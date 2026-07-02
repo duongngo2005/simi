@@ -1,0 +1,50 @@
+### === General ===
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.env
+.env.local
+.env.*.local
+
+### === IDE ===
+.idea/
+*.iml
+.vscode/
+*.swp
+
+### === Backend (simi-be - Spring Boot / Maven or Gradle) ===
+simi-be/target/
+simi-be/build/
+simi-be/.mvn/
+simi-be/!.mvn/wrapper/maven-wrapper.jar
+simi-be/*.class
+simi-be/HELP.md
+simi-be/.gradle/
+simi-be/out/
+simi-be/bin/
+
+# Application secrets (giữ lại file mẫu nếu có, ví dụ application-example.yaml)
+simi-be/src/main/resources/application-local.yaml
+simi-be/src/main/resources/application-secret.yaml
+
+### === Frontend (simi-fe - React + Vite + TS) ===
+simi-fe/node_modules/
+simi-fe/dist/
+simi-fe/dist-ssr/
+simi-fe/build/
+simi-fe/.vite/
+simi-fe/*.local
+
+# Logs của npm/yarn/pnpm
+simi-fe/npm-debug.log*
+simi-fe/yarn-debug.log*
+simi-fe/yarn-error.log*
+simi-fe/pnpm-debug.log*
+
+# Editor directories
+simi-fe/*.suo
+simi-fe/*.ntvs*
+simi-fe/*.njsproj
+simi-fe/*.sln
+simi-fe/*.sw?
