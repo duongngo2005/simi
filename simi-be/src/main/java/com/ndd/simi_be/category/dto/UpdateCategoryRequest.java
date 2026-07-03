@@ -7,4 +7,5 @@ public class UpdateCategoryRequest {
     private String name;
     private String slug;
     private Long parentId;
+    private Boolean active;
 }

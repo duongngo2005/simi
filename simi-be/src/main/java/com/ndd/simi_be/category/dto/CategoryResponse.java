@@ -14,4 +14,5 @@ public class CategoryResponse {
     private String slug;
     private Long parentId;
     private List<CategoryResponse> children;
+    private boolean active;
 }

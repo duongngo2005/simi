@@ -21,6 +21,7 @@ public class CategoryMapper {
                         ? new ArrayList<>()
                         : category.getChildren().stream().map(CategoryMapper::toCategoryResponse).toList()
                 )
+                .active(category.isActive())
                 .build();
     }
 }
