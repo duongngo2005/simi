@@ -1,5 +1,6 @@
 package com.ndd.simi_be.user.entity;
 
+import com.ndd.simi_be.common.entity.BaseEntity;
 import com.ndd.simi_be.user.enums.Role;
 import com.ndd.simi_be.user.enums.Status;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "users")
 @Builder
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
     private String fullName;
     private String email;
     private String phoneNumber;
@@ -49,7 +50,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return phoneNumber;
+        return email;
     }
 
     @Override
