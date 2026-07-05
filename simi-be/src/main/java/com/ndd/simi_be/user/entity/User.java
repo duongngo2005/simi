@@ -3,10 +3,7 @@ package com.ndd.simi_be.user.entity;
 import com.ndd.simi_be.common.entity.BaseEntity;
 import com.ndd.simi_be.user.enums.Role;
 import com.ndd.simi_be.user.enums.Status;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +19,9 @@ import java.util.List;
 @Table(name = "users")
 @Builder
 public class User extends BaseEntity implements UserDetails {
+    @Column(nullable = false)
     private String fullName;
+    @Column(nullable = false, unique = true)
     private String email;
     private String phoneNumber;
     private String passwordHash;

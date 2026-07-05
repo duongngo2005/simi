@@ -15,7 +15,7 @@ import lombok.*;
 public class Tag extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String slug;
     @Builder.Default
     private boolean active = true;
