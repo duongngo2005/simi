@@ -87,6 +87,7 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
     public void logout(String refreshTokenStr){
         refreshTokenRepository.findByRefreshToken(refreshTokenStr)
                 .ifPresent(token -> {
