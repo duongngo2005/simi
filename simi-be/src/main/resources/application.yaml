@@ -29,4 +29,9 @@ app:
     access-expiration-ms: 1800000
     refresh-expiration-ms: 604800000
 
+cloudinary:
+  cloud-name: docidan7t
+  api-key: 131775748839957
+  api-secret: 94Gm4Ui5GNzEHzkehkYrh3wVFr4
+
 
