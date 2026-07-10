@@ -2,7 +2,8 @@ package com.ndd.simi_be.consignment.controller;
 
 import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentItemRequest;
-import com.ndd.simi_be.consignment.dto.request.ConsignmentRequest;
+import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
+import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.service.ConsignmentService;
@@ -11,7 +12,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +27,7 @@ public class ConsignmentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<ConsignmentResponse>> createConsignment(
-            @Valid @RequestBody ConsignmentRequest request,
+            @Valid @RequestBody CreateConsignmentRequest request,
             @AuthenticationPrincipal User user
     ){
         ApiResponse<ConsignmentResponse> response = ApiResponse.<ConsignmentResponse>builder()
@@ -78,5 +78,42 @@ public class ConsignmentController {
                 .body(consignmentService.activeConsignment(consignmentId))
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ConsignmentResponse>> getConsignmentById(
+            @PathVariable("id") Long consignmentId
+    ){
+        ApiResponse<ConsignmentResponse> response =
+                ApiResponse.<ConsignmentResponse>builder()
+                        .status(200)
+                        .body(consignmentService.getConsignmentById(consignmentId))
+                        .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<ConsignmentResponse>> updateConsignment(
+            @RequestBody UpdateConsignmentRequest request,
+            @PathVariable("id") Long consignmentId
+    ){
+        ApiResponse<ConsignmentResponse> response =
+                ApiResponse.<ConsignmentResponse>builder()
+                        .status(200)
+                        .message("Cập nhật lô hàng thành công")
+                        .body(consignmentService.updateConsignment(request, consignmentId))
+                        .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteConsignment(
+            @PathVariable("id") Long consignmentId
+    ){
+        consignmentService.deleteConsignment(consignmentId);
+
+        return ResponseEntity.noContent().build();
     }
 }

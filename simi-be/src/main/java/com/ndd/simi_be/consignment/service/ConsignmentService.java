@@ -2,10 +2,12 @@ package com.ndd.simi_be.consignment.service;
 
 import com.ndd.simi_be.cloudinary.CloudinaryService;
 import com.ndd.simi_be.common.exception.BadRequestException;
+import com.ndd.simi_be.common.exception.ConflictException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentItemRequest;
-import com.ndd.simi_be.consignment.dto.request.ConsignmentRequest;
+import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.request.PriceScheduleRequest;
+import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.entity.Consignment;
@@ -17,7 +19,6 @@ import com.ndd.simi_be.consignment.mapper.ConsignmentItemMapper;
 import com.ndd.simi_be.consignment.mapper.ConsignmentMapper;
 import com.ndd.simi_be.consignment.repository.ConsignmentItemRepository;
 import com.ndd.simi_be.consignment.repository.ConsignmentRepository;
-import com.ndd.simi_be.product.dto.ProductRequest;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.product.service.ProductService;
@@ -43,7 +44,7 @@ public class ConsignmentService {
     private final CloudinaryService cloudinaryService;
 
     @Transactional
-    public ConsignmentResponse createConsignment(ConsignmentRequest request, Long receivedById){
+    public ConsignmentResponse createConsignment(CreateConsignmentRequest request, Long receivedById){
         User receivedBy = userRepository.findById(receivedById)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng"));
         User consignor = userRepository.findById(request.getConsignorId())
@@ -146,6 +147,36 @@ public class ConsignmentService {
         consignment.setConsignmentStatus(ConsignmentStatus.ACTIVE);
         consignment.setStartDate(LocalDateTime.now());
         consignment.setExpiryDate(LocalDateTime.now().plusDays(60));
+
+        return ConsignmentMapper.toConsignmentResponse(consignment);
+    }
+
+    @Transactional
+    public ConsignmentResponse updateConsignment(UpdateConsignmentRequest request, Long consignmentId){
+        Consignment consignment = consignmentRepository.findById(consignmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
+
+        consignment.setNote(request.getNote());
+        consignmentRepository.save(consignment);
+        return ConsignmentMapper.toConsignmentResponse(consignment);
+    }
+
+    @Transactional
+    public void deleteConsignment(Long consignmentId){
+        Consignment consignment = consignmentRepository.findById(consignmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
+
+        if (!consignment.getConsignmentItems().isEmpty()){
+            throw new ConflictException("Không thể xóa lô hàng đang có chi tiết lô hàng");
+        }
+
+        consignmentRepository.delete(consignment);
+    }
+
+    @Transactional(readOnly = true)
+    public ConsignmentResponse getConsignmentById(Long consignmentId){
+        Consignment consignment = consignmentRepository.findById(consignmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
 
         return ConsignmentMapper.toConsignmentResponse(consignment);
     }
