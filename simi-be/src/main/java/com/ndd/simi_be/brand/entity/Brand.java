@@ -1,10 +1,11 @@
 package com.ndd.simi_be.brand.entity;
 
 import com.ndd.simi_be.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.ndd.simi_be.product.entity.Product;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Builder
@@ -21,4 +22,7 @@ public class Brand extends BaseEntity {
     private String description;
     @Builder.Default
     private boolean active = true;
+
+    @OneToMany(mappedBy = "brand")
+    private List<Product> products;
 }

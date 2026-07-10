@@ -8,7 +8,7 @@ public final class SlugUtils {
             .customReplacement("đ", "d")
             .lowerCase(true)
             .build();
-    public SlugUtils(){}
+    private SlugUtils(){}
     public static String toSlug(String input){
         return slugify.slugify(input);
     }

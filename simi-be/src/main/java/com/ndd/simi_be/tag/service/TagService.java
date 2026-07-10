@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,8 +23,13 @@ public class TagService {
 
     @Transactional
     public TagResponse createTag(CreateTagRequest request){
-        if (tagRepository.existsByName(request.getName())){
+        if (tagRepository.existsByNameIgnoreCase(request.getName())){
             throw new ConflictException("Tag đã tồn tại");
+        }
+
+        String slug = SlugUtils.toSlug(request.getName());
+        if (tagRepository.existsBySlug(slug)){
+            throw new ConflictException("Tag trùng slug");
         }
 
         Tag tag = Tag.builder()
@@ -37,6 +43,27 @@ public class TagService {
     }
 
     @Transactional
+    public List<Tag> createTagOrFind(List<String> requests) {
+        List<Tag> tags = new ArrayList<>();
+
+        for (String tagName : requests) {
+            String slug = SlugUtils.toSlug(tagName.trim());
+
+            Tag tag = tagRepository.findByNameIgnoreCase(tagName.trim())
+                    .orElseGet(() -> tagRepository.findBySlug(slug)
+                            .orElseGet(() -> {
+                                return tagRepository.save(Tag.builder()
+                                        .name(tagName.trim())
+                                        .active(true)
+                                        .slug(slug)
+                                        .build());
+                            }));
+            tags.add(tag);
+        }
+        return tags;
+    }
+
+    @Transactional
     public TagResponse updateTag(UpdateTagRequest request, Long id){
         Tag tag = tagRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tag"));
@@ -44,7 +71,7 @@ public class TagService {
 
 
         if (request.getName() != null){
-            if (tagRepository.existsByName(request.getName())){
+            if (tagRepository.existsByNameIgnoreCase(request.getName())){
                 throw new ConflictException("Tên tag đã bị trùng");
             }
             tag.setName(request.getName());
@@ -58,7 +85,7 @@ public class TagService {
         return TagMapper.toTagResponse(tag);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<TagResponse> getAllTags(){
         return tagRepository.findAll().stream().map(TagMapper::toTagResponse).toList();
     }
