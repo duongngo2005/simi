@@ -1,6 +1,7 @@
 package com.ndd.simi_be.category.entity;
 
 import com.ndd.simi_be.common.entity.BaseEntity;
+import com.ndd.simi_be.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +29,8 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "parent")
     @Builder.Default
     private List<Category> children = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category")
+    @Builder.Default
+    private List<Product> products = new ArrayList<>();
 }
