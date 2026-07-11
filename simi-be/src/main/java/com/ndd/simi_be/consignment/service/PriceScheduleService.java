@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,49 +18,54 @@ import java.util.List;
 public class PriceScheduleService {
     private final PriceScheduleRepository priceScheduleRepository;
 
-    @Transactional
     public PriceSchedule createPriceSchedule(
             PriceScheduleRequest request,
             ConsignmentItem consignmentItem
     ){
-        PriceSchedule priceSchedule = PriceSchedule.builder()
+        return PriceSchedule.builder()
                 .price(request.getPrice())
                 .effectiveAfterDays(request.getEffectiveAfterDays())
-                .sequenceNo(request.getSequenceNo())
                 .consignmentItem(consignmentItem)
                 .build();
-        return priceScheduleRepository.save(priceSchedule);
     }
 
-    public void validatePriceSchedule(List<PriceSchedule> schedules){
-        if (schedules == null || schedules.size() < 2){
-            return;
+    @Transactional
+    public List<PriceSchedule> createListPriceSchedule(
+            List<PriceScheduleRequest> schedules,
+            ConsignmentItem consignmentItem
+    ){
+        if (schedules == null || schedules.isEmpty()){
+            throw new BadRequestException("Lịch giá không được để trống");
         }
 
-        boolean hasDuplicate = schedules.stream()
-                .map(PriceSchedule::getSequenceNo)
-                .distinct()
-                .count() != schedules.size();
+        List<PriceScheduleRequest> sortedRequest = schedules.stream()
+                .sorted(Comparator.comparingInt(PriceScheduleRequest::getEffectiveAfterDays))
+                .toList();
 
-        if (hasDuplicate){
-            throw new BadRequestException("Các bước giá không được trùng thứ tự");
+        if (sortedRequest.getFirst().getEffectiveAfterDays() != 0){
+            throw new BadRequestException("Lịch giá đầu tiên phải là sau 0 ngày");
         }
 
-        List<PriceSchedule> sorted =
-                schedules.stream().sorted(Comparator.comparingInt(PriceSchedule::getSequenceNo))
-                        .toList();
+        int size = sortedRequest.size();
 
-        for (int i = 0; i < sorted.size() - 1; i++){
-            PriceSchedule current = sorted.get(i);
-            PriceSchedule next = sorted.get(i + 1);
+        for (int i = 0; i < size - 1; i++){
+            PriceScheduleRequest current = sortedRequest.get(i);
+            PriceScheduleRequest next = sortedRequest.get(i + 1);
             if (current.getPrice().compareTo(next.getPrice()) < 0){
-                throw new BadRequestException(
-                        "Giá ở bước %d (%s) không được lớn hơn giá ở bước %d (%s)".formatted(
-                                next.getSequenceNo(), next.getPrice(),
-                                current.getSequenceNo(), current.getPrice()
-                        )
-                );
+                throw new BadRequestException("Lần giảm giá sau giá không được cao hơn lần trước");
+            }
+            if (current.getEffectiveAfterDays() == next.getEffectiveAfterDays()){
+                throw new BadRequestException("Không được cấu hình trùng ngày giảm giá");
             }
         }
+
+        List<PriceSchedule> priceSchedules = new ArrayList<>();
+
+        for (PriceScheduleRequest request : sortedRequest){
+            PriceSchedule schedule = createPriceSchedule(request, consignmentItem);
+            priceSchedules.add(schedule);
+        }
+
+        return priceScheduleRepository.saveAll(priceSchedules);
     }
 }

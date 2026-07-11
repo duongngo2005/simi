@@ -13,10 +13,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PriceScheduleRequest {
-    @NotNull(message = "Thứ tự giảm giá không thể để trống")
-    private Integer sequenceNo;
     @NotNull(message = "Số ngày áp dụng không được để trống")
-    private Integer effectiveAfterDays;
+    private int effectiveAfterDays;
     @NotNull(message = "Giá tiền không được để trống")
     private BigDecimal price;
 }

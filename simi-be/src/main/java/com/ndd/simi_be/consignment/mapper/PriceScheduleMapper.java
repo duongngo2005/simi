@@ -7,7 +7,6 @@ public class PriceScheduleMapper {
     public static PriceScheduleResponse toPriceScheduleResponse(PriceSchedule schedule){
         return PriceScheduleResponse.builder()
                 .price(schedule.getPrice())
-                .sequenceNo(schedule.getSequenceNo())
                 .effectiveAfterDays(schedule.getEffectiveAfterDays())
                 .id(schedule.getId())
                 .status(schedule.getPriceScheduleStatus().name())
