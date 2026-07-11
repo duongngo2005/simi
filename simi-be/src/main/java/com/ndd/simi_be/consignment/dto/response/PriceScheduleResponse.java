@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 public class PriceScheduleResponse {
     private Long id;
-    private int sequenceNo;
     private int effectiveAfterDays;
     private BigDecimal price;
     private LocalDateTime appliedAt;

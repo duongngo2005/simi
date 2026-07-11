@@ -79,6 +79,7 @@ public class ProductService {
                 .category(category)
                 .brand(brand)
                 .productCondition(request.getProductCondition())
+                .tags(tags)
                 .build();
 
         product = productRepository.save(product);

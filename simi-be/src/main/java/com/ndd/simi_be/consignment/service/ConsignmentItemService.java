@@ -8,6 +8,7 @@ import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.entity.Consignment;
 import com.ndd.simi_be.consignment.entity.ConsignmentItem;
 import com.ndd.simi_be.consignment.entity.PriceSchedule;
+import com.ndd.simi_be.consignment.enums.PriceScheduleStatus;
 import com.ndd.simi_be.consignment.mapper.ConsignmentItemMapper;
 import com.ndd.simi_be.consignment.repository.ConsignmentItemRepository;
 import com.ndd.simi_be.consignment.repository.ConsignmentRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,7 @@ public class ConsignmentItemService {
         Consignment consignment = consignmentRepository.findById(consignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
 
+
         Product product = productService.createProduct(
                 request.getProductRequest(),
                 thumbnail,
@@ -58,27 +61,13 @@ public class ConsignmentItemService {
 
         consignmentItem = consignmentItemRepository.save(consignmentItem);
 
-        List<PriceSchedule> priceSchedules = new ArrayList<>();
-        for (PriceScheduleRequest priceScheduleRequest : request.getPriceScheduleRequests()){
-            PriceSchedule priceSchedule = priceScheduleService.createPriceSchedule(priceScheduleRequest, consignmentItem);
-            priceSchedules.add(priceSchedule);
-        }
+        List<PriceSchedule> priceSchedules
+                = priceScheduleService.createListPriceSchedule(request.getPriceScheduleRequests(), consignmentItem);
 
-        priceScheduleService.validatePriceSchedule(priceSchedules);
-
-        for (PriceSchedule schedule : priceSchedules){
-            schedule.setConsignmentItem(consignmentItem);
-        }
-
-        product.setCurrentPrice(
-                priceSchedules.stream()
-                        .filter(schedule -> schedule.getSequenceNo() == 1)
-                        .findFirst()
-                        .map(PriceSchedule::getPrice)
-                        .orElseThrow(() -> new ResourceNotFoundException(
-                                "Không tìm thấy mức giá thứ nhất"
-                        ))
-        );
+        PriceSchedule nowSchedule = priceSchedules.getFirst();
+        product.setCurrentPrice(nowSchedule.getPrice());
+        nowSchedule.setAppliedAt(LocalDateTime.now());
+        nowSchedule.setPriceScheduleStatus(PriceScheduleStatus.APPLIED);
 
         consignmentItem.setPriceSchedules(priceSchedules);
 

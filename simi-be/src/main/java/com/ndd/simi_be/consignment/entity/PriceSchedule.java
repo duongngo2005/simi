@@ -25,5 +25,4 @@ public class PriceSchedule extends BaseEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private PriceScheduleStatus priceScheduleStatus = PriceScheduleStatus.PENDING;
-    private int sequenceNo;
 }
