@@ -108,4 +108,14 @@ public class ProductService {
 
         return product;
     }
+
+    @Transactional
+    public void hardDeleteProduct(Product product){
+        List<ProductImage> productImages = product.getProductImages();
+        for (ProductImage productImage : productImages){
+            cloudinaryService.deleteImage(productImage.getImagePublicId());
+            productImageRepository.delete(productImage);
+        }
+        productRepository.delete(product);
+    }
 }

@@ -7,8 +7,10 @@ import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.entity.Consignment;
+import com.ndd.simi_be.consignment.entity.PriceSchedule;
 import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
 import com.ndd.simi_be.consignment.enums.ConsignmentStatus;
+import com.ndd.simi_be.consignment.enums.PriceScheduleStatus;
 import com.ndd.simi_be.consignment.mapper.ConsignmentMapper;
 import com.ndd.simi_be.consignment.repository.ConsignmentRepository;
 import com.ndd.simi_be.product.enums.ProductStatus;
@@ -69,7 +71,11 @@ public class ConsignmentService {
                 .forEach(item -> {
                     item.setConsignmentItemStatus(ConsignmentItemStatus.ACTIVE);
                     item.setActivatedAt(LocalDateTime.now());
+                    PriceSchedule nowSchedule = item.getPriceSchedules().getFirst();
                     item.getProduct().setProductStatus(ProductStatus.AVAILABLE);
+                    item.getProduct().setCurrentPrice(nowSchedule.getPrice());
+                    nowSchedule.setAppliedAt(LocalDateTime.now());
+                    nowSchedule.setPriceScheduleStatus(PriceScheduleStatus.APPLIED);
                 });
 
         consignment.setConsignmentStatus(ConsignmentStatus.ACTIVE);

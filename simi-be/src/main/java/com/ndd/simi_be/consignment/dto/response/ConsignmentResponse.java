@@ -19,5 +19,4 @@ public class ConsignmentResponse {
     private int soldItem;
     private String note;
     private String status;
-    private List<ConsignmentItemResponse> consignmentItemResponses;
 }
