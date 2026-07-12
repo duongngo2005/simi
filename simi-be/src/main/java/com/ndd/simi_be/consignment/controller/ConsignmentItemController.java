@@ -2,6 +2,7 @@ package com.ndd.simi_be.consignment.controller;
 
 import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentItemRequest;
+import com.ndd.simi_be.consignment.dto.response.ConsignmentFullDetailResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.service.ConsignmentItemService;
 import jakarta.validation.Valid;
@@ -37,5 +38,52 @@ public class ConsignmentItemController {
                         .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{id}/items")
+    public ResponseEntity<ApiResponse<ConsignmentFullDetailResponse>> getAllItemsByConsignmentId(
+            @PathVariable("id") Long consignmentId
+    ){
+        ApiResponse<ConsignmentFullDetailResponse> response = ApiResponse.<ConsignmentFullDetailResponse>builder()
+                .status(200)
+                .body(consignmentItemService.getAllItemsByConsignmentId(consignmentId))
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{consignmentId}/items/{consignmentItemId}")
+    public ResponseEntity<Void> hardDeleteConsignmentItem(
+            @PathVariable Long consignmentId,
+            @PathVariable Long consignmentItemId
+    ){
+        consignmentItemService.hardDeleteConsignmentItem(consignmentId, consignmentItemId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{consignmentId}/items/{consignmentItemId}/cancel")
+    public ResponseEntity<ApiResponse<ConsignmentItemResponse>> softDeleteConsignmentItem(
+            @PathVariable Long consignmentId,
+            @PathVariable Long consignmentItemId
+    ){
+        ApiResponse<ConsignmentItemResponse> response = ApiResponse.<ConsignmentItemResponse>builder()
+                .body(consignmentItemService.softDeleteConsignmentItem(consignmentId, consignmentItemId))
+                .message("Xóa mềm thành công")
+                .status(200)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/items/{consignmentItemId}")
+    public ResponseEntity<ApiResponse<ConsignmentItemResponse>> getConsignmentItemById(
+            @PathVariable("consignmentItemId") Long consignmentItemId
+    ){
+        ApiResponse<ConsignmentItemResponse> response
+                = ApiResponse.<ConsignmentItemResponse>builder()
+                .status(200)
+                .body(consignmentItemService.getConsignmentItemById(consignmentItemId))
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }

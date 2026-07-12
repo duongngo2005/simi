@@ -68,4 +68,9 @@ public class PriceScheduleService {
 
         return priceScheduleRepository.saveAll(priceSchedules);
     }
+
+    @Transactional
+    public void hardDeletePriceSchedules(List<PriceSchedule> priceSchedules){
+        priceScheduleRepository.deleteAll(priceSchedules);
+    }
 }

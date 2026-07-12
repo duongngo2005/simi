@@ -5,6 +5,7 @@ public enum ConsignmentItemStatus {
     ACTIVE,
     EXPIRED,
     SOLD,
+    CANCELLED,
     RETURNED,
     DONATED
 }
