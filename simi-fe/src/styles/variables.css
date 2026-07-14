@@ -1,0 +1,51 @@
+@import '@fontsource/be-vietnam-pro/400.css';
+@import '@fontsource/be-vietnam-pro/500.css';
+@import '@fontsource/be-vietnam-pro/600.css';
+@import '@fontsource/be-vietnam-pro/700.css';
+
+:root {
+    /* Cơ bản */
+    --font-sans: 'Be Vietnam Pro', system-ui, sans-serif;
+    --color-background: #F4EFE6;
+
+    /* Chữ */
+    --color-heading: #4A352D; 
+    --color-text: #6f4e40;
+
+    /* Button */
+    --color-btn-primary: #B98B6F;
+    --color-btn-primary-text: #fff;
+    --color-btn-primary-hover: #986a4e;
+    --color-btn-secondary: #f1f5f9;
+    --color-btn-secondary-text:#4A352D;
+    --color-btn-secondary-hover: #eceef1;
+
+    /* input */
+    --color-input: #fbf8f3;
+    --color-input-border: #d6c7bc;
+    --color-input-border-focus: #fffdf9;
+
+    /* viền */
+    --color-divider: #a18f85;
+    
+     /* Success: Phù hợp trạng thái ACTIVE, Hoàn thành */
+    --color-success: #4F772D;          /* Xanh lá úa/rêu trầm hợp với tone nâu */
+    --color-success-bg: #F0F4EC;
+    --color-success-border: #C2D5A8;
+
+    /* Warning: Phù hợp trạng thái DRAFT, Đang chờ duyệt */
+    --color-warning: #D97706;          /* Vàng cam ấm áp */
+    --color-warning-bg: #FEF3C7;
+    --color-warning-border: #FCD34D;
+
+    /* Danger: Phù hợp trạng thái EXPIRED, Đã huỷ */
+    --color-danger: #BC3908;           /* Đỏ đất/Terracotta */
+    --color-danger-bg: #FDF2F0;
+    --color-danger-border: #F5C6BA;
+    --color-danger-text: #9F3D2A;
+
+    /* Info: Phù hợp các thông tin hướng dẫn, thông báo phụ */
+    --color-info: #2E5B88;             /* Xanh dương xám cổ điển */
+    --color-info-bg: #F0F4F8;
+    --color-info-border: #BCD0E3;
+}
