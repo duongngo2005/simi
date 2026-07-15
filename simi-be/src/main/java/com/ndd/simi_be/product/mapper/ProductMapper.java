@@ -1,6 +1,7 @@
 package com.ndd.simi_be.product.mapper;
 
-import com.ndd.simi_be.product.dto.ProductResponse;
+import com.ndd.simi_be.product.dto.response.ProductResponse;
+import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.tag.mapper.TagMapper;
 
@@ -27,6 +28,24 @@ public class ProductMapper {
                         product.getTags().stream().map(TagMapper::toTagResponse).toList()
                 )
                 .currentPrice(product.getCurrentPrice())
+                .build();
+    }
+
+    public static ProductSummaryResponse toProductSummaryResponse(Product product){
+        return ProductSummaryResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .size(product.getSize())
+                .currentPrice(product.getCurrentPrice())
+                .brandName(
+                        product.getBrand() == null
+                        ? null
+                        : product.getBrand().getName()
+                )
+                .productCondition(product.getProductCondition().name())
+                .productImageResponses(
+                        product.getProductImages().stream().map(ProductImageMapper::toProductImageResponse).toList()
+                )
                 .build();
     }
 }
