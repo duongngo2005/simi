@@ -1,5 +1,5 @@
 package com.ndd.simi_be.consignment.dto.request;
-import com.ndd.simi_be.product.dto.ProductRequest;
+import com.ndd.simi_be.product.dto.request.ProductRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

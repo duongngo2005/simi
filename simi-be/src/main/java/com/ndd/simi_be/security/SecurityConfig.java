@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -43,6 +44,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/brands/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/tags/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(
