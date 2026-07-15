@@ -1,6 +1,6 @@
 package com.ndd.simi_be.consignment.dto.response;
 
-import com.ndd.simi_be.product.dto.ProductResponse;
+import com.ndd.simi_be.product.dto.response.ProductResponse;
 import lombok.*;
 
 import java.math.BigDecimal;

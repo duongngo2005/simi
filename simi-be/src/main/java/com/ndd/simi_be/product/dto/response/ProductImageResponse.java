@@ -1,4 +1,4 @@
-package com.ndd.simi_be.product.dto;
+package com.ndd.simi_be.product.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,7 @@
-package com.ndd.simi_be.product.dto;
+package com.ndd.simi_be.product.dto.request;
 
 import com.ndd.simi_be.product.enums.ProductCondition;
 import com.ndd.simi_be.product.enums.ProductStatus;
-import com.ndd.simi_be.tag.dto.CreateTagRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

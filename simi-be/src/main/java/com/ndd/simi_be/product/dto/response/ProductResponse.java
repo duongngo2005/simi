@@ -1,7 +1,5 @@
-package com.ndd.simi_be.product.dto;
+package com.ndd.simi_be.product.dto.response;
 
-import com.ndd.simi_be.brand.dto.BrandResponse;
-import com.ndd.simi_be.category.dto.CategoryResponse;
 import com.ndd.simi_be.tag.dto.TagResponse;
 import lombok.*;
 

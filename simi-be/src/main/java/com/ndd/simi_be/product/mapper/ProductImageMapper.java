@@ -1,6 +1,6 @@
 package com.ndd.simi_be.product.mapper;
 
-import com.ndd.simi_be.product.dto.ProductImageResponse;
+import com.ndd.simi_be.product.dto.response.ProductImageResponse;
 import com.ndd.simi_be.product.entity.ProductImage;
 
 public class ProductImageMapper {
