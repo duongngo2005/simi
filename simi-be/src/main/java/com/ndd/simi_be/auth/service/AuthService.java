@@ -43,6 +43,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .fullName(request.getFullName())
                 .passwordHash(encoder.encode(request.getPassword()))
+                .phoneNumber(request.getPhoneNumber())
                 .build();
 
         user = userRepository.save(user);
