@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
     ){
         ErrorResponse response = ErrorResponse.builder()
                 .status(500)
-                .message("Đã có lỗi xảy ra")
+                .message("Đã có lỗi xảy ra" + ex.getMessage())
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now())
                 .build();
