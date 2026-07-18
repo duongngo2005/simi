@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class ProductFilterRequest {
     private String keyword;
     private Long categoryId;
+    private String categorySlug;
     private Long brandId;
     private String sizeProduct;
     private String color;

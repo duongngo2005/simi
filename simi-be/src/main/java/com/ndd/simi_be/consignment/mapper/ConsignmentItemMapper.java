@@ -10,7 +10,7 @@ public class ConsignmentItemMapper {
                 .id(item.getId())
                 .commissionRate(item.getCommissionRate())
                 .status(item.getConsignmentItemStatus().name())
-                .productResponse(ProductMapper.toProductResponse(item.getProduct()))
+                .productDetailResponse(ProductMapper.toProductResponse(item.getProduct()))
                 .priceScheduleResponses(
                         item.getPriceSchedules().stream().map(PriceScheduleMapper::toPriceScheduleResponse).toList()
                 )

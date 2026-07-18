@@ -1,7 +1,7 @@
 package com.ndd.simi_be.product.enums;
 
 public enum ProductCondition {
-    NEW,
+    NEW_TAG,
     LIKE_NEW,
     GOOD,
     FAIR

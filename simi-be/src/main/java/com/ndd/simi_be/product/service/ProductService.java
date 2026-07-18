@@ -10,6 +10,7 @@ import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.repository.ProductImageRepository;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
 import com.ndd.simi_be.product.dto.request.ProductRequest;
+import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.product.entity.ProductImage;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,10 +46,26 @@ public class ProductService {
     public Page<ProductSummaryResponse> searchProducts(
             ProductFilterRequest filterRequest
     ){
+        List<Long> categoryIds = null;
+        if (filterRequest.getCategorySlug() != null){
+            Category parent = categoryRepository.findBySlug(filterRequest.getCategorySlug())
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục cha"));
+
+            categoryIds = new ArrayList<>();
+            categoryIds.add(parent.getId());
+
+            for (Category child : parent.getChildren()){
+                categoryIds.add(child.getId());
+            }
+        }
+
+
         Specification<Product> specification = Specification.allOf(
                 ProductSpecification.hasBrandId(filterRequest.getBrandId()),
                 ProductSpecification.isAvailable(),
-                ProductSpecification.hasCategoryId(filterRequest.getCategoryId()),
+                categoryIds == null
+                ? ProductSpecification.hasCategoryId(filterRequest.getCategoryId())
+                : ProductSpecification.hasCategoryIdIn(categoryIds),
                 ProductSpecification.hasProductCondition(filterRequest.getProductCondition()),
                 ProductSpecification.hasColor(filterRequest.getColor()),
                 ProductSpecification.hasSize(filterRequest.getSizeProduct()),
@@ -103,7 +121,7 @@ public class ProductService {
         product.getProductImages().add(thumbnail);
         productImageRepository.save(thumbnail);
 
-        if (!imageFiles.isEmpty()){
+        if (imageFiles != null){
             for (MultipartFile file : imageFiles){
                 CloudinaryResponse response = cloudinaryService.uploadImage(file);
                 ProductImage image = ProductImage.builder()
@@ -128,5 +146,13 @@ public class ProductService {
             productImageRepository.delete(productImage);
         }
         productRepository.delete(product);
+    }
+
+    @Transactional
+    public ProductDetailResponse getProductById(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
+
+        return ProductMapper.toProductResponse(product);
     }
 }

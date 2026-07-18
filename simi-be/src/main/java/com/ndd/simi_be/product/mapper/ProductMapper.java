@@ -1,13 +1,14 @@
 package com.ndd.simi_be.product.mapper;
 
-import com.ndd.simi_be.product.dto.response.ProductResponse;
+import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.tag.mapper.TagMapper;
 
 public class ProductMapper {
-    public static ProductResponse toProductResponse(Product product){
-        return ProductResponse.builder()
+    public static ProductDetailResponse toProductResponse(Product product){
+        return ProductDetailResponse.builder()
+                .createdDate(product.getCreatedDate())
                 .id(product.getId())
                 .color(product.getColor())
                 .name(product.getName())

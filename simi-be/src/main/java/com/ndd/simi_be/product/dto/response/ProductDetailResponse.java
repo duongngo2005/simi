@@ -4,6 +4,7 @@ import com.ndd.simi_be.tag.dto.TagResponse;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -11,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponse {
+public class ProductDetailResponse {
     private Long id;
     private String name;
     private Long category;
@@ -24,4 +25,5 @@ public class ProductResponse {
     private String productCondition;
     private String status;
     private List<ProductImageResponse> productImageResponses;
+    private LocalDateTime createdDate;
 }
