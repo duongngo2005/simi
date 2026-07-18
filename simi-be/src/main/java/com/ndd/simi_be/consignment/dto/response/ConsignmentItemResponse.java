@@ -1,6 +1,6 @@
 package com.ndd.simi_be.consignment.dto.response;
 
-import com.ndd.simi_be.product.dto.response.ProductResponse;
+import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -17,6 +17,6 @@ public class ConsignmentItemResponse {
     private String status;
 
     private List<PriceScheduleResponse> priceScheduleResponses;
-    private ProductResponse productResponse;
+    private ProductDetailResponse productDetailResponse;
     private ItemDispositionResponse itemDispositionResponse;
 }

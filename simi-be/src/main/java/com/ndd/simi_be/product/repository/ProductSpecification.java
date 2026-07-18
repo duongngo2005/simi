@@ -9,6 +9,7 @@ import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ProductSpecification {
     private ProductSpecification(){}
@@ -129,5 +130,14 @@ public class ProductSpecification {
 
     public static Specification<Product> isAvailable(){
         return (root, query, cb) -> cb.equal(root.get("productStatus"), ProductStatus.AVAILABLE);
+    }
+
+    public static Specification<Product> hasCategoryIdIn(List<Long> categoryIds){
+        return (root, query, cb) -> {
+            if (categoryIds == null || categoryIds.isEmpty()){
+                return cb.conjunction();
+            }
+            return root.get("category").get("id").in(categoryIds);
+        };
     }
 }

@@ -11,3 +11,12 @@ export interface ErrorResponse{
     timestamp: string;
     errors?: Record<string, string>
 }
+
+export interface PageResponse<T>{
+    content: T[];
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    first: boolean;
+    last: boolean;
+}
