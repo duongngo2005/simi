@@ -1,0 +1,123 @@
+/* Card Container */
+.card {
+  min-width: 260px;
+  width: 260px;
+  flex-shrink: 0;
+  background-color: #fffdf9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--color-input-border);
+  text-decoration: none; /* Bỏ gạch chân mặc định của thẻ Link */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(74, 53, 45, 0.08);
+}
+
+/* Image section */
+.cardImageContainer {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background-color: #fbf8f3;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Status & Discount Badges */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: var(--color-success);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.badgeTag {
+  background-color: var(--color-info);
+}
+
+.badgeDanger {
+  background-color: var(--color-danger);
+}
+
+/* Metadata & Details */
+.cardBody {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardMetaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.cardSize {
+  font-size: 0.72rem;
+  color: var(--color-btn-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.cardBrand {
+  font-size: 0.72rem;
+  color: var(--color-divider);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.cardName {
+  font-size: 0.95rem;
+  color: var(--color-heading);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.35;
+  height: 2.7em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardPrice {
+  font-size: 1.05rem;
+  color: var(--color-btn-primary);
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Pricing Grid for Sales */
+.priceContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardPriceNew {
+  font-size: 1.05rem;
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.cardPriceOld {
+  font-size: 0.85rem;
+  color: var(--color-divider);
+  text-decoration: line-through;
+}

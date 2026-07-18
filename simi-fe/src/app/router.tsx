@@ -4,6 +4,7 @@ import LoginPage from "../feature/auth/pages/LoginPage";
 import RegisterPage from "../feature/auth/pages/RegisterPage";
 import { MainLayout } from "../layouts/MainLayout";
 import { HomePage } from "../feature/home/pages/HomePage";
+import { ProductDetailPage } from "../feature/product/pages/ProductDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage/>
+            },
+            {
+                path: "/products/:id",
+                element: <ProductDetailPage/>
             }
         ]
     }
