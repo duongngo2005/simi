@@ -57,7 +57,7 @@ public class PaymentService {
             payment.setPaidAt(LocalDateTime.now());
 
             Order order = payment.getOrder();
-            order.setOrderStatus(OrderStatus.CONFIRMED);
+            order.setOrderStatus(OrderStatus.PACKING);
 
             for (OrderItem orderItem : order.getOrderItems()){
                 Product product = orderItem.getProduct();

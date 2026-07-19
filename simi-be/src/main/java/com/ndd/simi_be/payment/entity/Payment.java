@@ -30,4 +30,6 @@ public class Payment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus = PaymentStatus.PENDING;
     private LocalDateTime paidAt;
+    private LocalDateTime refundedAt;
+    private String transactionId;
 }
