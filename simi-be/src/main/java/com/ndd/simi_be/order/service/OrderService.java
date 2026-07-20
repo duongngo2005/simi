@@ -16,6 +16,9 @@ import com.ndd.simi_be.order.enums.OrderStatus;
 import com.ndd.simi_be.order.mapper.OrderMapper;
 import com.ndd.simi_be.order.repository.OrderItemRepository;
 import com.ndd.simi_be.order.repository.OrderRepository;
+import com.ndd.simi_be.payment.entity.Payment;
+import com.ndd.simi_be.payment.enums.PaymentMethod;
+import com.ndd.simi_be.payment.service.PaymentService;
 import com.ndd.simi_be.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,7 @@ public class OrderService {
     private final ProvinceRepository provinceRepository;
     private final WardRepository wardRepository;
     private final OrderItemService orderItemService;
+    private final PaymentService paymentService;
 
     @Transactional
     public OrderDetailResponse createOrder(OrderRequest request, User customer){
@@ -79,10 +83,16 @@ public class OrderService {
                 = (subtotalAmount.multiply(BigDecimal.ONE.subtract(request.getDiscount()))).add(shippingFee);
         order.setFinalAmount(finalAmount);
 
+        if (request.getPaymentMethod() == PaymentMethod.COD) {
+            Payment payment = paymentService.createPayment(order, request.getPaymentMethod());
+            order.getPayments().add(payment);
+            order.setOrderStatus(OrderStatus.PACKING);
+        }
+
         return OrderMapper.toOrderDetailResponse(order);
     }
 
-    private BigDecimal calculateShippingFee(String provinceCode, BigDecimal subtotalAmount){
+    public BigDecimal calculateShippingFee(String provinceCode, BigDecimal subtotalAmount){
         if ("79".equals(provinceCode)){
             if (subtotalAmount.compareTo(BigDecimal.valueOf(150000)) < 0){
                 return BigDecimal.valueOf(30000);

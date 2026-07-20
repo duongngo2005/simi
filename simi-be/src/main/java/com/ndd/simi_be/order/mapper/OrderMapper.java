@@ -3,6 +3,7 @@ package com.ndd.simi_be.order.mapper;
 import com.ndd.simi_be.order.dto.response.OrderDetailResponse;
 import com.ndd.simi_be.order.dto.response.OrderSummaryResponse;
 import com.ndd.simi_be.order.entity.Order;
+import com.ndd.simi_be.payment.mapper.PaymentMapper;
 import com.ndd.simi_be.product.entity.ProductImage;
 
 public class OrderMapper {
@@ -28,6 +29,9 @@ public class OrderMapper {
                 .createdDate(order.getCreatedDate())
                 .orderItems(
                         order.getOrderItems().stream().map(OrderItemMapper::toOrderItemResponse).toList()
+                )
+                .paymentResponses(
+                    order.getPayments().stream().map(PaymentMapper::toPaymentResponse).toList()
                 )
                 .build();
     }

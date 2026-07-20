@@ -1,0 +1,284 @@
+.page {
+  background-color: var(--color-background);
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  padding: 40px 24px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pageTitle {
+  font-size: 1.85rem;
+  color: var(--color-heading);
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+/* Bố cục 2 cột */
+.container {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.leftCol,
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Card */
+.card {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 12px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  color: var(--color-heading);
+  margin: 0;
+  font-weight: 700;
+  border-bottom: 1px solid var(--color-input-border);
+  padding-bottom: 14px;
+}
+
+/* Form controls */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputGroup label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.inputGroup input,
+.inputGroup select,
+.inputGroup textarea {
+  background-color: var(--color-input);
+  border: 1px solid var(--color-input-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--color-heading);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  outline: none;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus,
+.inputGroup textarea:focus {
+  border-color: var(--color-btn-primary);
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(185, 139, 111, 0.15);
+}
+
+.inputGroup select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Phương thức thanh toán */
+.paymentMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.paymentLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 8px;
+  background-color: var(--color-input);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paymentLabel input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--color-btn-primary);
+  flex-shrink: 0;
+}
+
+.paymentText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.paymentText strong {
+  font-size: 0.9rem;
+  color: var(--color-heading);
+}
+
+.paymentText span {
+  font-size: 0.78rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.paymentActive {
+  border-color: var(--color-btn-primary);
+  background-color: #fcf8f4;
+}
+
+/* Sản phẩm trong order summary */
+.productRow {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.productImg {
+  width: 72px;
+  height: 92px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--color-input-border);
+  flex-shrink: 0;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.productName {
+  font-weight: 600;
+  color: var(--color-heading);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.productBrand {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-btn-primary);
+}
+
+.productMeta {
+  display: flex;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: var(--color-divider);
+}
+
+.productPrice {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-btn-primary);
+}
+
+/* Divider */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-input-border);
+  margin: 0;
+}
+
+/* Tổng tiền */
+.summaryRows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.totalRow {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.totalRow span:last-child {
+  color: var(--color-btn-primary);
+}
+
+/* Buttons */
+.btnSubmit {
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: var(--font-sans);
+  width: 100%;
+}
+
+.btnSubmit:hover:not(:disabled) {
+  background-color: var(--color-btn-primary-hover);
+}
+
+.btnSubmit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btnBack {
+  text-align: center;
+  color: var(--color-btn-primary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: block;
+}
+
+.btnBack:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .inputGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+}

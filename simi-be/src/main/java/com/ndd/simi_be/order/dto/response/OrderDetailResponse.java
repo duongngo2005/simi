@@ -1,5 +1,6 @@
 package com.ndd.simi_be.order.dto.response;
 
+import com.ndd.simi_be.payment.dto.PaymentResponse;
 import com.ndd.simi_be.payment.enums.PaymentMethod;
 import com.ndd.simi_be.payment.enums.PaymentStatus;
 import lombok.*;
@@ -31,8 +32,7 @@ public class OrderDetailResponse {
     private String orderChannel;
 
     private LocalDateTime createdDate;
-    private PaymentStatus paymentStatus;
-    private PaymentMethod paymentMethod;
 
     private List<OrderItemResponse> orderItems;
+    private List<PaymentResponse> paymentResponses;
 }

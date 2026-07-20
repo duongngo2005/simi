@@ -3,6 +3,7 @@ package com.ndd.simi_be.order.entity;
 import com.ndd.simi_be.common.entity.BaseEntity;
 import com.ndd.simi_be.order.enums.OrderChannel;
 import com.ndd.simi_be.order.enums.OrderStatus;
+import com.ndd.simi_be.payment.entity.Payment;
 import com.ndd.simi_be.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,4 +55,8 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Payment> payments = new ArrayList<>();
 }

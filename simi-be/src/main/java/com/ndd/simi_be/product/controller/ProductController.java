@@ -3,6 +3,7 @@ package com.ndd.simi_be.product.controller;
 import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
 import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
+import com.ndd.simi_be.product.dto.response.ProductImageResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -38,6 +39,17 @@ public class ProductController {
                 .body(productService.getProductById(id))
                 .build();
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/thumbnail")
+    public ResponseEntity<ApiResponse<ProductImageResponse>> getThumbnailByProductId(
+            @PathVariable Long id
+    ){
+        ApiResponse<ProductImageResponse> response = ApiResponse.<ProductImageResponse>builder()
+                .body(productService.getProductThumbnail(id))
+                .status(200)
+                .build();
         return ResponseEntity.ok(response);
     }
 }

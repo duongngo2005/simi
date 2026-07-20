@@ -79,7 +79,6 @@ export const HomePage = () => {
     }
   };
 
-  // Đợi cả 3 API cùng load xong dữ liệu
   if (newestLoading || newTagLoading || accessoriesLoading || footwearLoading) {
     return <div className={styles.loading}>Đang tải trang chủ...</div>;
   }

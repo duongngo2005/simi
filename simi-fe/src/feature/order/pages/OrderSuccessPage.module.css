@@ -1,0 +1,211 @@
+.page {
+  background-color: var(--color-background);
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.card {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 16px;
+  padding: 52px 48px;
+  max-width: 560px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(74, 53, 45, 0.08);
+}
+
+/* Icon thành công */
+.iconWrapper {
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.iconCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--color-success-bg);
+  border: 2px solid var(--color-success-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkIcon {
+  width: 36px;
+  height: 36px;
+  color: var(--color-success);
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: drawCheck 0.4s ease 0.3s forwards;
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Title */
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.92rem;
+  color: var(--color-text);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 400px;
+}
+
+.subtitle strong {
+  color: var(--color-btn-primary);
+}
+
+/* Mã đơn hàng */
+.orderIdBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--color-background);
+  border: 1px dashed var(--color-btn-primary);
+  border-radius: 10px;
+  padding: 14px 32px;
+  width: 100%;
+}
+
+.orderIdLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-divider);
+  font-weight: 600;
+}
+
+.orderIdValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-btn-primary);
+  letter-spacing: 2px;
+}
+
+/* Steps */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  background-color: var(--color-background);
+  border-radius: 8px;
+  border: 1px solid var(--color-input-border);
+}
+
+.stepIcon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stepText strong {
+  font-size: 0.88rem;
+  color: var(--color-heading);
+  font-weight: 700;
+}
+
+.stepText span {
+  font-size: 0.78rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.btnPrimary {
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+  padding: 13px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: center;
+  transition: background-color 0.2s;
+  display: block;
+}
+
+.btnPrimary:hover {
+  background-color: var(--color-btn-primary-hover);
+}
+
+.btnSecondary {
+  background-color: transparent;
+  color: var(--color-btn-primary);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-btn-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background-color 0.2s;
+  display: block;
+}
+
+.btnSecondary:hover {
+  background-color: #f7f0ea;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 36px 24px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+}

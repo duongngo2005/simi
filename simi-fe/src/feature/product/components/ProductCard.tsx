@@ -14,7 +14,6 @@ export const ProductCard = ({
   discount,
   isSale = false
 }: ProductSummaryResponse) => {
-  // 1. Tìm ảnh thumbnail, nếu không có thì lấy ảnh đầu tiên, cuối cùng là ảnh mặc định
   const thumbnailImage = 
     productImageResponses?.find((img) => img.thumbnail)?.imageUrl ||
     productImageResponses?.[0]?.imageUrl ||
@@ -22,7 +21,6 @@ export const ProductCard = ({
 
   const isNewWithTag = productCondition === "NEW WITH TAG";
 
-  // 2. Hàm format tiền tệ Việt Nam (150000 -> 150.000đ)
   const formatPrice = (price: number) => {
     return price.toLocaleString("vi-VN") + "đ";
   };
@@ -32,7 +30,6 @@ export const ProductCard = ({
       <div className={styles.cardImageContainer}>
         <img src={thumbnailImage} alt={name} className={styles.cardImage} loading="lazy" />
         
-        {/* Render nhãn trạng thái */}
         {(productCondition || discount) && (
           <span className={`${styles.badge} ${isNewWithTag ? styles.badgeTag : (isSale ? styles.badgeDanger : "")}`}>
             {isSale && discount ? discount : productCondition}
