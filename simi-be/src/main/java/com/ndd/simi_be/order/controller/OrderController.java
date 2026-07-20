@@ -10,10 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RequestMapping("/orders")
 @RestController
@@ -35,5 +34,15 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
+    @GetMapping("/shipping-fee")
+    public ResponseEntity<ApiResponse<BigDecimal>> estimateShippingFee(
+            @RequestParam String provinceCode,
+            @RequestParam BigDecimal subtotalAmount
+    ){
+        return ResponseEntity.ok(
+                ApiResponse.<BigDecimal>builder()
+                        .body(orderService.calculateShippingFee(provinceCode, subtotalAmount))
+                        .build()
+        );
+    }
 }

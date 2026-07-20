@@ -11,9 +11,11 @@ import com.ndd.simi_be.consignment.repository.ProductImageRepository;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
 import com.ndd.simi_be.product.dto.request.ProductRequest;
 import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
+import com.ndd.simi_be.product.dto.response.ProductImageResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.product.entity.ProductImage;
+import com.ndd.simi_be.product.mapper.ProductImageMapper;
 import com.ndd.simi_be.product.mapper.ProductMapper;
 import com.ndd.simi_be.product.repository.ProductRepository;
 import com.ndd.simi_be.product.repository.ProductSpecification;
@@ -148,11 +150,23 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ProductDetailResponse getProductById(Long id){
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
 
         return ProductMapper.toProductResponse(product);
+    }
+
+    @Transactional(readOnly = true)
+    public ProductImageResponse getProductThumbnail(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
+        ProductImage thumbnail = product.getProductImages().stream()
+                .filter(ProductImage::isThumbnail)
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Sản phẩm không có thumbnail"));
+
+        return ProductImageMapper.toProductImageResponse(thumbnail);
     }
 }

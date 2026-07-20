@@ -1,5 +1,6 @@
 package com.ndd.simi_be.order.dto.request;
 
+import com.ndd.simi_be.payment.enums.PaymentMethod;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,9 @@ public class OrderRequest {
     private String recipientPhone;
     @NotBlank(message = "Bạn chưa nhập tên")
     private String recipientName;
-
+    @Builder.Default
     private BigDecimal discount = BigDecimal.ZERO;
+
+    @NotNull(message = "Bạn chưa chọn phương thức thanh toán")
+    private PaymentMethod paymentMethod;
 }

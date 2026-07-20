@@ -11,6 +11,8 @@ public class PaymentMapper {
                 .amount(payment.getAmount())
                 .id(payment.getId())
                 .orderId(payment.getOrder().getId())
+                .refundedAt(payment.getRefundedAt())
+                .transactionId(payment.getTransactionId())
                 .build();
     }
 }

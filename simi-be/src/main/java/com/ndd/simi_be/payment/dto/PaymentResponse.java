@@ -21,4 +21,6 @@ public class PaymentResponse {
     private BigDecimal amount;
     private LocalDateTime paidAt;
     private PaymentMethod paymentMethod;
+    private LocalDateTime refundedAt;
+    private String transactionId;
 }
