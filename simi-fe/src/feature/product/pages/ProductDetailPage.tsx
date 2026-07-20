@@ -1,36 +1,21 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../lib/http/apiClient";
 import type { ApiResponse } from "../../../types/common";
 import styles from "./ProductDetailPage.module.css";
-
-// Type khớp với ProductDetailResponse từ BE
-interface ProductDetailResponse {
-  id: number;
-  name: string;
-  description: string;
-  size: string;
-  color: string;
-  currentPrice: number;
-  productCondition: "NEW_TAG" | "LIKE_NEW" | "GOOD" | "FAIR";
-  productStatus: string;
-  brandName: string;
-  categoryName: string;
-  tagNames: string[];
-  productImageResponses: { imageUrl: string; thumbnail: boolean }[];
-  createdDate: string;
-}
+import type { ProductDetailResponse } from "../types/product.type";
+import { size } from "zod";
 
 const CONDITION_LABEL: Record<string, string> = {
-  NEW: "Mới nguyên tag",
+  NEW_TAG: "Mới nguyên tag",
   LIKE_NEW: "Như mới (95%+)",
   GOOD: "Tốt (85-94%)",
   FAIR: "Khá (70-84%)",
 };
 
 const CONDITION_COLOR: Record<string, string> = {
-  NEW: "var(--color-info)",
+  NEW_TAG: "var(--color-info)",
   LIKE_NEW: "var(--color-success)",
   GOOD: "var(--color-warning)",
   FAIR: "var(--color-divider)",
@@ -53,6 +38,26 @@ export const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { data: product, isLoading, isError } = useProductDetail(id!);
   const [activeImage, setActiveImage] = useState(0);
+
+  const nav = useNavigate()
+
+  const handleBuyNow = () => {
+    nav("/checkout", {
+      state: {
+        product: {
+          id: product?.id,
+          name: product?.name,
+          currentPrice: product?.currentPrice,
+          brandName: product?.brandName,
+          categoryName: product?.categoryName,
+          size: product?.size,
+          color: product?.color,
+          productCondition: product?.productCondition,
+          productImageResponses: product?.productImageResponses
+        }
+      }
+    })
+  }
 
   if (isLoading) {
     return (
@@ -194,7 +199,7 @@ export const ProductDetailPage = () => {
             <button className={styles.btnAddToCart}>
               Thêm vào giỏ hàng
             </button>
-            <button className={styles.btnBuyNow}>
+            <button className={styles.btnBuyNow} onClick={handleBuyNow}>
               Mua ngay
             </button>
           </div>

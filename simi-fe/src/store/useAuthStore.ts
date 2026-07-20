@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { UserResponse } from "../types/user";
-import { userApi } from "../feature/user/userApi";
+import { userApi } from "../feature/user/api/userApi";
 
 interface AuthState{
     user: UserResponse | null;

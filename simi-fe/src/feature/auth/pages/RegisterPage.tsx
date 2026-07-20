@@ -8,24 +8,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getServerError } from "../../../utils/getMessageError";
 
 const registerSchema = z.object({
-  email: z
-  .string()
-  .trim()
-  .min(1, "Email không được để trống")
-  .pipe(z.email("Email không đúng định dạng")),
-  password: z
-  .string()
-  .min(5, "Mật khẩu phải lớn hơn 5 ký tự"),
-  confirm: z
-  .string()
-  .min(1, "Xác nhận mật khẩu không được để trống"),
-  fullName: z
-  .string()
-  .min(1, "Tên đầy đủ không được để trống")
+  fullName: z.string().min(1, "Tên đầy đủ không được để trống"),
+  email: z.string().trim().min(1, "Email không được để trống")
+           .pipe(z.email("Email không đúng định dạng")),
+  phoneNumber: z.string()               // ← THÊM MỚI
+    .min(10, "Số điện thoại tối thiểu 10 số")
+    .max(11, "Số điện thoại tối đa 11 số")
+    .regex(/^[0-9]+$/, "Số điện thoại chỉ được chứa chữ số"),
+  password: z.string().min(5, "Mật khẩu phải lớn hơn 5 ký tự"),
+  confirm: z.string().min(1, "Xác nhận mật khẩu không được để trống"),
 }).refine((data) => data.password === data.confirm, {
   message: "Mật khẩu xác nhận không khớp",
-  path: ['confirm']
-})
+  path: ["confirm"]
+});
+
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
@@ -79,6 +75,23 @@ const RegisterPage = () => {
             </span>
           )}
         </div>
+
+        <div className={styles.formField}>
+          <label htmlFor="phoneNumber">Số điện thoại</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            autoComplete="tel"
+            placeholder="Nhập số điện thoại"
+            {...formRegister("phoneNumber")}
+          />
+          {errors.phoneNumber && (
+            <span className={styles.errorText}>
+              {errors.phoneNumber.message}
+            </span>
+          )}
+        </div>
+
 
         <div className={styles.formField}>
           <label htmlFor="email">Email</label>

@@ -3,18 +3,20 @@
   min-height: 100vh;
 
   display: flex;
-  align-items: center;
+  align-items: center;          /* căn giữa dọc khi nội dung ngắn */
   justify-content: center;
 
-  padding: 24px;
+  padding: 40px 24px;           /* padding trên dưới để không sát màn hình */
   background-color: var(--color-background);
+  box-sizing: border-box;
 }
 
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
 
-  height: min(700px, calc(100vh - 48px));
+  /* ❌ Bỏ: height: min(700px, ...) — đây là nguyên nhân bị cắt */
+  /* ✅ Thay bằng: tự động giãn theo nội dung */
 
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -22,11 +24,13 @@
   background-color: white;
   border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 8px 40px rgba(74, 53, 45, 0.10);
 }
 
 .imageSection {
   min-width: 0;
   min-height: 0;
+  /* Ảnh sẽ tự kéo dài theo chiều cao của cột form bên phải */
 }
 
 .imageLogin {
@@ -34,15 +38,36 @@
   height: 100%;
   display: block;
   object-fit: cover;
+  /* Luôn lấp đầy dù form bên phải cao hay thấp */
 }
 
 .content {
   min-width: 0;
-  min-height: 0;
 
   display: flex;
-  align-items: center;
+  align-items: center;          /* căn giữa dọc trong cột */
   justify-content: center;
 
-  padding: 48px;
+  padding: 52px 48px;           /* padding rộng hơn một chút để form dễ thở */
+}
+
+/* Responsive: stack dọc trên mobile */
+@media (max-width: 768px) {
+  .page {
+    padding: 20px 16px;
+    align-items: flex-start;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+    border-radius: 12px;
+  }
+
+  .imageSection {
+    height: 220px;              /* ảnh hiện thị dạng banner ngang trên mobile */
+  }
+
+  .content {
+    padding: 32px 24px;
+  }
 }
