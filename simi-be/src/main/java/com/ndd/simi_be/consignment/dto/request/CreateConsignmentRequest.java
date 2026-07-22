@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class CreateConsignmentRequest {
-    @NotNull(message = "Khách hàng không được để trống")
-    private Long consignorId;
+    @NotNull(message = "Số điện thoại khách hàng không được để trống")
+    private String consignorPhone;
     private String note;
 }

@@ -33,8 +33,8 @@ public class ConsignmentService {
     public ConsignmentResponse createConsignment(CreateConsignmentRequest request, Long receivedById){
         User receivedBy = userRepository.findById(receivedById)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng"));
-        User consignor = userRepository.findById(request.getConsignorId())
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin khách hàng"));
+        User consignor = userRepository.findByPhoneNumber(request.getConsignorPhone())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng"));
 
         Consignment consignment = Consignment.builder()
                 .receivedBy(receivedBy)
