@@ -38,4 +38,24 @@ public class OrderItemService {
 
         return orderItemRepository.save(orderItem);
     }
+    @Transactional
+    public OrderItem createOrderItemOffline(OrderItemRequest request, Order order){
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
+
+        if (product.getProductStatus() != ProductStatus.AVAILABLE){
+            throw new BadRequestException("Sản phẩm hiện tại không khả dụng");
+        }
+
+        OrderItem orderItem = OrderItem.builder()
+                .product(product)
+                .order(order)
+                .unitPrice(product.getCurrentPrice())
+                .build();
+
+        product.setProductStatus(ProductStatus.SOLD);
+
+        return orderItemRepository.save(orderItem);
+    }
+
 }
