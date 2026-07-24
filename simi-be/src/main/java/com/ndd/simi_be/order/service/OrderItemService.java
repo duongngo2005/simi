@@ -39,7 +39,7 @@ public class OrderItemService {
         return orderItemRepository.save(orderItem);
     }
     @Transactional
-    public OrderItem createOrderItemOffline(OrderItemRequest request, Order order){
+    public OrderItem createPosOrderItem(OrderItemRequest request, Order order){
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
 

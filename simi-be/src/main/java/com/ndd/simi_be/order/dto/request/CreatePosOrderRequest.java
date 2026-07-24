@@ -11,7 +11,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class OrderOfflineRequest {
+public class CreatePosOrderRequest {
     @NotNull(message = "Chi tiết đơn hàng không được thiếu")
     private List<OrderItemRequest> orderItemRequests;
 

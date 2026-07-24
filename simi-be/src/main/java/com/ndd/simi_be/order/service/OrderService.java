@@ -11,7 +11,7 @@ import com.ndd.simi_be.location.repository.ProvinceRepository;
 import com.ndd.simi_be.location.repository.WardRepository;
 import com.ndd.simi_be.order.dto.request.OrderFilterRequest;
 import com.ndd.simi_be.order.dto.request.OrderItemRequest;
-import com.ndd.simi_be.order.dto.request.OrderOfflineRequest;
+import com.ndd.simi_be.order.dto.request.CreatePosOrderRequest;
 import com.ndd.simi_be.order.dto.request.OrderRequest;
 import com.ndd.simi_be.order.dto.response.OrderDetailResponse;
 import com.ndd.simi_be.order.dto.response.OrderSummaryResponse;
@@ -20,7 +20,6 @@ import com.ndd.simi_be.order.entity.OrderItem;
 import com.ndd.simi_be.order.enums.OrderChannel;
 import com.ndd.simi_be.order.enums.OrderStatus;
 import com.ndd.simi_be.order.mapper.OrderMapper;
-import com.ndd.simi_be.order.repository.OrderItemRepository;
 import com.ndd.simi_be.order.repository.OrderRepository;
 import com.ndd.simi_be.order.specification.OrderSpecification;
 import com.ndd.simi_be.payment.entity.Payment;
@@ -167,8 +166,8 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDetailResponse createOrderOffline(
-            OrderOfflineRequest request,
+    public OrderDetailResponse createPosOrder(
+            CreatePosOrderRequest request,
             User acceptedBy
     ){
         if (request.getPaymentMethod() == PaymentMethod.COD){
@@ -195,7 +194,7 @@ public class OrderService {
 
             List<OrderItem> orderItems = new ArrayList<>();
             for (OrderItemRequest itemRequest : request.getOrderItemRequests()){
-                OrderItem orderItem = orderItemService.createOrderItemOffline(itemRequest, order);
+                OrderItem orderItem = orderItemService.createPosOrderItem(itemRequest, order);
                 orderItems.add(orderItem);
             }
             order.setOrderItems(orderItems);

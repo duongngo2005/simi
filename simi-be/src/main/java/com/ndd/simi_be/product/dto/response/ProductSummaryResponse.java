@@ -1,5 +1,6 @@
 package com.ndd.simi_be.product.dto.response;
 
+import com.ndd.simi_be.product.enums.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,6 @@ public class ProductSummaryResponse {
     private BigDecimal currentPrice;
     private String size;
     private String productCondition;
-    private List<ProductImageResponse> productImageResponses;
+    private String thumbnail;
+    private ProductStatus productStatus;
 }

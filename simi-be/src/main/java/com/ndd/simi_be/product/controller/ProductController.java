@@ -1,5 +1,6 @@
 package com.ndd.simi_be.product.controller;
 
+import com.cloudinary.Api;
 import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
 import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
@@ -50,6 +51,17 @@ public class ProductController {
                 .body(productService.getProductThumbnail(id))
                 .status(200)
                 .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/pos")
+    public ResponseEntity<ApiResponse<ProductSummaryResponse>> getProductForPos(
+            @PathVariable Long id
+    ){
+        ApiResponse<ProductSummaryResponse> response = ApiResponse.<ProductSummaryResponse>builder()
+                .body(productService.getProductForPos(id))
+                .build();
+
         return ResponseEntity.ok(response);
     }
 }

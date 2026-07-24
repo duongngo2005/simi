@@ -7,11 +7,11 @@ export interface ProductSummaryResponse {
   id: number;
   name: string;
   brandName?: string;
-  currentPrice: number; // Tương đương BigDecimal ở BE
+  currentPrice: number;
   size?: string;
   productCondition?: string;
-  productImageResponses?: ProductImageResponse[];
-  // Dành riêng cho FE giả lập giao diện Sale
+  productStatus: string;
+  thumbnail: string;
   oldPrice?: number;
   discount?: string;
   isSale?: boolean;

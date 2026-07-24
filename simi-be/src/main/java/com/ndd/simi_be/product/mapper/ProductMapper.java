@@ -3,6 +3,7 @@ package com.ndd.simi_be.product.mapper;
 import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
+import com.ndd.simi_be.product.entity.ProductImage;
 import com.ndd.simi_be.tag.mapper.TagMapper;
 
 public class ProductMapper {
@@ -44,8 +45,13 @@ public class ProductMapper {
                         : product.getBrand().getName()
                 )
                 .productCondition(product.getProductCondition().name())
-                .productImageResponses(
-                        product.getProductImages().stream().map(ProductImageMapper::toProductImageResponse).toList()
+                .productStatus(product.getProductStatus())
+                .thumbnail(
+                        product.getProductImages().stream()
+                                .filter(ProductImage::isThumbnail)
+                                .map(ProductImage::getImageUrl)
+                                .findFirst()
+                                .orElse(null)
                 )
                 .build();
     }

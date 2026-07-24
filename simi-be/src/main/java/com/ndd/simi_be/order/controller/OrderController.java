@@ -2,7 +2,7 @@ package com.ndd.simi_be.order.controller;
 
 import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.order.dto.request.OrderFilterRequest;
-import com.ndd.simi_be.order.dto.request.OrderOfflineRequest;
+import com.ndd.simi_be.order.dto.request.CreatePosOrderRequest;
 import com.ndd.simi_be.order.dto.request.OrderRequest;
 import com.ndd.simi_be.order.dto.response.OrderDetailResponse;
 import com.ndd.simi_be.order.dto.response.OrderSummaryResponse;
@@ -19,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @RequestMapping("/orders")
 @RestController
@@ -67,16 +66,16 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/offline")
+    @PostMapping("/pos")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
-    public ResponseEntity<ApiResponse<OrderDetailResponse>> createOrderOffline(
-            @RequestBody OrderOfflineRequest request,
+    public ResponseEntity<ApiResponse<OrderDetailResponse>> createPosOrder(
+            @RequestBody CreatePosOrderRequest request,
             @AuthenticationPrincipal User acceptedBy
     ){
         ApiResponse<OrderDetailResponse> response = ApiResponse.<OrderDetailResponse>builder()
                 .message("Tạo đơn hàng thành công")
                 .status(201)
-                .body(orderService.createOrderOffline(request, acceptedBy))
+                .body(orderService.createPosOrder(request, acceptedBy))
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

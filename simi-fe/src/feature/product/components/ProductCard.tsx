@@ -9,14 +9,14 @@ export const ProductCard = ({
   currentPrice,
   size,
   productCondition,
-  productImageResponses,
+  thumbnail, // 💡 Hứng trường thumbnail mới từ BE
   oldPrice,
   discount,
   isSale = false
 }: ProductSummaryResponse) => {
+  // Lấy thumbnail từ BE, nếu không có mới dùng ảnh fallback
   const thumbnailImage = 
-    productImageResponses?.find((img) => img.thumbnail)?.imageUrl ||
-    productImageResponses?.[0]?.imageUrl ||
+    thumbnail || 
     "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500";
 
   const isNewWithTag = productCondition === "NEW WITH TAG";

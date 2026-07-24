@@ -112,7 +112,7 @@ export const HomePage = () => {
         <ProductSection title="Phụ kiện thời trang" products={accessoriesProducts} viewAllPath="/products?category=accessories" />
         
         <ProductSection title="Giày dép" products={footwearProducts} viewAllPath="/products?category=shoes" />
-        <ProductSection title="Thương hiệu yêu thích" products={PREMIUM_BRANDS} viewAllPath="/products?type=premium" />
+        {/* <ProductSection title="Thương hiệu yêu thích" products={PREMIUM_BRANDS} viewAllPath="/products?type=premium" /> */}
 
         {/* 3. FEEDBACK KHÁCH HÀNG */}
         <section className={`${styles.section} ${styles.sectionAlt}`}>

@@ -1,0 +1,291 @@
+.container {
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pageTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin: 0 0 4px 0;
+}
+
+.subtitle {
+  font-size: 0.82rem;
+  color: var(--color-text);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.posGrid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 18px;
+}
+
+.leftColumn,
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.card {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+/* Ô Tìm kiếm ID sản phẩm */
+.searchForm {
+  display: flex;
+  gap: 10px;
+}
+
+.inputBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  background-color: #ffffff;
+  padding: 0 12px;
+}
+
+.icon {
+  font-size: 1.1rem;
+  margin-right: 8px;
+}
+
+.inputBox input {
+  width: 100%;
+  height: 40px;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.btnAdd {
+  background-color: var(--color-btn-primary);
+  color: #ffffff;
+  border: none;
+  padding: 0 18px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Thẻ báo lỗi / Cảnh báo */
+.alertError {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Giỏ hàng */
+.emptyCart {
+  padding: 40px;
+  text-align: center;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.emptyCart span {
+  font-size: 2.5rem;
+}
+
+.cartList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cartItemCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.itemIndex {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  opacity: 0.6;
+}
+
+.itemThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--color-input-border);
+}
+
+.itemMeta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.itemName {
+  font-size: 0.88rem;
+  color: var(--color-heading);
+}
+
+.itemSpecs {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.itemPrice {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-heading);
+}
+
+.btnDelete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.btnDelete:hover {
+  opacity: 1;
+}
+
+/* Form Nhập thông tin khách bên phải */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formGroup label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text);
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+
+.formGroup input {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  outline: none;
+  font-size: 0.88rem;
+}
+
+/* Selector Phương thức thanh toán */
+.paymentSelector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.payMethodBtn {
+  height: 38px;
+  border: 1px solid var(--color-input-border);
+  background-color: #ffffff;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.payActive {
+  background-color: var(--color-btn-primary);
+  color: #ffffff;
+  border-color: var(--color-btn-primary);
+}
+
+/* Tổng tiền đơn hàng */
+.billSummary {
+  background-color: #f7f0ea;
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.billRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--color-heading);
+}
+
+.totalRow {
+  border-top: 1px solid var(--color-input-border);
+  padding-top: 10px;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+.totalPrice {
+  font-size: 1.15rem;
+  color: var(--color-btn-primary);
+}
+
+.btnCheckout {
+  background-color: #2e7d32;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 6px;
+}
+
+.btnCheckout:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .posGrid {
+    grid-template-columns: 1fr;
+  }
+}

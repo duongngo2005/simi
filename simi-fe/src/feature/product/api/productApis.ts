@@ -1,6 +1,6 @@
 import api from "../../../lib/http/apiClient";
 import type { ApiResponse, PageResponse } from "../../../types/common";
-import  { type ProductImageResponse, type ProductSummaryResponse } from "../types/product.type";
+import  { type ProductDetailResponse, type ProductImageResponse, type ProductSummaryResponse } from "../types/product.type";
 
 export const getProducts = async (params: {
     page?: number;
@@ -24,4 +24,9 @@ export const getProducts = async (params: {
 export const getThumbnail = async (id: number) => {
     const response = await api.get<ApiResponse<ProductImageResponse>>(`/products/${id}/thumbnail`);
     return response.data
+}
+
+export const getProductDetail = async (id: number) => {
+    const res = await api.get<ApiResponse<ProductDetailResponse>>(`/products/${id}`);
+      return res.data;
 }

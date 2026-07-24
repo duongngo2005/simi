@@ -6,6 +6,7 @@ import com.ndd.simi_be.category.entity.Category;
 import com.ndd.simi_be.category.repository.CategoryRepository;
 import com.ndd.simi_be.cloudinary.CloudinaryResponse;
 import com.ndd.simi_be.cloudinary.CloudinaryService;
+import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.repository.ProductImageRepository;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
@@ -15,6 +16,7 @@ import com.ndd.simi_be.product.dto.response.ProductImageResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.product.entity.ProductImage;
+import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.product.mapper.ProductImageMapper;
 import com.ndd.simi_be.product.mapper.ProductMapper;
 import com.ndd.simi_be.product.repository.ProductRepository;
@@ -168,5 +170,20 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Sản phẩm không có thumbnail"));
 
         return ProductImageMapper.toProductImageResponse(thumbnail);
+    }
+
+    @Transactional(readOnly = true)
+    public ProductSummaryResponse getProductForPos(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
+
+        if (product.getProductStatus() == ProductStatus.RESERVED){
+            throw new BadRequestException("Sản phẩm đang được đặt, không thể bán tại POS");
+        }
+
+        if (product.getProductStatus() == ProductStatus.SOLD){
+            throw new BadRequestException("Sản phẩm đã được bán");
+        }
+        return ProductMapper.toProductSummaryResponse(product);
     }
 }

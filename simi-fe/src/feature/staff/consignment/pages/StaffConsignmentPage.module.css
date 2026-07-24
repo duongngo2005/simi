@@ -1,0 +1,395 @@
+.container {
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pageTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin: 0 0 4px 0;
+}
+
+.subtitle {
+  font-size: 0.82rem;
+  color: var(--color-text);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.btnCreate {
+  background-color: var(--color-btn-primary);
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Cảnh báo */
+.warningGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.warningCard {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.warningExpiring { border-left: 4px solid #f57c00; }
+.warningSettlement { border-left: 4px solid #d32f2f; }
+
+.warningIcon { font-size: 1.8rem; }
+.warningCount { display: block; font-weight: 700; font-size: 0.95rem; color: var(--color-heading); }
+.warningLabel { display: block; font-size: 0.75rem; color: var(--color-text); opacity: 0.8; }
+
+/* Bảng */
+.tableWrapper {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f7f0ea;
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  border-bottom: 1px solid var(--color-input-border);
+}
+
+.table td {
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--color-input-border);
+}
+
+.consignmentId { font-weight: 700; color: var(--color-btn-primary); }
+
+.statusBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.status_ACTIVE { background-color: #e8f5e9; color: #2e7d32; }
+.status_EXPIRED { background-color: #ffebee; color: #c62828; }
+
+/* Modal nhỏ khởi tạo */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modalSmall {
+  background-color: #fffdf9;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 420px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-input-border);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.modalHeader h3 { margin: 0; font-size: 1rem; color: var(--color-heading); }
+.btnClose { background: none; border: none; font-size: 1.1rem; cursor: pointer; }
+
+.modalForm { display: flex; flex-direction: column; gap: 12px; }
+.modalActions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+
+.inputGroup { display: flex; flex-direction: column; gap: 4px; }
+.inputGroup label { font-size: 0.7rem; font-weight: 700; color: var(--color-text); text-transform: uppercase; }
+.inputGroup input, .inputGroup select { height: 34px; padding: 0 10px; border: 1px solid var(--color-input-border); border-radius: 6px; font-size: 0.82rem; }
+
+.btnPrimary { background-color: var(--color-btn-primary); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+.btnCancel { background: none; border: 1px solid var(--color-input-border); padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.82rem; cursor: pointer; }
+
+/* Trang Workspace Biên Tập (DETAIL WORKSPACE) */
+.detailWorkspace {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.btnBack {
+  background: none;
+  border: none;
+  color: var(--color-btn-primary);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--color-heading);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badgeDraft {
+  background-color: #fff3e0;
+  color: #e65100;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.detailMeta {
+  margin: 4px 0 0 0;
+  font-size: 0.82rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.btnActivateMain {
+  background-color: #2e7d32;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.formCard, .listCard {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cardSectionTitle {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  color: var(--color-heading);
+}
+
+.itemFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.colSpan2 { grid-column: span 2; }
+
+/* ── STYLES LỊCH GIÁ ĐỘNG ── */
+.scheduleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.btnAddScheduleRow {
+  background: none;
+  border: none;
+  color: var(--color-btn-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.priceScheduleContainer {
+  background-color: #f7f0ea;
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scheduleRowDynamic {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dayInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.dayInputGroup input {
+  width: 50px !important;
+  text-align: center;
+}
+
+.priceInput {
+  flex: 1;
+}
+
+.btnRemoveSchedule {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.btnRemoveSchedule:hover {
+  opacity: 1;
+}
+
+/* Tag Lịch giá hiển thị ở bảng bên phải */
+.scheduleBadgesList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.scheduleTag {
+  font-size: 0.7rem;
+  background-color: #efebe9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.formActions {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btnSaveItem {
+  background-color: var(--color-btn-primary);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btnCancelEdit {
+  background-color: #efebe9;
+  border: 1px solid var(--color-input-border);
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+/* Bảng hiển thị bên phải */
+.miniTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.miniTable th {
+  background-color: #f7f0ea;
+  padding: 10px;
+  border-bottom: 1px solid var(--color-input-border);
+}
+
+.miniTable td {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-input-border);
+}
+
+.subMeta {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+.btnGroup {
+  display: flex;
+  gap: 6px;
+}
+
+.btnEdit, .btnDelete {
+  background: none;
+  border: 1px solid var(--color-input-border);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.btnDelete:hover { background-color: #ffebee; }
+.btnEdit:hover { background-color: #e3f2fd; }
+
+.emptyItems {
+  padding: 30px;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 900px) {
+  .detailGrid { grid-template-columns: 1fr; }
+  .warningGrid { grid-template-columns: 1fr; }
+}

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getProducts, getThumbnail } from "../api/productApis"
+import { getProductDetail, getProducts, getThumbnail } from "../api/productApis"
 
 export const useNewestProducts = () => {
     return useQuery({
@@ -61,3 +61,13 @@ export const useThumbnail = (id: number) => {
         select: (response) => response.body.imageUrl
     })
 }
+
+export const useProductDetail = (id: number) => {
+    return useQuery({
+        queryKey: ["product", id],
+        queryFn: () => getProductDetail(id),
+        select: (response) => response.body,
+        enabled: !!id,
+  });
+}
+  

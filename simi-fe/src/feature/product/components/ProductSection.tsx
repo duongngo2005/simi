@@ -49,7 +49,7 @@ export const ProductSection = ({ title, products, viewAllPath, isSale = false }:
               discount={prod.discount}
               size={prod.size}
               productCondition={prod.productCondition}
-              productImageResponses={prod.productImageResponses}
+              thumbnail={prod.thumbnail}
               isSale={isSale}
             />
           ))}
