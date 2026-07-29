@@ -1,6 +1,7 @@
 package com.ndd.simi_be.category.service;
 
 import com.ndd.simi_be.category.dto.CategoryResponse;
+import com.ndd.simi_be.category.dto.CategoryTreeResponse;
 import com.ndd.simi_be.category.dto.CreateCategoryRequest;
 import com.ndd.simi_be.category.dto.UpdateCategoryRequest;
 import com.ndd.simi_be.category.entity.Category;
@@ -23,7 +24,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public CategoryResponse createCategory(CreateCategoryRequest request){
+    public CategoryTreeResponse createCategory(CreateCategoryRequest request){
         if (categoryRepository.existsByName(request.getName())){
             throw new ConflictException("Tên danh mục đã tồn tại");
         }
@@ -44,11 +45,11 @@ public class CategoryService {
                 .build();
         category = categoryRepository.save(category);
 
-        return CategoryMapper.toCategoryResponse(category);
+        return CategoryMapper.toCategoryTreeResponse(category);
     }
 
     @Transactional
-    public CategoryResponse updateCategory(UpdateCategoryRequest request, Long id){
+    public CategoryTreeResponse updateCategory(UpdateCategoryRequest request, Long id){
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Danh mục không tồn tại"));
 
@@ -89,12 +90,12 @@ public class CategoryService {
 
         category = categoryRepository.save(category);
 
-        return CategoryMapper.toCategoryResponse(category);
+        return CategoryMapper.toCategoryTreeResponse(category);
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryResponse> getCategoryTree(){
-        return categoryRepository.findByParentIsNull().stream().map(CategoryMapper::toCategoryResponse).toList();
+    public List<CategoryTreeResponse> getCategoryTree(){
+        return categoryRepository.findByParentIsNull().stream().map(CategoryMapper::toCategoryTreeResponse).toList();
     }
 
     @Transactional
@@ -102,5 +103,10 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy danh mục"));
         category.setActive(false);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getAllCategories(){
+        return categoryRepository.findAll().stream().map(CategoryMapper::toCategoryResponse).toList();
     }
 }

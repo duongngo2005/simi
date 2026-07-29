@@ -1,6 +1,7 @@
 package com.ndd.simi_be.category.controller;
 
 import com.ndd.simi_be.category.dto.CategoryResponse;
+import com.ndd.simi_be.category.dto.CategoryTreeResponse;
 import com.ndd.simi_be.category.dto.CreateCategoryRequest;
 import com.ndd.simi_be.category.dto.UpdateCategoryRequest;
 import com.ndd.simi_be.category.service.CategoryService;
@@ -9,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +24,10 @@ public class CategoryController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<CategoryResponse>> createCategory(
+    public ResponseEntity<ApiResponse<CategoryTreeResponse>> createCategory(
             @Valid @RequestBody CreateCategoryRequest request
     ){
-        ApiResponse<CategoryResponse> apiResponse = ApiResponse.<CategoryResponse>builder()
+        ApiResponse<CategoryTreeResponse> apiResponse = ApiResponse.<CategoryTreeResponse>builder()
                 .body(categoryService.createCategory(request))
                 .status(201)
                 .message("Tạo danh mục thành công")
@@ -38,11 +38,11 @@ public class CategoryController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(
+    public ResponseEntity<ApiResponse<CategoryTreeResponse>> updateCategory(
             @Valid @RequestBody UpdateCategoryRequest request,
             @PathVariable Long id
     ){
-        ApiResponse<CategoryResponse> apiResponse = ApiResponse.<CategoryResponse>builder()
+        ApiResponse<CategoryTreeResponse> apiResponse = ApiResponse.<CategoryTreeResponse>builder()
                 .body(categoryService.updateCategory(request, id))
                 .message("Cập nhật danh mục thành công")
                 .status(200)
@@ -51,11 +51,22 @@ public class CategoryController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @GetMapping("/tree")
+    public ResponseEntity<ApiResponse<List<CategoryTreeResponse>>> getCategoryTree(){
+        ApiResponse<List<CategoryTreeResponse>> apiResponse
+                = ApiResponse.<List<CategoryTreeResponse>>builder()
+                .body(categoryService.getCategoryTree())
+                .status(200)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getCategoryTree(){
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAllCategories(){
         ApiResponse<List<CategoryResponse>> apiResponse
                 = ApiResponse.<List<CategoryResponse>>builder()
-                .body(categoryService.getCategoryTree())
+                .body(categoryService.getAllCategories())
                 .status(200)
                 .build();
 
