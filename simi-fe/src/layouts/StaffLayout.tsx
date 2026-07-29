@@ -1,13 +1,24 @@
-import { Outlet, NavLink, useNavigate } from "react-router";
+import { Outlet, NavLink, useNavigate, Navigate } from "react-router";
 import { useAuthStore } from "../store/useAuthStore";
 import styles from "./StaffLayout.module.css";
 
 export const StaffLayout = () => {
-  const { user, clearAuth } = useAuthStore();
+  const { user, clearAuth, isInitialized } = useAuthStore();
   const navigate = useNavigate();
 
+  if(!isInitialized){
+    return null;
+  }
+
+  if(!user){
+    return <Navigate to="/login" replace/>
+  }
+
+  if(user.role !== "STAFF" && user.role !== "ADMIN"){
+    return <Navigate to="/" replace/>
+  }
+
   const handleLogout = () => {
-    // Gọi API logout nếu cần, hoặc đơn giản là clear local state và redirect
     clearAuth();
     navigate("/login");
   };
@@ -29,7 +40,7 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}>📊</span>
+            <span className={styles.navIcon}></span>
             Tổng quan
           </NavLink>
 
@@ -39,7 +50,7 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}>📦</span>
+            <span className={styles.navIcon}></span>
             Bán hàng
           </NavLink>
 
@@ -49,7 +60,7 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}>📦</span>
+            <span className={styles.navIcon}></span>
             Quản lý đơn hàng
           </NavLink>
 
@@ -59,7 +70,7 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}>🤝</span>
+            <span className={styles.navIcon}></span>
             Quản lý ký gửi
           </NavLink>
 
@@ -69,14 +80,14 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}>🏷️</span>
+            <span className={styles.navIcon}></span>
             Quản lý sản phẩm
           </NavLink>
         </nav>
 
         <div className={styles.footerSection}>
           <button onClick={handleLogout} className={styles.btnLogout}>
-            <span className={styles.navIcon}>🚪</span>
+            <span className={styles.navIcon}></span>
             Đăng xuất
           </button>
         </div>
