@@ -12,9 +12,6 @@ export interface ProductSummaryResponse {
   productCondition?: string;
   productStatus: string;
   thumbnail: string;
-  oldPrice?: number;
-  discount?: string;
-  isSale?: boolean;
 }
 
 export interface ProductDetailResponse {
