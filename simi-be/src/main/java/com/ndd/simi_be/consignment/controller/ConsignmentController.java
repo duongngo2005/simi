@@ -1,6 +1,7 @@
 package com.ndd.simi_be.consignment.controller;
 
 import com.ndd.simi_be.common.response.ApiResponse;
+import com.ndd.simi_be.consignment.dto.request.ConsignmentFilterRequest;
 import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
@@ -8,6 +9,7 @@ import com.ndd.simi_be.consignment.service.ConsignmentService;
 import com.ndd.simi_be.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,13 +42,14 @@ public class ConsignmentController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
-    public ResponseEntity<ApiResponse<List<ConsignmentResponse>>> getAllConsignments(){
-        ApiResponse<List<ConsignmentResponse>> response =
-                ApiResponse.<List<ConsignmentResponse>>builder()
-                        .status(200)
-                        .body(consignmentService.getAllConsignments())
-                        .build();
-
+    public ResponseEntity<ApiResponse<Page<ConsignmentResponse>>> searchConsignments(
+            @Valid @ModelAttribute ConsignmentFilterRequest request
+    ){
+        ApiResponse<Page<ConsignmentResponse>> response
+                = ApiResponse.<Page<ConsignmentResponse>>builder()
+                .body(consignmentService.searchConsignments(request))
+                .status(201)
+                .build();
         return ResponseEntity.ok(response);
     }
 

@@ -1,0 +1,179 @@
+.card {
+  background-color: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  padding-bottom: 8px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-heading, #111827);
+}
+
+.btnActivate {
+  padding: 6px 12px;
+  background-color: #15803d;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.btnActivate:hover {
+  opacity: 0.9;
+}
+
+.emptyText {
+  text-align: center;
+  padding: 32px 16px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.83rem;
+}
+
+.table th {
+  padding: 8px 10px;
+  background-color: #f9fafb;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #4b5563;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  color: var(--color-text, #1f2937);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid #e5e7eb;
+  display: block;
+}
+
+.productName {
+  font-weight: 600;
+  color: var(--color-heading, #111827);
+}
+
+.productMeta {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.priceCell {
+  font-weight: 600;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 2px 6px;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btnEdit {
+  padding: 3px 8px;
+  background-color: transparent;
+  border: 1px solid var(--color-border, #d1d5db);
+  color: var(--color-text, #374151);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btnEdit:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btnDelete {
+  padding: 3px 8px;
+  background-color: transparent;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btnDelete:hover {
+  background-color: #fef2f2;
+}
+
+.deletingRow {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

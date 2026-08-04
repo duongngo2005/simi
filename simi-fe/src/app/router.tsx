@@ -12,6 +12,7 @@ import { StaffDashboard } from "../feature/staff/order/pages/StaffDashboard";
 import { StaffOrderListPage } from "../feature/staff/order/pages/StaffOrderListPage";
 import { StaffConsignmentPage } from "../feature/staff/consignment/pages/StaffConsignmentPage";
 import { StaffPOSPage } from "../feature/staff/pos/pages/StaffPOSPage";
+import { StaffConsignmentDetailPage } from "../feature/staff/consignment/pages/StaffConsignmentDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -62,6 +63,11 @@ export const router = createBrowserRouter([
             {
                 path: "/staff/consignments",
                 element: <StaffConsignmentPage/>
+
+            },
+            {
+                path: "staff/consignments/:id",
+                element: <StaffConsignmentDetailPage/>
             },
             {
                 path: "/staff/pos",

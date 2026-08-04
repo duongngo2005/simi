@@ -11,8 +11,10 @@ public class ConsignmentMapper {
     public static ConsignmentResponse toConsignmentResponse(Consignment consignment){
         return ConsignmentResponse.builder()
                 .id(consignment.getId())
+                .receivedName(consignment.getReceivedBy().getFullName())
                 .receivedBy(consignment.getReceivedBy().getId())
                 .consignorId(consignment.getConsignor().getId())
+                .consignorName(consignment.getConsignor().getFullName())
                 .startDate(consignment.getStartDate())
                 .expiryDate(consignment.getExpiryDate())
                 .note(consignment.getNote())
@@ -22,8 +24,9 @@ public class ConsignmentMapper {
                 )
                 .soldItem(
                         consignment.getConsignmentItems().stream().filter(
-                                c -> c.getConsignmentItemStatus() == ConsignmentItemStatus.SOLD
-                        ).toList().size()
+                                c -> c.getConsignmentItemStatus() ==
+                                        ConsignmentItemStatus.SOLD)
+                                .toList().size()
                 )
                 .build();
     }

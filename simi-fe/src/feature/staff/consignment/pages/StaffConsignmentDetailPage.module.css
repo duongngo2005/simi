@@ -1,0 +1,75 @@
+/* ── KHUNG CHÍNH ── */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+/* ── THANH TIÊU ĐỀ TRÊN ── */
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btnBack {
+  padding: 6px 14px;
+  background-color: transparent;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-text, #374151);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btnBack:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-heading, #111827);
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 3px 8px;
+  background-color: #f3e8ff;
+  color: #6b21a8;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 450px minmax(0, 1fr); 
+  gap: 16px;
+  align-items: start;
+}
+
+/* ── KHUNG KHÁC (LOADING / ERROR / NOT DRAFT) ── */
+.stateBox {
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6b7280;
+  background-color: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 4px;
+}
+
+/* RESPONSIVE MÀN HÌNH NHỎ */
+@media (max-width: 900px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}

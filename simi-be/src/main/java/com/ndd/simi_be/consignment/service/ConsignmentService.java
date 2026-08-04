@@ -3,6 +3,7 @@ package com.ndd.simi_be.consignment.service;
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ConflictException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
+import com.ndd.simi_be.consignment.dto.request.ConsignmentFilterRequest;
 import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
@@ -13,10 +14,16 @@ import com.ndd.simi_be.consignment.enums.ConsignmentStatus;
 import com.ndd.simi_be.consignment.enums.PriceScheduleStatus;
 import com.ndd.simi_be.consignment.mapper.ConsignmentMapper;
 import com.ndd.simi_be.consignment.repository.ConsignmentRepository;
+import com.ndd.simi_be.consignment.specification.ConsignmentSpecification;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.user.entity.User;
 import com.ndd.simi_be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,9 +55,24 @@ public class ConsignmentService {
     }
 
     @Transactional(readOnly = true)
-    public List<ConsignmentResponse> getAllConsignments(){
-        return consignmentRepository.findAll().stream()
-                .map(ConsignmentMapper::toConsignmentResponse).toList();
+    public Page<ConsignmentResponse> searchConsignments(ConsignmentFilterRequest request){
+        Specification<Consignment> specification = Specification.allOf(
+                ConsignmentSpecification.hasIsExpiringSoon(request.getIsExpiringSoon()),
+                ConsignmentSpecification.hasKeyword(request.getKeyword()),
+                ConsignmentSpecification.hasStatus(request.getConsignmentStatus()),
+                ConsignmentSpecification.hasExpiryDateTo(request.getExpiryDateTo()),
+                ConsignmentSpecification.hasExpiryDateFrom(request.getExpiryDateFrom()),
+                ConsignmentSpecification.hasStartDateFrom(request.getStartDateFrom()),
+                ConsignmentSpecification.hasStartDateTo(request.getStartDateTo())
+        );
+
+        Sort sort = request.getSortDir().equalsIgnoreCase("desc")
+                ? Sort.by(request.getSortBy()).descending()
+                : Sort.by(request.getSortBy()).ascending();
+
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sort);
+        return consignmentRepository.findAll(specification, pageable)
+                .map(ConsignmentMapper::toConsignmentResponse);
     }
 
     @Transactional

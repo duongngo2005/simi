@@ -23,11 +23,12 @@ export interface ProductDetailResponse {
   currentPrice: number;
   productCondition: "NEW_TAG" | "LIKE_NEW" | "GOOD" | "FAIR";
   productStatus: string;
-  brandName: string;
-  categoryName: string;
+  brand: number | null;
+  category: number;
   tagNames: string[];
-  productImageResponses: { imageUrl: string; thumbnail: boolean }[];
+  productImageResponses: { id: number, imageUrl: string; thumbnail: boolean }[];
   createdDate: string;
+  thumbnail: string;
 }
 
 export interface ProductImageResponse {

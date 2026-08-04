@@ -13,7 +13,7 @@ export const staffOrderApi = {
     },
     changeOrderStatus: async (orderId: number, status: string) => {
         await api.patch(`/orders/${orderId}/status`, null, {
-            params: {status}
+            params: { status }
         });
     }
 }

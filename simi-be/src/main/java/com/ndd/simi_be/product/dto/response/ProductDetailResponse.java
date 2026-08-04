@@ -26,4 +26,5 @@ public class ProductDetailResponse {
     private String status;
     private List<ProductImageResponse> productImageResponses;
     private LocalDateTime createdDate;
+    private String thumbnail;
 }
