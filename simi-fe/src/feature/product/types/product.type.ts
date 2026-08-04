@@ -7,14 +7,11 @@ export interface ProductSummaryResponse {
   id: number;
   name: string;
   brandName?: string;
-  currentPrice: number; // Tương đương BigDecimal ở BE
+  currentPrice: number;
   size?: string;
   productCondition?: string;
-  productImageResponses?: ProductImageResponse[];
-  // Dành riêng cho FE giả lập giao diện Sale
-  oldPrice?: number;
-  discount?: string;
-  isSale?: boolean;
+  productStatus: string;
+  thumbnail: string;
 }
 
 export interface ProductDetailResponse {
@@ -26,11 +23,12 @@ export interface ProductDetailResponse {
   currentPrice: number;
   productCondition: "NEW_TAG" | "LIKE_NEW" | "GOOD" | "FAIR";
   productStatus: string;
-  brandName: string;
-  categoryName: string;
+  brand: number | null;
+  category: number;
   tagNames: string[];
-  productImageResponses: { imageUrl: string; thumbnail: boolean }[];
+  productImageResponses: { id: number, imageUrl: string; thumbnail: boolean }[];
   createdDate: string;
+  thumbnail: string;
 }
 
 export interface ProductImageResponse {

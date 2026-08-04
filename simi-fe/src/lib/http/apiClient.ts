@@ -18,26 +18,43 @@ api.interceptors.request.use((config) => {
     return config;
 })
 
+let refreshing: Promise<void> | null = null;
+
 api.interceptors.response.use( 
     (response) => response,
     async (error) => {
         const originalRequest = error.config
-        if(error.response?.status === 401 && !originalRequest._retry){
-            originalRequest._retry = true
-            try{
-                const res = await api.post<ApiResponse<AuthTokenResponse>>('/auth/refresh')
-                const newToken: string = res.data.body.accessToken
 
-                localStorage.setItem('accessToken', newToken);
-                originalRequest.headers.Authorization = `Bearer ${newToken}`
-
-                return api(originalRequest);
-            }catch{
-                useAuthStore.getState().clearAuth()
-                window.location.href = "/login"
-            }
+        if (error.response?.status !== 401 || originalRequest._retry){
+            return Promise.reject(error);
         }
-        return Promise.reject(error)
+
+        originalRequest._retry = true;
+
+        if (!refreshing){
+            refreshing = api
+            .post<ApiResponse<AuthTokenResponse>>('/auth/refresh')
+            .then((res) => {
+                localStorage.setItem('accessToken', res.data.body.accessToken);
+            })
+            .catch(() => {
+                useAuthStore.getState().clearAuth();
+                window.location.href = "/login";
+            })
+            .finally(() => {
+                refreshing = null;
+            })
+        }
+
+        await refreshing;
+
+        const newToken = localStorage.getItem("accessToken");
+        if(newToken){
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return api(originalRequest);
+        }
+
+        return Promise.reject(error);
     }
 )
 

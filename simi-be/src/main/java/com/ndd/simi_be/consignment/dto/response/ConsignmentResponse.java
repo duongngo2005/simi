@@ -12,7 +12,9 @@ import java.util.List;
 public class ConsignmentResponse {
     private Long id;
     private Long consignorId;
+    private String consignorName;
     private Long receivedBy;
+    private String receivedName;
     private LocalDateTime startDate;
     private LocalDateTime expiryDate;
     private int totalItem;

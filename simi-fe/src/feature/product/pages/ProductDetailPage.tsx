@@ -6,6 +6,7 @@ import type { ApiResponse } from "../../../types/common";
 import styles from "./ProductDetailPage.module.css";
 import type { ProductDetailResponse } from "../types/product.type";
 import { size } from "zod";
+import { useProductDetail } from "../hooks/useProducts";
 
 const CONDITION_LABEL: Record<string, string> = {
   NEW_TAG: "Mới nguyên tag",
@@ -24,19 +25,10 @@ const CONDITION_COLOR: Record<string, string> = {
 const formatPrice = (price: number) =>
   price?.toLocaleString("vi-VN") + "đ";
 
-const useProductDetail = (id: string) =>
-  useQuery({
-    queryKey: ["product", id],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<ProductDetailResponse>>(`/products/${id}`);
-      return res.data.body;
-    },
-    enabled: !!id,
-  });
-
 export const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: product, isLoading, isError } = useProductDetail(id!);
+  const productId = id ? Number(id) : 0; 
+  const { data: product, isLoading, isError } = useProductDetail(productId);
   const [activeImage, setActiveImage] = useState(0);
 
   const nav = useNavigate()

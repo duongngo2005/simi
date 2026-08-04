@@ -9,14 +9,10 @@ export const ProductCard = ({
   currentPrice,
   size,
   productCondition,
-  productImageResponses,
-  oldPrice,
-  discount,
-  isSale = false
+  thumbnail,
 }: ProductSummaryResponse) => {
-  const thumbnailImage = 
-    productImageResponses?.find((img) => img.thumbnail)?.imageUrl ||
-    productImageResponses?.[0]?.imageUrl ||
+  const thumbnailImage =
+    thumbnail ||
     "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500";
 
   const isNewWithTag = productCondition === "NEW WITH TAG";
@@ -28,11 +24,20 @@ export const ProductCard = ({
   return (
     <Link to={`/products/${id}`} className={styles.card}>
       <div className={styles.cardImageContainer}>
-        <img src={thumbnailImage} alt={name} className={styles.cardImage} loading="lazy" />
-        
-        {(productCondition || discount) && (
-          <span className={`${styles.badge} ${isNewWithTag ? styles.badgeTag : (isSale ? styles.badgeDanger : "")}`}>
-            {isSale && discount ? discount : productCondition}
+        <img
+          src={thumbnailImage}
+          alt={name}
+          className={styles.cardImage}
+          loading="lazy"
+        />
+
+        {productCondition && (
+          <span
+            className={`${styles.badge} ${
+              isNewWithTag ? styles.badgeTag : ""
+            }`}
+          >
+            {productCondition}
           </span>
         )}
       </div>
@@ -41,17 +46,10 @@ export const ProductCard = ({
           {size && <span className={styles.cardSize}>Size {size}</span>}
           {brandName && <span className={styles.cardBrand}>{brandName}</span>}
         </div>
-        
+
         <h3 className={styles.cardName}>{name}</h3>
-        
-        {isSale && oldPrice ? (
-          <div className={styles.priceContainer}>
-            <span className={styles.cardPriceNew}>{formatPrice(currentPrice)}</span>
-            <span className={styles.cardPriceOld}>{formatPrice(oldPrice)}</span>
-          </div>
-        ) : (
-          <p className={styles.cardPrice}>{formatPrice(currentPrice)}</p>
-        )}
+
+        <p className={styles.cardPrice}>{formatPrice(currentPrice)}</p>
       </div>
     </Link>
   );

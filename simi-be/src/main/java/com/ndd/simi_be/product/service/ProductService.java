@@ -6,6 +6,7 @@ import com.ndd.simi_be.category.entity.Category;
 import com.ndd.simi_be.category.repository.CategoryRepository;
 import com.ndd.simi_be.cloudinary.CloudinaryResponse;
 import com.ndd.simi_be.cloudinary.CloudinaryService;
+import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.repository.ProductImageRepository;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
@@ -15,6 +16,7 @@ import com.ndd.simi_be.product.dto.response.ProductImageResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.product.entity.ProductImage;
+import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.product.mapper.ProductImageMapper;
 import com.ndd.simi_be.product.mapper.ProductMapper;
 import com.ndd.simi_be.product.repository.ProductRepository;
@@ -155,7 +157,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
 
-        return ProductMapper.toProductResponse(product);
+        return ProductMapper.toProductDetailResponse(product);
     }
 
     @Transactional(readOnly = true)
@@ -168,5 +170,98 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Sản phẩm không có thumbnail"));
 
         return ProductImageMapper.toProductImageResponse(thumbnail);
+    }
+
+    @Transactional(readOnly = true)
+    public ProductSummaryResponse getProductForPos(Long id){
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
+
+        if (product.getProductStatus() == ProductStatus.RESERVED){
+            throw new BadRequestException("Sản phẩm đang được đặt, không thể bán tại POS");
+        }
+
+        if (product.getProductStatus() == ProductStatus.SOLD){
+            throw new BadRequestException("Sản phẩm đã được bán");
+        }
+        return ProductMapper.toProductSummaryResponse(product);
+    }
+
+    @Transactional
+    public Product updateProduct(
+            Product existingProduct,
+            ProductRequest request,
+            MultipartFile newThumb,
+            List<MultipartFile> newImages,
+            List<Long> deleteImageIds
+    ){
+        existingProduct.setName(request.getName());
+        existingProduct.setDescription(request.getDescription());
+        existingProduct.setSize(request.getSize());
+        existingProduct.setColor(request.getColor());
+        existingProduct.setProductCondition(request.getProductCondition());
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy loại sản phẩm"));
+        existingProduct.setCategory(category);
+
+        if (request.getBrandId() != null){
+            Brand brand = brandRepository.findById(request.getBrandId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thương hiệu"));
+            existingProduct.setBrand(brand);
+        }else {
+            existingProduct.setBrand(null);
+        }
+
+        List<Tag> tags = tagService.createTagOrFind(request.getTagNames());
+        existingProduct.setTags(tags);
+
+        if (deleteImageIds != null && !deleteImageIds.isEmpty()){
+            List<ProductImage> imagesToDelete = existingProduct.getProductImages().stream()
+                    .filter((img) -> deleteImageIds.contains(img.getId()))
+                    .toList();
+
+            for (ProductImage img : imagesToDelete){
+                cloudinaryService.deleteImage(img.getImagePublicId());
+                productImageRepository.delete(img);
+                existingProduct.getProductImages().remove(img);
+            }
+        }
+
+        if (newThumb != null && !newThumb.isEmpty()){
+            existingProduct.getProductImages().stream()
+                    .filter(ProductImage::isThumbnail)
+                    .findFirst()
+                    .ifPresent((oldThumb) -> {
+                        cloudinaryService.deleteImage(oldThumb.getImagePublicId());
+                        productImageRepository.delete(oldThumb);
+                        existingProduct.getProductImages().remove(oldThumb);
+                        CloudinaryResponse response = cloudinaryService.uploadImage(newThumb);
+                        ProductImage newThumbnail = ProductImage.builder()
+                                .product(existingProduct)
+                                .thumbnail(true)
+                                .imagePublicId(response.getPublicId())
+                                .imageUrl(response.getUrl())
+                                .build();
+                        productImageRepository.save(newThumbnail);
+                        existingProduct.getProductImages().add(newThumbnail);
+                    });
+        }
+
+        if (newImages != null){
+            for (MultipartFile img : newImages){
+                CloudinaryResponse response = cloudinaryService.uploadImage(img);
+                ProductImage newImg = ProductImage.builder()
+                        .product(existingProduct)
+                        .thumbnail(false)
+                        .imagePublicId(response.getPublicId())
+                        .imageUrl(response.getUrl())
+                        .build();
+                existingProduct.getProductImages().add(newImg);
+                productImageRepository.save(newImg);
+            }
+        }
+
+        return productRepository.save(existingProduct);
     }
 }

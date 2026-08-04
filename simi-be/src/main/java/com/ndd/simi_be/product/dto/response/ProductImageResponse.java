@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class ProductImageResponse {
+    private Long id;
     private String imageUrl;
     private boolean thumbnail;
 }

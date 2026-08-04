@@ -2,6 +2,7 @@ package com.ndd.simi_be.consignment.controller;
 
 import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentItemRequest;
+import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentItemRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentFullDetailResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.service.ConsignmentItemService;
@@ -40,7 +41,7 @@ public class ConsignmentItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}/items")
+    @GetMapping("/{id}/details")
     public ResponseEntity<ApiResponse<ConsignmentFullDetailResponse>> getAllItemsByConsignmentId(
             @PathVariable("id") Long consignmentId
     ){
@@ -83,6 +84,26 @@ public class ConsignmentItemController {
                 .status(200)
                 .body(consignmentItemService.getConsignmentItemById(consignmentItemId))
                 .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{consignmentId}/items/{consignmentItemId}")
+    public ResponseEntity<ApiResponse<ConsignmentItemResponse>> updateConsignmentItem(
+            @Valid @RequestPart("data") UpdateConsignmentItemRequest request,
+            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images,
+            @PathVariable("consignmentId") Long consignmentId,
+            @PathVariable("consignmentItemId") Long consignmentItemId
+    ){
+        ApiResponse<ConsignmentItemResponse> response =
+                ApiResponse.<ConsignmentItemResponse>builder()
+                        .message("Update item thành công")
+                        .status(200)
+                        .body(consignmentItemService.updateConsignmentItem(
+                                consignmentId, consignmentItemId, request, thumbnail, images
+                        ))
+                        .build();
 
         return ResponseEntity.ok(response);
     }

@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class BrandController {
     private final BrandService brandService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<BrandResponse>> createBrand(
             @Valid @RequestBody CreateBrandRequest request
     ){
@@ -33,6 +35,7 @@ public class BrandController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<BrandResponse>> updateBrand(
             @Valid @RequestBody UpdateBrandRequest request,
             @PathVariable Long id
@@ -57,6 +60,7 @@ public class BrandController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> softDeleteBrand(@PathVariable Long id){
         brandService.softDeleteBrand(id);
         return ResponseEntity.noContent().build();

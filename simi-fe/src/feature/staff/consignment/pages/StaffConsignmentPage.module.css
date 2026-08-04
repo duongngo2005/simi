@@ -1,0 +1,362 @@
+/* ── KHUNG CHÍNH ── */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-heading, #111827);
+}
+
+.btnCreate {
+  padding: 8px 16px;
+  background-color: var(--color-btn-primary, #6b21a8);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.btnCreate:hover {
+  opacity: 0.9;
+}
+
+/* ── BẢNG DỮ LIỆU ── */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 4px;
+  background-color: var(--color-surface, #ffffff);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.table th {
+  padding: 10px 12px;
+  background-color: #f9fafb;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #4b5563;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  color: var(--color-text, #1f2937);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background-color: #f9fafb;
+}
+
+.codeCell {
+  font-weight: 700;
+  color: var(--color-btn-primary, #6b21a8);
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 32px 12px !important;
+  color: #6b7280;
+}
+
+/* ── TRẠNG THÁI (STATUS BADGES) ── */
+.statusBadge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status_DRAFT {
+  background-color: #f3e8ff;
+  color: #6b21a8;
+}
+
+.status_ACTIVE {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status_PENDING_SETTLEMENT {
+  background-color: #ffe4e6;
+  color: #be123c;
+}
+
+.status_SETTLED {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status_CLOSED {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+/* ── NÚT CHI TIẾT ── */
+.btnDetail {
+  padding: 4px 10px;
+  background-color: transparent;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text, #374151);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btnDetail:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+/* ── PHÂN TRANG ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.pageBtn {
+  padding: 6px 14px;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 4px;
+  background-color: var(--color-surface, #ffffff);
+  font-size: 0.82rem;
+  color: var(--color-text, #374151);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+/* ── KHUNG CHÍNH ── */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-heading, #111827);
+}
+
+.btnCreate {
+  padding: 8px 16px;
+  background-color: var(--color-btn-primary, #6b21a8);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.btnCreate:hover {
+  opacity: 0.9;
+}
+
+/* ── BẢNG DỮ LIỆU ── */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 4px;
+  background-color: var(--color-surface, #ffffff);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.table th {
+  padding: 10px 12px;
+  background-color: #f9fafb;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #4b5563;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  color: var(--color-text, #1f2937);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background-color: #f9fafb;
+}
+
+.codeCell {
+  font-weight: 700;
+  color: var(--color-btn-primary, #6b21a8);
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 32px 12px !important;
+  color: #6b7280;
+}
+
+/* ── TRẠNG THÁI (STATUS BADGES) ── */
+.statusBadge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status_DRAFT {
+  background-color: #f3e8ff;
+  color: #6b21a8;
+}
+
+.status_ACTIVE {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status_PENDING_SETTLEMENT {
+  background-color: #ffe4e6;
+  color: #be123c;
+}
+
+.status_SETTLED {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status_CLOSED {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+/* ── NÚT CHI TIẾT ── */
+.btnDetail {
+  padding: 4px 10px;
+  background-color: transparent;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text, #374151);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btnDetail:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+/* ── PHÂN TRANG ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.pageBtn {
+  padding: 6px 14px;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 4px;
+  background-color: var(--color-surface, #ffffff);
+  font-size: 0.82rem;
+  color: var(--color-text, #374151);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.82rem;
+  color: #6b7280;
+}

@@ -2,8 +2,6 @@ package com.ndd.simi_be.category.dto;
 
 import lombok.*;
 
-import java.util.List;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,6 +11,5 @@ public class CategoryResponse {
     private String name;
     private String slug;
     private Long parentId;
-    private List<CategoryResponse> children;
     private boolean active;
 }

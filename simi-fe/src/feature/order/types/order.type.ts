@@ -1,3 +1,5 @@
+import { number } from "zod";
+
 export interface Province {
   code: string;
   name: string;
@@ -65,4 +67,30 @@ export interface PaymentResponse {
     paymentMethod: string;
     refundedAt?: string;
     transactionId?: string;
+}
+
+export interface OrderSummaryResponse{
+    id: number
+    orderStatus: string;
+    finalAmount: number;
+    createdDate: string;
+
+    firstItemName: string;
+    firstItemThumbnail: string;
+    totalItem: number;
+}
+
+export interface OrderFilterRequest{
+    orderStatus: string;
+    orderChannel: string;
+    keyword: string;
+
+    page: number;
+    size: number;
+
+    fromDate: string;
+    toDate: string;
+
+    sortDir: string;
+    sortBy: string;
 }

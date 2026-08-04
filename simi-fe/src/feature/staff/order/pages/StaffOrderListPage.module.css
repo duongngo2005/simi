@@ -1,0 +1,300 @@
+.container {
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pageTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin: 0;
+}
+
+/* ── KHU VỰC BỘ LỌC ── */
+.filterSection {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.filterGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inputGroup label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-text);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.inputGroup input,
+.inputGroup select {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  background-color: #ffffff;
+  outline: none;
+  font-size: 0.82rem;
+  color: var(--color-heading);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  border-color: var(--color-btn-primary);
+  box-shadow: 0 0 0 3px rgba(185, 139, 111, 0.1);
+}
+
+.colSpan2 {
+  grid-column: span 2;
+}
+
+/* NÚT TĂNG/GIẢM MŨI TÊN */
+.sortDirBtn {
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: var(--color-heading);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.sortDirBtn:hover {
+  background-color: #f7f0ea;
+  border-color: var(--color-btn-primary);
+}
+
+.arrowIcon {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-btn-primary);
+}
+
+/* ── BẢNG DỮ LIỆU ── */
+.tableWrapper {
+  background-color: #fffdf9;
+  border: 1px solid var(--color-input-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f7f0ea;
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  border-bottom: 1px solid var(--color-input-border);
+}
+
+.table td {
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--color-input-border);
+  vertical-align: middle;
+}
+
+.orderId {
+  font-weight: 700;
+  color: var(--color-btn-primary);
+}
+
+.dateCell {
+  font-size: 0.78rem;
+  color: var(--color-text);
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+/* Cột sản phẩm */
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.thumbnailImg {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid var(--color-input-border);
+}
+
+.noThumbnail {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background-color: #efebe9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.productName {
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.totalItemsCount {
+  font-size: 0.72rem;
+  color: var(--color-text);
+  opacity: 0.75;
+}
+
+.amount {
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+/* ── SELECT TRẠNG THÁI ── */
+.statusSelect {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.statusSelect:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status_PENDING {
+  background-color: #fff3e0;
+  color: #e65100;
+  border-color: #ffe0b2;
+}
+
+.status_PACKING {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-color: #c8e6c9;
+}
+
+.status_SHIPPING {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border-color: #bbdefb;
+}
+
+.status_COMPLETED {
+  background-color: #efebe9;
+  color: #4e342e;
+  border-color: #d7ccc8;
+}
+
+.status_CANCELLED {
+  background-color: #ffebee;
+  color: #c62828;
+  border-color: #ffcdd2;
+}
+
+/* ── PHÂN TRANG (PAGINATION) ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.pageBtn {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--color-input-border);
+  background-color: #fffdf9;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: #f7f0ea;
+  border-color: var(--color-btn-primary);
+}
+
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.loading,
+.error,
+.empty {
+  padding: 40px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--color-text);
+}
+
+.error {
+  color: #c62828;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .filterGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .filterGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .colSpan2 {
+    grid-column: span 1;
+  }
+}

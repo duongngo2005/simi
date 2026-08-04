@@ -3,10 +3,11 @@ package com.ndd.simi_be.product.mapper;
 import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
 import com.ndd.simi_be.product.dto.response.ProductSummaryResponse;
 import com.ndd.simi_be.product.entity.Product;
+import com.ndd.simi_be.product.entity.ProductImage;
 import com.ndd.simi_be.tag.mapper.TagMapper;
 
 public class ProductMapper {
-    public static ProductDetailResponse toProductResponse(Product product){
+    public static ProductDetailResponse toProductDetailResponse(Product product){
         return ProductDetailResponse.builder()
                 .createdDate(product.getCreatedDate())
                 .id(product.getId())
@@ -28,6 +29,13 @@ public class ProductMapper {
                 .tagResponses(
                         product.getTags().stream().map(TagMapper::toTagResponse).toList()
                 )
+                .thumbnail(
+                        product.getProductImages().stream()
+                                .filter(ProductImage::isThumbnail)
+                                .map(ProductImage::getImageUrl)
+                                .findFirst()
+                                .orElse(null)
+                )
                 .currentPrice(product.getCurrentPrice())
                 .build();
     }
@@ -44,8 +52,13 @@ public class ProductMapper {
                         : product.getBrand().getName()
                 )
                 .productCondition(product.getProductCondition().name())
-                .productImageResponses(
-                        product.getProductImages().stream().map(ProductImageMapper::toProductImageResponse).toList()
+                .productStatus(product.getProductStatus())
+                .thumbnail(
+                        product.getProductImages().stream()
+                                .filter(ProductImage::isThumbnail)
+                                .map(ProductImage::getImageUrl)
+                                .findFirst()
+                                .orElse(null)
                 )
                 .build();
     }

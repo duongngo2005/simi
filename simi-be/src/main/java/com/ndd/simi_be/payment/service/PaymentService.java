@@ -43,7 +43,16 @@ public class PaymentService {
                     .build();
 
             return paymentRepository.save(payment);
-        }else {
+        } else if (method == PaymentMethod.CASH) {
+            Payment payment = Payment.builder()
+                    .order(order)
+                    .amount(order.getFinalAmount())
+                    .paymentMethod(method)
+                    .paymentStatus(PaymentStatus.PAID)
+                    .build();
+
+            return paymentRepository.save(payment);
+        } else {
             throw new BadRequestException("Chưa hỗ trợ thanh toán online");
         }
     }
