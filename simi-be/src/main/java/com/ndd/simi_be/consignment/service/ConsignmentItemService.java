@@ -3,10 +3,9 @@ package com.ndd.simi_be.consignment.service;
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentItemRequest;
-import com.ndd.simi_be.consignment.dto.request.PriceScheduleRequest;
+import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentItemRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentFullDetailResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
-import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.entity.Consignment;
 import com.ndd.simi_be.consignment.entity.ConsignmentItem;
 import com.ndd.simi_be.consignment.entity.PriceSchedule;
@@ -25,8 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -141,6 +138,46 @@ public class ConsignmentItemService {
     ){
         ConsignmentItem item = consignmentItemRepository.findById(consignmentItemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng"));
+
+        return ConsignmentItemMapper.toConsignmentItemResponse(item);
+    }
+
+    @Transactional
+    public ConsignmentItemResponse updateConsignmentItem(
+            Long consignmentId,
+            Long consignmentItemId,
+            UpdateConsignmentItemRequest request,
+            MultipartFile thumbnail,
+            List<MultipartFile> imageProducts
+    ){
+
+        Consignment consignment = consignmentRepository.findById(consignmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
+
+        ConsignmentItem item = consignmentItemRepository.findById(consignmentItemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng"));
+
+        if (!item.getConsignment().getId().equals(consignmentId)) {
+            throw new BadRequestException("Chi tiết lô hàng không thuộc về lô hàng");
+        }
+
+        if (item.getConsignmentItemStatus() != ConsignmentItemStatus.DRAFT){
+            throw new BadRequestException("Chỉ có thể cập nhật chi tiết lô hàng ở trạng thái DRAFT");
+        }
+
+        item.setCommissionRate(request.getCommissionRate());
+
+        productService.updateProduct(
+                item.getProduct(), request.getProductRequest(),
+                thumbnail, imageProducts, request.getDeleteImageIds()
+        );
+
+        priceScheduleService.hardDeletePriceSchedules(item.getPriceSchedules());
+        consignmentItemRepository.flush();
+        List<PriceSchedule> newSchedules = priceScheduleService.createListPriceSchedule(
+                request.getPriceScheduleRequests(), item
+        );
+        item.setPriceSchedules(newSchedules);
 
         return ConsignmentItemMapper.toConsignmentItemResponse(item);
     }

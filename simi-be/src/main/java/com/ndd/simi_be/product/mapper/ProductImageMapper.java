@@ -6,6 +6,7 @@ import com.ndd.simi_be.product.entity.ProductImage;
 public class ProductImageMapper {
     public static ProductImageResponse toProductImageResponse(ProductImage productImage){
         return ProductImageResponse.builder()
+                .id(productImage.getId())
                 .imageUrl(productImage.getImageUrl())
                 .thumbnail(productImage.isThumbnail())
                 .build();
