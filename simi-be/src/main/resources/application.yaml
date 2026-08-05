@@ -28,6 +28,8 @@ app:
     secret: U21hcnREaWdpdGFsTGlicmFyeVNlY3JldEtleUZvckhTMjU2QWxnb3JpdGhtMjAyNA
     access-expiration-ms: 1800000
     refresh-expiration-ms: 604800000
+  scheduler:
+    price-cron: "0 42 17 * * ?"
 
 cloudinary:
   cloud-name: docidan7t

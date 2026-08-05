@@ -2,7 +2,7 @@ import { create } from "zustand";
 import type { UserResponse } from "../types/user";
 import { userApi } from "../feature/user/api/userApi";
 
-interface AuthState{
+interface AuthState {
     user: UserResponse | null;
     accessToken: string | null;
     isInitialized: boolean;
@@ -23,22 +23,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     setAuth: (user, token) => {
         localStorage.setItem('accessToken', token)
-        set({user: user, accessToken: token})
+        set({ user: user, accessToken: token })
     },
     initialize: async () => {
         const token = get().accessToken
 
-        if(!token){
-            set({isInitialized: true})
+        if (!token) {
+            set({ isInitialized: true })
             return;
         }
 
-        try{
+        try {
             const res = await userApi.getMe()
-            set({user: res.data.body, isInitialized: true})
-        }catch{
+            set({ user: res.data.body, isInitialized: true })
+        } catch {
             localStorage.removeItem('accessToken');
-            set({user: null, isInitialized: true, accessToken: null})
+            set({ user: null, accessToken: null })
+        } finally {
+            set({ isInitialized: true })
         }
     },
     clearAuth: () => {

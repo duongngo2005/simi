@@ -8,7 +8,7 @@ import com.ndd.simi_be.cloudinary.CloudinaryResponse;
 import com.ndd.simi_be.cloudinary.CloudinaryService;
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
-import com.ndd.simi_be.consignment.repository.ProductImageRepository;
+import com.ndd.simi_be.product.repository.ProductImageRepository;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
 import com.ndd.simi_be.product.dto.request.ProductRequest;
 import com.ndd.simi_be.product.dto.response.ProductDetailResponse;
