@@ -2,6 +2,9 @@ package com.ndd.simi_be.order.service;
 
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
+import com.ndd.simi_be.consignment.entity.ConsignmentItem;
+import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
+import com.ndd.simi_be.consignment.repository.ConsignmentItemRepository;
 import com.ndd.simi_be.order.dto.request.OrderItemRequest;
 import com.ndd.simi_be.order.entity.Order;
 import com.ndd.simi_be.order.entity.OrderItem;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
+    private final ConsignmentItemRepository consignmentItemRepository;
 
     @Transactional
     public OrderItem createOrderItem(OrderItemRequest request, Order order){
@@ -35,6 +39,12 @@ public class OrderItemService {
                 .build();
 
         product.setProductStatus(ProductStatus.RESERVED);
+
+        ConsignmentItem consignmentItem
+                = consignmentItemRepository.findByProduct(product)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng"));
+
+        consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.RESERVED);
 
         return orderItemRepository.save(orderItem);
     }
