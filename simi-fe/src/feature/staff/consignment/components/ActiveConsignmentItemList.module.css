@@ -1,0 +1,209 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-heading, #4A352D);
+}
+
+.emptyState {
+  padding: 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text, #6f4e40);
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.itemCard {
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.productMain {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.thumbnail {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+}
+
+.noThumbnail {
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  background-color: var(--color-input, #fbf8f3);
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--color-text, #6f4e40);
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.productName {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-heading, #4A352D);
+}
+
+.metaRow {
+  display: flex;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: var(--color-text, #6f4e40);
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status_ACTIVE {
+  background-color: var(--color-success-bg, #F0F4EC);
+  color: var(--color-success, #4F772D);
+  border: 1px solid var(--color-success-border, #C2D5A8);
+}
+
+.status_RESERVED {
+  background-color: var(--color-warning-bg, #FEF3C7);
+  color: var(--color-warning, #D97706);
+  border: 1px solid var(--color-warning-border, #FCD34D);
+}
+
+.status_SOLD {
+  background-color: var(--color-info-bg, #F0F4F8);
+  color: var(--color-info, #2E5B88);
+  border: 1px solid var(--color-info-border, #BCD0E3);
+}
+
+.status_EXPIRED {
+  background-color: var(--color-danger-bg, #FDF2F0);
+  color: var(--color-danger-text, #9F3D2A);
+  border: 1px solid var(--color-danger-border, #F5C6BA);
+}
+
+.financialRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 12px;
+  background-color: var(--color-input, #fbf8f3);
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.financialItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.financialLabel {
+  color: var(--color-heading, #4A352D);
+  font-weight: 500;
+}
+
+.financialValue {
+  color: var(--color-text, #6f4e40);
+  font-weight: 600;
+}
+
+.currentPrice {
+  color: var(--color-info, #2E5B88);
+  font-weight: 700;
+}
+
+.payoutValue {
+  color: var(--color-success, #4F772D);
+  font-weight: 700;
+}
+
+.scheduleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+
+.scheduleTitle {
+  font-weight: 600;
+  color: var(--color-heading, #4A352D);
+}
+
+.scheduleList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.scheduleTag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  color: var(--color-text, #6f4e40);
+}
+
+.schedulePrice {
+  color: var(--color-heading, #4A352D);
+}
+
+.scheduleStatus {
+  font-size: 0.72rem;
+}
+
+.schedStatus_APPLIED {
+  color: var(--color-success, #4F772D);
+  font-weight: 600;
+}
+
+.schedStatus_PENDING {
+  color: var(--color-warning, #D97706);
+}
