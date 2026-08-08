@@ -70,4 +70,14 @@ export const useProductDetail = (id: number) => {
         enabled: !!id,
   });
 }
+
+export const useProductsByIds = (productIds: number[]) => {
+    return useQuery({
+        queryKey: ['products', productIds],
+        queryFn: () => Promise.all(
+            productIds.map((id) => getProductDetail(id))
+        ),
+        enabled: productIds.length > 0,
+    })
+}
   

@@ -39,7 +39,7 @@ public class CartService {
     public CartResponse addToCart(Long productId, User user){
 
         Cart cart = cartRepository.findByUser(user)
-                .orElseGet(() -> cartRepository.save(Cart.builder().build()));
+                .orElseGet(() -> cartRepository.save(Cart.builder().user(user).build()));
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin sản phẩm"));

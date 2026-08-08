@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useGetMyCart, useRemoveItem } from "../hook/useCart";
 import styles from "./CartPage.module.css";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { formatPrice } from "../../../utils/formatPrice";
 
 export const CartPage = () => {
   const { data: myCart, isLoading: cartLoading, isError } = useGetMyCart();
   const { mutateAsync: removeItem, isPending } = useRemoveItem();
+  const navigate = useNavigate();
 
   const items = myCart?.cartItemResponses || [];
 
@@ -51,6 +52,16 @@ export const CartPage = () => {
     const price = item.productSummaryResponse?.currentPrice || item.currentPrice || 0;
     return acc + price;
   }, 0);
+
+  const handleCheckout = () => {
+    if(selectedItems.length === 0) return;
+
+    navigate("/checkout", {
+      state: {
+        productIds: selectedItems.map((item) => item.productSummaryResponse.id)
+      }
+    })
+  }
 
   const availableCount = items.filter(
     (item) => (item.productSummaryResponse?.productStatus || "AVAILABLE") === "AVAILABLE"
@@ -155,9 +166,9 @@ export const CartPage = () => {
                 Xóa
               </button>
               {selectedItems.length > 0 ? (
-                <Link to="/checkout" state={{ selectedCartItemIds: selectedIds }} className={styles.checkoutBtn}>
+                <button className={styles.checkoutBtn} onClick={handleCheckout}>
                   Thanh toán
-                </Link>
+                </button>
               ) : (
                 <button disabled className={styles.disabledBtn}>
                   Thanh toán

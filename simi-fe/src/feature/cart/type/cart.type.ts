@@ -1,4 +1,4 @@
-import type { ProductImageResponse, ProductSummaryResponse } from "../../product/types/product.type";
+import type { ProductSummaryResponse } from "../../product/types/product.type";
 
 export interface CartResponse {
     id: number;

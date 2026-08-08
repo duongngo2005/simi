@@ -9,5 +9,8 @@ export const cartApi = {
     },
     removeItem: async (id: number) => {
         await api.delete(`/carts/remove/${id}`);
+    },
+    addToCart: async (id: number) => {
+        await api.post(`carts/add/${id}`)
     }
 }

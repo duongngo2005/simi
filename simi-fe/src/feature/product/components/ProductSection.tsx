@@ -27,6 +27,12 @@ export const ProductSection = ({
     }
   };
 
+  if (!products || products.length === 0){
+    return(
+      <></>
+    )
+  }
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>{title}</h2>

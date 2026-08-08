@@ -18,3 +18,13 @@ export const useRemoveItem = () => {
         })
     })
 }
+
+export const useAddToCart = () => {
+    return useMutation({
+        mutationFn: (id: number) => cartApi.addToCart(id),
+        onSuccess: () => queryClient.invalidateQueries({
+            queryKey: ["my-cart"]
+        })
+    })
+}
+    
