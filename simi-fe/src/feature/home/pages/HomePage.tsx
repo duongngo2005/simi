@@ -9,66 +9,6 @@ import { ProductSection } from "../../product/components/ProductSection";
 import styles from "./HomePage.module.css";
 import { Link } from "react-router";
 
-// Helper sinh dữ liệu giả lập cho các danh mục còn lại chưa có API
-const generateProducts = (
-  type: "normal" | "accessory" | "shoes",
-  prefix: string,
-  startId: number
-) => {
-  const images = [
-    "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500", // shirt
-    "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500", // jeans
-    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500", // blazer
-    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500", // dress
-    "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500", // jacket
-    "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500", // hoodie
-  ];
-
-  const shoeImages = [
-    "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500",
-    "https://images.unsplash.com/photo-1539185441755-769473a23570?w=500",
-    "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500",
-  ];
-
-  const brands = [
-    "Zara",
-    "Levi's",
-    "Mango",
-    "Uniqlo",
-    "MLB",
-    "H&M",
-    "Gucci",
-    "Chanel",
-    "Nike",
-    "Adidas",
-  ];
-  const sizes = ["S", "M", "L", "XL", "38", "39", "40", "41", "42"];
-
-  return Array.from({ length: 20 }, (_, i) => {
-    const id = startId + i;
-    const brand = brands[id % brands.length];
-    let img = images[id % images.length];
-
-    if (type === "shoes") {
-      img = shoeImages[id % shoeImages.length];
-    }
-
-    return {
-      id,
-      name: `${prefix} ${brand} #${id}`,
-      currentPrice: 150000 + (id % 8) * 70000,
-      size: sizes[id % sizes.length],
-      productCondition:
-        type === "normal" && id % 3 === 0
-          ? "NEW WITH TAG"
-          : `${92 + (id % 3) * 3}%`,
-      productStatus: "AVAILABLE",
-      brandName: brand,
-      thumbnail: img,
-    };
-  });
-};
-
 const FEEDBACKS = [
   {
     id: 1,
@@ -121,7 +61,6 @@ const FEEDBACKS = [
 ];
 
 export const HomePage = () => {
-  // Nạp dữ liệu thực từ API qua React Query hooks
   const { data: newestProducts = [], isLoading: newestLoading } =
     useNewestProducts();
   const { data: newTagProducts = [], isLoading: newTagLoading } =
@@ -149,7 +88,6 @@ export const HomePage = () => {
 
   return (
     <div className={styles.home}>
-      {/* 1. HERO BANNER */}
       <section className={styles.hero}>
         <div className={styles.heroOverlay}>
           <div className={styles.heroContent}>
@@ -176,7 +114,6 @@ export const HomePage = () => {
       </section>
 
       <div className={styles.mainContainer}>
-        {/* 2. CÁC PHÂN MỤC SẢN PHẨM */}
         <ProductSection
           title="Mới lên kệ"
           products={newestProducts}
@@ -201,7 +138,6 @@ export const HomePage = () => {
           viewAllPath="/products?category=shoes"
         />
 
-        {/* 3. FEEDBACK KHÁCH HÀNG */}
         <section className={`${styles.section} ${styles.sectionAlt}`}>
           <h2 className={styles.sectionTitle}>Đánh giá từ khách hàng</h2>
           <div className={styles.carouselWrapper}>

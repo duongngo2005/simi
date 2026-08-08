@@ -7,13 +7,7 @@ import { useProvinces, useWards } from "../hooks/useLocation";
 import { formatPrice } from "../../../utils/formatPrice";
 import { useThumbnail } from "../../product/hooks/useProducts";
 import { useShippingFee, useCreateOrder } from "../hooks/useOrder";
-
-const CONDITION_LABEL: Record<string, string> = {
-  NEW_TAG: "Mới nguyên tag",
-  LIKE_NEW: "Như mới (95%+)",
-  GOOD: "Tốt (85-94%)",
-  FAIR: "Khá (70-84%)",
-};
+import { CONDITION_LABEL } from "../../../utils/condition";
 
 export const CheckoutPage = () => {
   const location = useLocation();
