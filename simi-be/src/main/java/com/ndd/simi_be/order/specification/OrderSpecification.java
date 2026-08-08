@@ -73,4 +73,13 @@ public class OrderSpecification {
             return cb.lessThanOrEqualTo(root.get("createdDate"), toDate);
         };
     }
+
+    public static Specification<Order> hasCustomer(User user){
+        return (root, query, cb) -> {
+            if (user == null){
+                return cb.conjunction();
+            }
+            return cb.equal(root.get("customer"), user);
+        };
+    }
 }
