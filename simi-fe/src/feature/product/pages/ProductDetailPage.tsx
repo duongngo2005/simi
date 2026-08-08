@@ -1,54 +1,46 @@
 import { useParams, Link, useNavigate } from "react-router";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import api from "../../../lib/http/apiClient";
-import type { ApiResponse } from "../../../types/common";
 import styles from "./ProductDetailPage.module.css";
-import type { ProductDetailResponse } from "../types/product.type";
-import { size } from "zod";
 import { useProductDetail } from "../hooks/useProducts";
-
-const CONDITION_LABEL: Record<string, string> = {
-  NEW_TAG: "Mới nguyên tag",
-  LIKE_NEW: "Như mới (95%+)",
-  GOOD: "Tốt (85-94%)",
-  FAIR: "Khá (70-84%)",
-};
-
-const CONDITION_COLOR: Record<string, string> = {
-  NEW_TAG: "var(--color-info)",
-  LIKE_NEW: "var(--color-success)",
-  GOOD: "var(--color-warning)",
-  FAIR: "var(--color-divider)",
-};
-
-const formatPrice = (price: number) =>
-  price?.toLocaleString("vi-VN") + "đ";
+import { CONDITION_COLOR, CONDITION_LABEL } from "../../../utils/condition";
+import { formatPrice } from "../../../utils/formatPrice";
+import { useAddToCart, useGetMyCart } from "../../cart/hook/useCart";
 
 export const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const productId = id ? Number(id) : 0; 
   const { data: product, isLoading, isError } = useProductDetail(productId);
   const [activeImage, setActiveImage] = useState(0);
+  const {mutateAsync: addToCart, isPending} = useAddToCart()
+
+  const {data: myCart} = useGetMyCart()
+
+  const isInCart = myCart?.cartItemResponses?.some(
+    (item) => item.productSummaryResponse?.id === productId
+  );
 
   const nav = useNavigate()
 
   const handleBuyNow = () => {
     nav("/checkout", {
       state: {
-        product: {
-          id: product?.id,
-          name: product?.name,
-          currentPrice: product?.currentPrice,
-          brandName: product?.brandName,
-          categoryName: product?.categoryName,
-          size: product?.size,
-          color: product?.color,
-          productCondition: product?.productCondition,
-          productImageResponses: product?.productImageResponses
-        }
+        productIds: [product?.id]
       }
     })
+  }
+
+  const handleAddToCart = async (id: number) => {
+    if(isInCart){
+      nav("/cart");
+      return;
+    }
+
+    try{
+      addToCart(id);
+      alert("Đã thêm sản phẩm vào giỏ hàng")
+    }catch(err: any){
+      alert(err.response?.data?.message || "Lỗi thêm vào giỏ hàng")
+    }
   }
 
   if (isLoading) {
@@ -118,15 +110,14 @@ export const ProductDetailPage = () => {
           )}
         </div>
 
-        {/* ── CỘT PHẢI: THÔNG TIN ── */}
         <div className={styles.info}>
           {/* Brand + Category */}
           <div className={styles.metaRow}>
-            {product.brandName && (
-              <span className={styles.brand}>{product.brandName}</span>
+            {product.brand && (
+              <span className={styles.brand}>{product.brand}</span>
             )}
-            {product.categoryName && (
-              <span className={styles.category}>{product.categoryName}</span>
+            {product.category && (
+              <span className={styles.category}>{product.category}</span>
             )}
           </div>
 
@@ -141,7 +132,6 @@ export const ProductDetailPage = () => {
           {/* Divider */}
           <hr className={styles.divider} />
 
-          {/* Chi tiết nhanh */}
           <div className={styles.detailGrid}>
             {product.size && (
               <div className={styles.detailItem}>
@@ -161,15 +151,14 @@ export const ProductDetailPage = () => {
                 {CONDITION_LABEL[product.productCondition]}
               </span>
             </div>
-            {product.brandName && (
+            {product.brand && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Thương hiệu</span>
-                <span className={styles.detailValue}>{product.brandName}</span>
+                <span className={styles.detailValue}>{product.brand}</span>
               </div>
             )}
           </div>
 
-          {/* Tags */}
           {product.tagNames?.length > 0 && (
             <div className={styles.tags}>
               {product.tagNames.map((tag) => (
@@ -178,7 +167,6 @@ export const ProductDetailPage = () => {
             </div>
           )}
 
-          {/* Mô tả */}
           {product.description && (
             <div className={styles.descriptionSection}>
               <h3 className={styles.descLabel}>Mô tả sản phẩm</h3>
@@ -186,17 +174,15 @@ export const ProductDetailPage = () => {
             </div>
           )}
 
-          {/* Nút hành động */}
           <div className={styles.actions}>
-            <button className={styles.btnAddToCart}>
-              Thêm vào giỏ hàng
+            <button onClick={() => handleAddToCart(product.id)} disabled={isPending} className={styles.btnAddToCart}>
+              {isInCart ? "Đã có trong giỏ hàng" : "Thêm vào giỏ hàng"}
             </button>
             <button className={styles.btnBuyNow} onClick={handleBuyNow}>
               Mua ngay
             </button>
           </div>
 
-          {/* Cam kết */}
           <div className={styles.guarantees}>
             <div className={styles.guarantee}>
               <span className={styles.guaranteeIcon}>✓</span>

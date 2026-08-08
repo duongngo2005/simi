@@ -13,6 +13,7 @@ import { StaffOrderListPage } from "../feature/staff/order/pages/StaffOrderListP
 import { StaffConsignmentPage } from "../feature/staff/consignment/pages/StaffConsignmentPage";
 import { StaffPOSPage } from "../feature/staff/pos/pages/StaffPOSPage";
 import { StaffConsignmentDetailPage } from "../feature/staff/consignment/pages/StaffConsignmentDetailPage";
+import { CartPage } from "../feature/cart/page/CartPage";
 
 export const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
             {
                 path: "/profile",
                 element: <ProfilePage/>
+            },
+            {
+                path: "/cart",
+                element: <CartPage/>
             }
         ]
     },

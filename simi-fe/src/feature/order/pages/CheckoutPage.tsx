@@ -1,71 +1,71 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router";
 import styles from "./CheckoutPage.module.css";
-import type { ProductDetailResponse } from "../../product/types/product.type";
 import type { OrderRequest } from "../types/order.type";
 import { useProvinces, useWards } from "../hooks/useLocation";
 import { formatPrice } from "../../../utils/formatPrice";
-import { useThumbnail } from "../../product/hooks/useProducts";
+import { useProductsByIds } from "../../product/hooks/useProducts";
 import { useShippingFee, useCreateOrder } from "../hooks/useOrder";
-
-const CONDITION_LABEL: Record<string, string> = {
-  NEW_TAG: "Mới nguyên tag",
-  LIKE_NEW: "Như mới (95%+)",
-  GOOD: "Tốt (85-94%)",
-  FAIR: "Khá (70-84%)",
-};
+import { CONDITION_LABEL } from "../../../utils/condition";
+import { cartApi } from "../../cart/api/cartApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const product = location.state?.product as ProductDetailResponse | undefined;
+  const queryClient = useQueryClient();
 
-const [formData, setFormData] = useState<{
-  fullName: string;
-  phone: string;
-  email: string;
-  provinceCode: string;
-  provinceName: string;
-  wardCode: string;
-  wardName: string;
-  addressDetail: string;
-  note: string;
-  paymentMethod: "COD" | "VNPAY";  
-}>({
-  fullName: "",
-  phone: "",
-  email: "",
-  provinceCode: "",
-  provinceName: "",
-  wardCode: "",
-  wardName: "",
-  addressDetail: "",
-  note: "",
-  paymentMethod: "COD",
-});
+  const { productIds = [], cartItemIds } = (location.state as {
+    productIds?: number[];
+    cartItemIds?: number[];
+  }) || {};
 
-  // ── Tất cả hooks đặt TRƯỚC guard clause ──────────────
+  const { data: productResponses = [], isLoading: loadingProducts } = useProductsByIds(productIds);
+  const products = productResponses.map((res) => res.body).filter(Boolean);
+
+  const subtotal = products.reduce((acc, p) => acc + (p?.currentPrice || 0), 0);
+
+  const [formData, setFormData] = useState<{
+    fullName: string;
+    phone: string;
+    email: string;
+    provinceCode: string;
+    provinceName: string;
+    wardCode: string;
+    wardName: string;
+    addressDetail: string;
+    note: string;
+    paymentMethod: "COD" | "VNPAY";
+  }>({
+    fullName: "",
+    phone: "",
+    email: "",
+    provinceCode: "",
+    provinceName: "",
+    wardCode: "",
+    wardName: "",
+    addressDetail: "",
+    note: "",
+    paymentMethod: "COD",
+  });
+
   const { data: provinces = [], isLoading: loadingProvinces } = useProvinces();
   const { data: wards = [], isLoading: loadingWards } = useWards(formData.provinceCode);
-  const { data: thumbnailUrl } = useThumbnail(product?.id ?? 0);
-  const { data: shippingFee = 30000 } = useShippingFee(
-    formData.provinceCode,
-    product?.currentPrice ?? 0
-  );
+  const { data: shippingFee = 30000 } = useShippingFee(formData.provinceCode, subtotal);
   const { mutateAsync: createOrder, isPending } = useCreateOrder();
 
   useEffect(() => {
-    if (!product) navigate("/");
-  }, [product, navigate]);
+    if (!productIds || productIds.length === 0) {
+      navigate("/cart", { replace: true });
+    }
+  }, [productIds, navigate]);
 
-  // Guard sau tất cả hooks
-  if (!product) {
-    return <div className={styles.page}><p>Đang chuyển hướng...</p></div>;
+  if (loadingProducts || productIds.length === 0) {
+    return <div className={styles.stateWrapper}><p>Đang tải đơn hàng...</p></div>;
   }
 
-  const total = product.currentPrice + shippingFee;
+  const total = subtotal + shippingFee;
 
-  // ── Handlers ─────────────────────────────────────────
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -103,18 +103,28 @@ const [formData, setFormData] = useState<{
     }
 
     const payload: OrderRequest = {
-      recipientName:  formData.fullName,
+      recipientName: formData.fullName,
       recipientPhone: formData.phone,
-      province:       formData.provinceCode,
-      ward:           formData.wardCode,
-      addressDetail:  formData.addressDetail,
+      province: formData.provinceCode,
+      ward: formData.wardCode,
+      addressDetail: formData.addressDetail,
       paymentMethod: formData.paymentMethod,
-      discount:       0,
-      orderItemRequests:     [{ productId: product.id }], 
+      discount: 0,
+      orderItemRequests: productIds.map((id) => ({ productId: id })),
     };
 
     try {
-      const res = await createOrder(payload); // dùng useMutation thay vì gọi api thô
+      const res = await createOrder(payload);
+
+      if (cartItemIds && cartItemIds.length > 0) {
+        try {
+          await Promise.all(cartItemIds.map((id) => cartApi.removeItem(id)));
+          queryClient.invalidateQueries({ queryKey: ["my-cart"] });
+        } catch {
+          // Bỏ qua lỗi xóa giỏ hàng nếu đơn hàng đã tạo thành công
+        }
+      }
+
       navigate("/orders/success", {
         state: { orderId: res.body?.id },
       });
@@ -123,38 +133,48 @@ const [formData, setFormData] = useState<{
     }
   };
 
-  // ── Render ───────────────────────────────────────────
   return (
     <div className={styles.page}>
-      <h1 className={styles.pageTitle}>Thanh toán đơn hàng</h1>
+      <h1 className={styles.pageTitle}>Thanh toán đơn hàng ({products.length} sản phẩm)</h1>
 
       <form onSubmit={handleSubmit} className={styles.container}>
-        {/* CỘT TRÁI */}
         <div className={styles.leftCol}>
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Thông tin nhận hàng</h2>
 
             <div className={styles.inputGroup}>
               <label>Họ và tên</label>
-              <input required type="text" name="fullName"
+              <input
+                required
+                type="text"
+                name="fullName"
                 placeholder="Nhập đầy đủ họ và tên"
-                value={formData.fullName} onChange={handleInputChange}
+                value={formData.fullName}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className={styles.inputGrid}>
               <div className={styles.inputGroup}>
                 <label>Số điện thoại</label>
-                <input required type="tel" name="phone"
+                <input
+                  required
+                  type="tel"
+                  name="phone"
                   placeholder="Số điện thoại nhận hàng"
-                  value={formData.phone} onChange={handleInputChange}
+                  value={formData.phone}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className={styles.inputGroup}>
                 <label>Email (Nhận hóa đơn)</label>
-                <input required type="email" name="email"
+                <input
+                  required
+                  type="email"
+                  name="email"
                   placeholder="email@example.com"
-                  value={formData.email} onChange={handleInputChange}
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -174,13 +194,18 @@ const [formData, setFormData] = useState<{
 
               <div className={styles.inputGroup}>
                 <label>Xã / Phường</label>
-                <select required
+                <select
+                  required
                   disabled={!formData.provinceCode || loadingWards}
-                  value={formData.wardCode} onChange={handleWardChange}
+                  value={formData.wardCode}
+                  onChange={handleWardChange}
                 >
                   <option value="">
-                    {!formData.provinceCode ? "Chọn Tỉnh/Thành trước"
-                      : loadingWards ? "Đang tải..." : "Chọn Xã/Phường"}
+                    {!formData.provinceCode
+                      ? "Chọn Tỉnh/Thành trước"
+                      : loadingWards
+                      ? "Đang tải..."
+                      : "Chọn Xã/Phường"}
                   </option>
                   {wards.map((w) => (
                     <option key={w.code} value={w.code}>{w.fullName}</option>
@@ -191,17 +216,24 @@ const [formData, setFormData] = useState<{
 
             <div className={styles.inputGroup}>
               <label>Địa chỉ chi tiết (Số nhà, tên đường)</label>
-              <input required type="text" name="addressDetail"
+              <input
+                required
+                type="text"
+                name="addressDetail"
                 placeholder="Ví dụ: 123 Đường Lê Lợi"
-                value={formData.addressDetail} onChange={handleInputChange}
+                value={formData.addressDetail}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className={styles.inputGroup}>
               <label>Ghi chú (Tùy chọn)</label>
-              <textarea name="note" rows={3}
+              <textarea
+                name="note"
+                rows={3}
                 placeholder="Ghi chú về thời gian giao hàng..."
-                value={formData.note} onChange={handleInputChange}
+                value={formData.note}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -210,10 +242,16 @@ const [formData, setFormData] = useState<{
             <h2 className={styles.cardTitle}>Phương thức thanh toán</h2>
             <div className={styles.paymentMethods}>
               {(["COD", "VNPAY"] as const).map((method) => (
-                <label key={method}
-                  className={`${styles.paymentLabel} ${formData.paymentMethod === method ? styles.paymentActive : ""}`}
+                <label
+                  key={method}
+                  className={`${styles.paymentLabel} ${
+                    formData.paymentMethod === method ? styles.paymentActive : ""
+                  }`}
                 >
-                  <input type="radio" name="paymentMethod" value={method}
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={method}
                     checked={formData.paymentMethod === method}
                     onChange={handleInputChange}
                   />
@@ -236,28 +274,35 @@ const [formData, setFormData] = useState<{
           </div>
         </div>
 
-        {/* CỘT PHẢI */}
         <div className={styles.rightCol}>
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Chi tiết đơn hàng</h2>
 
-            <div className={styles.productRow}>
-              <img src={thumbnailUrl} alt={product.name} className={styles.productImg} />
-              <div className={styles.productInfo}>
-                <span className={styles.productName}>{product.name}</span>
-                {product.brandName && (
-                  <span className={styles.productBrand}>{product.brandName}</span>
-                )}
-                <div className={styles.productMeta}>
-                  {product.size && <span>Size {product.size}</span>}
-                  {product.productCondition && (
-                    <span>{CONDITION_LABEL[product.productCondition]}</span>
-                  )}
-                </div>
-                <span className={styles.productPrice}>
-                  {formatPrice(product.currentPrice)}
-                </span>
-              </div>
+            <div className={styles.productList}>
+              {products.map((product) => {
+                if (!product) return null;
+                const thumb = product.thumbnail || product.productImageResponses?.[0]?.imageUrl;
+
+                return (
+                  <div key={product.id} className={styles.productRow}>
+                    {thumb ? (
+                      <img src={thumb} alt={product.name} className={styles.productImg} />
+                    ) : (
+                      <div className={styles.noImg}>No Img</div>
+                    )}
+                    <div className={styles.productInfo}>
+                      <span className={styles.productName}>{product.name}</span>
+                      <div className={styles.productMeta}>
+                        {product.size && <span>Size: {product.size}</span>}
+                        {product.productCondition && (
+                          <span>Tình trạng: {CONDITION_LABEL[product.productCondition] || product.productCondition}</span>
+                        )}
+                      </div>
+                      <span className={styles.productPrice}>{formatPrice(product.currentPrice)}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             <hr className={styles.divider} />
@@ -265,7 +310,7 @@ const [formData, setFormData] = useState<{
             <div className={styles.summaryRows}>
               <div className={styles.summaryRow}>
                 <span>Tạm tính</span>
-                <span>{formatPrice(product.currentPrice)}</span>
+                <span>{formatPrice(subtotal)}</span>
               </div>
               <div className={styles.summaryRow}>
                 <span>Phí vận chuyển</span>
@@ -282,8 +327,8 @@ const [formData, setFormData] = useState<{
               {isPending ? "Đang xử lý..." : "Đặt hàng ngay"}
             </button>
 
-            <Link to={`/products/${product.id}`} className={styles.btnBack}>
-              ← Quay lại chi tiết sản phẩm
+            <Link to="/cart" className={styles.btnBack}>
+              Quay lại giỏ hàng
             </Link>
           </div>
         </div>
