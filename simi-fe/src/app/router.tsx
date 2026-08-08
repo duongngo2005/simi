@@ -14,6 +14,8 @@ import { StaffConsignmentPage } from "../feature/staff/consignment/pages/StaffCo
 import { StaffPOSPage } from "../feature/staff/pos/pages/StaffPOSPage";
 import { StaffConsignmentDetailPage } from "../feature/staff/consignment/pages/StaffConsignmentDetailPage";
 import { CartPage } from "../feature/cart/page/CartPage";
+import { MyOrders } from "../feature/user/components/MyOrders";
+import { MyConsignment } from "../feature/user/components/MyConsignment";
 
 export const router = createBrowserRouter([
     {
@@ -51,6 +53,14 @@ export const router = createBrowserRouter([
             {
                 path: "/cart",
                 element: <CartPage/>
+            },
+            {
+                path: "/my-orders",
+                element: <MyOrders/>
+            }, 
+            {
+                path: "/my-consignments",
+                element: <MyConsignment/>
             }
         ]
     },

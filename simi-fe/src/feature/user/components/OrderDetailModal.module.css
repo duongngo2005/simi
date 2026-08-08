@@ -1,0 +1,238 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal {
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-input, #fbf8f3);
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-heading, #4A352D);
+}
+
+.closeBtn {
+  background-color: transparent;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text, #6f4e40);
+  cursor: pointer;
+}
+
+.stateBox {
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text, #6f4e40);
+}
+
+.body {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-heading, #4A352D);
+}
+
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: var(--color-input, #fbf8f3);
+  padding: 10px 12px;
+  border-radius: 4px;
+}
+
+.infoRow {
+  display: flex;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.label {
+  color: var(--color-text, #6f4e40);
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.value {
+  font-weight: 600;
+  color: var(--color-heading, #4A352D);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background-color: var(--color-input, #fbf8f3);
+  border-radius: 4px;
+}
+
+.thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  flex-shrink: 0;
+}
+
+.noThumbnail {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--color-text, #6f4e40);
+  flex-shrink: 0;
+}
+
+.itemMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.itemName {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-heading, #4A352D);
+}
+
+.itemSubMeta {
+  display: flex;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: var(--color-text, #6f4e40);
+  opacity: 0.8;
+}
+
+.itemPrice {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-info, #2E5B88);
+}
+
+.summarySection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background-color: var(--color-input, #fbf8f3);
+  border-radius: 4px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--color-text, #6f4e40);
+}
+
+.totalRow {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.totalPrice {
+  color: var(--color-info, #2E5B88);
+}
+
+.statusBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.statusPENDING {
+  color: var(--color-warning-text, #8C5E14);
+  background-color: var(--color-warning-bg, #FFFBF0);
+  border-color: var(--color-warning-border, #F5E6BA);
+}
+
+.statusPACKING,
+.statusSHIPPING {
+  color: var(--color-info, #2E5B88);
+  background-color: #ffffff;
+  border-color: var(--color-input-border, #d6c7bc);
+}
+
+.statusCOMPLETED {
+  color: var(--color-success-text, #2D6A4F);
+  background-color: var(--color-success-bg, #F0FDF4);
+  border-color: var(--color-success-border, #B9E6C9);
+}
+
+.statusCANCELLED {
+  color: var(--color-danger-text, #9F3D2A);
+  background-color: var(--color-danger-bg, #FDF2F0);
+  border-color: var(--color-danger-border, #F5C6BA);
+}

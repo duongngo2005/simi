@@ -247,4 +247,42 @@ public class OrderService {
         order.setOrderStatus(status);
         orderRepository.save(order);
     }
+
+    @Transactional(readOnly = true)
+    public Page<OrderSummaryResponse> getMyOrders(OrderFilterRequest filterRequest, User user){
+        LocalDateTime fromDate = null;
+        if (filterRequest.getFromDate() != null){
+            fromDate = filterRequest.getFromDate().atStartOfDay();
+        }
+
+        LocalDateTime toDate = null;
+        if (filterRequest.getToDate() != null){
+            toDate = filterRequest.getToDate().atTime(23, 59, 59);
+        }
+
+        Specification<Order> specification = Specification.allOf(
+                OrderSpecification.hasKeyword(filterRequest.getKeyword()),
+                OrderSpecification.hasOrderChannel(filterRequest.getOrderChannel()),
+                OrderSpecification.hasStatus(filterRequest.getOrderStatus()),
+                OrderSpecification.hasFromDate(fromDate),
+                OrderSpecification.hasToDate(toDate),
+                OrderSpecification.hasCustomer(user)
+        );
+
+        Sort sort = filterRequest.getSortDir().equalsIgnoreCase("desc")
+                ? Sort.by(filterRequest.getSortBy()).descending()
+                : Sort.by(filterRequest.getSortBy()).ascending();
+
+        Pageable pageable = PageRequest.of(filterRequest.getPage(), filterRequest.getSize(), sort);
+
+        return orderRepository.findAll(specification, pageable).map(OrderMapper::toOrderSummaryResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDetailResponse getOrderDetail(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng này"));
+
+        return OrderMapper.toOrderDetailResponse(order);
+    }
 }

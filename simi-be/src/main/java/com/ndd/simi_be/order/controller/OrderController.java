@@ -90,4 +90,28 @@ public class OrderController {
         orderService.changeStatus(status, orderId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/my-orders")
+    public ResponseEntity<ApiResponse<Page<OrderSummaryResponse>>> getMyOrders(
+            @AuthenticationPrincipal User user,
+            @Valid @ModelAttribute OrderFilterRequest filterRequest
+    ){
+        ApiResponse<Page<OrderSummaryResponse>> response = ApiResponse.<Page<OrderSummaryResponse>>builder()
+                .status(200)
+                .body(orderService.getMyOrders(filterRequest, user))
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<ApiResponse<OrderDetailResponse>> getOrderDetail(
+            @PathVariable("id") Long orderId
+    ){
+        ApiResponse<OrderDetailResponse> response = ApiResponse.<OrderDetailResponse>builder()
+                .status(200)
+                .body(orderService.getOrderDetail(orderId))
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
 }
