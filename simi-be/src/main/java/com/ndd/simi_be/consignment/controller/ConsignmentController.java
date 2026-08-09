@@ -4,6 +4,7 @@ import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentFilterRequest;
 import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
+import com.ndd.simi_be.consignment.dto.response.ConsignmentFullDetailResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.service.ConsignmentService;
 import com.ndd.simi_be.user.entity.User;
@@ -104,5 +105,30 @@ public class ConsignmentController {
         consignmentService.deleteConsignment(consignmentId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/my-consignments")
+    public ResponseEntity<ApiResponse<List<ConsignmentResponse>>> getMyConsignments(
+            @AuthenticationPrincipal User user
+    ){
+        ApiResponse<List<ConsignmentResponse>> response = ApiResponse.<List<ConsignmentResponse>>builder()
+                .status(200)
+                .body(consignmentService.getMyConsignments(user))
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<ApiResponse<ConsignmentFullDetailResponse>> getConsignmentFullDetail(
+            @PathVariable("id") Long consignmentId
+    ){
+        ApiResponse<ConsignmentFullDetailResponse> response =
+                ApiResponse.<ConsignmentFullDetailResponse>builder()
+                        .status(200)
+                        .body(consignmentService.getConsignmentFullDetail(consignmentId))
+                        .build();
+
+        return ResponseEntity.ok(response);
     }
 }

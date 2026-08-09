@@ -6,6 +6,7 @@ import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentFilterRequest;
 import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
+import com.ndd.simi_be.consignment.dto.response.ConsignmentFullDetailResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.entity.Consignment;
 import com.ndd.simi_be.consignment.entity.PriceSchedule;
@@ -135,5 +136,22 @@ public class ConsignmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
 
         return ConsignmentMapper.toConsignmentResponse(consignment);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ConsignmentResponse> getMyConsignments(
+            User user
+    ){
+        return consignmentRepository.findByConsignor(user).stream().map(
+                ConsignmentMapper::toConsignmentResponse
+        ).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ConsignmentFullDetailResponse getConsignmentFullDetail(Long consignmentId){
+        Consignment consignment = consignmentRepository.findById(consignmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
+
+        return ConsignmentMapper.toConsignmentFullDetailResponse(consignment);
     }
 }
