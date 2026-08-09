@@ -1,0 +1,233 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal {
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-input, #fbf8f3);
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-heading, #4A352D);
+}
+
+.closeBtn {
+  background-color: transparent;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text, #6f4e40);
+  cursor: pointer;
+}
+
+.stateBox {
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text, #6f4e40);
+}
+
+.body {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryBar {
+  display: flex;
+  gap: 16px;
+  padding: 8px 12px;
+  background-color: var(--color-input, #fbf8f3);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--color-text, #6f4e40);
+}
+
+.summaryBar strong {
+  color: var(--color-heading, #4A352D);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemCard {
+  padding: 10px;
+  background-color: var(--color-input, #fbf8f3);
+  border-radius: 4px;
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.thumbnail {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  flex-shrink: 0;
+}
+
+.noThumbnail {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--color-text, #6f4e40);
+  flex-shrink: 0;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.itemName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-heading, #4A352D);
+}
+
+.itemMeta {
+  display: flex;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--color-text, #6f4e40);
+  opacity: 0.8;
+}
+
+.itemRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.itemPrice {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-info, #2E5B88);
+}
+
+.itemStatus {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.itemStatusDRAFT {
+  color: var(--color-text, #6f4e40);
+  background-color: #ffffff;
+  border-color: var(--color-input-border, #d6c7bc);
+}
+
+.itemStatusACTIVE {
+  color: var(--color-info, #2E5B88);
+  background-color: #ffffff;
+  border-color: var(--color-input-border, #d6c7bc);
+}
+
+.itemStatusRESERVED {
+  color: var(--color-warning-text, #8C5E14);
+  background-color: var(--color-warning-bg, #FFFBF0);
+  border-color: var(--color-warning-border, #F5E6BA);
+}
+
+.itemStatusSOLD {
+  color: var(--color-success-text, #2D6A4F);
+  background-color: var(--color-success-bg, #F0FDF4);
+  border-color: var(--color-success-border, #B9E6C9);
+}
+
+.itemStatusEXPIRED,
+.itemStatusCANCELLED {
+  color: var(--color-danger-text, #9F3D2A);
+  background-color: var(--color-danger-bg, #FDF2F0);
+  border-color: var(--color-danger-border, #F5C6BA);
+}
+
+.statusBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.statusDRAFT {
+  color: var(--color-text, #6f4e40);
+  background-color: #ffffff;
+  border-color: var(--color-input-border, #d6c7bc);
+}
+
+.statusACTIVE {
+  color: var(--color-info, #2E5B88);
+  background-color: #ffffff;
+  border-color: var(--color-input-border, #d6c7bc);
+}
+
+.statusPENDING_SETTLEMENT {
+  color: var(--color-warning-text, #8C5E14);
+  background-color: var(--color-warning-bg, #FFFBF0);
+  border-color: var(--color-warning-border, #F5E6BA);
+}
+
+.statusSETTLED,
+.statusCLOSED {
+  color: var(--color-success-text, #2D6A4F);
+  background-color: var(--color-success-bg, #F0FDF4);
+  border-color: var(--color-success-border, #B9E6C9);
+}
