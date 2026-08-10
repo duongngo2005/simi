@@ -15,9 +15,18 @@ public class ConsignmentFilterRequest {
     private LocalDateTime expiryDateFrom;
     private LocalDateTime expiryDateTo;
     private Boolean isExpiringSoon;
-    private ConsignmentStatus consignmentStatus;
+    private String consignmentStatus;
     private int page = 0;
     private int size = 10;
     private String sortBy = "createdDate";
     private String sortDir = "desc";
+
+    public ConsignmentStatus parseConsignmentStatus(){
+        if (consignmentStatus == null || consignmentStatus.isBlank()) return null;
+        try{
+            return ConsignmentStatus.valueOf(consignmentStatus.trim().toUpperCase());
+        }catch (IllegalArgumentException e){
+            return null;
+        }
+    }
 }
