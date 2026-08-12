@@ -14,7 +14,6 @@ public class ItemDispositionResponse {
     private String type;
     private String status;
     private LocalDateTime pickupDeadline;
-    private LocalDateTime consentedAt;
     private LocalDateTime processedAt;
     private Long processedBy;
     private String note;
