@@ -11,9 +11,8 @@ public class ItemDispositionMapper {
                 .type(itemDisposition.getItemDispositionType().name())
                 .status(itemDisposition.getItemDispositionStatus().name())
                 .pickupDeadline(itemDisposition.getPickupDeadline())
-                .consentedAt(itemDisposition.getConsentedAt())
                 .processedAt(itemDisposition.getProcessedAt())
-                .processedBy(itemDisposition.getProcessedBy().getId())
+                .processedBy(itemDisposition.getProcessedBy() == null ? null : itemDisposition.getProcessedBy().getId())
                 .build();
     }
 }

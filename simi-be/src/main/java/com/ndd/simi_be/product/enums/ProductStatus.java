@@ -5,6 +5,7 @@ public enum ProductStatus {
     AVAILABLE,
     SOLD,
     RESERVED, // giu cho
+    EXPIRED,
     HIDDEN,
     CANCELLED
 }

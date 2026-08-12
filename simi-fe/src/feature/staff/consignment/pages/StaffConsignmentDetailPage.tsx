@@ -1,3 +1,4 @@
+/* ── 1. StaffConsignmentDetailPage.tsx ── */
 import { useParams, useNavigate } from "react-router";
 import { useActiveConsignment, useConsignmentFullDetail } from "../hooks/useConsignments";
 import { ConsignmentItemForm } from "../components/ConsignmentItemForm";
@@ -7,6 +8,8 @@ import styles from "./StaffConsignmentDetailPage.module.css";
 import { useState } from "react";
 import type { ConsignmentItemResponse } from "../types/staffConsignment.type";
 import { ActiveConsignmentItemList } from "../components/ActiveConsignmentItemList";
+import { PendingSettlementConsignmentView } from "../components/PendingSettlementConsignmentView";
+import { SettledConsignmentView } from "../components/SettledConsignmentView";
 
 export const StaffConsignmentDetailPage = () => {
   const { id } = useParams();
@@ -71,8 +74,12 @@ export const StaffConsignmentDetailPage = () => {
       ) : consignment.status === "ACTIVE" ? (
         <div>
           <ConsignmentHeaderInfo consignment={consignment} />
-          <ActiveConsignmentItemList items={items}/>
+          <ActiveConsignmentItemList items={items} />
         </div>
+      ) : consignment.status === "PENDING_SETTLEMENT" ? (
+        <PendingSettlementConsignmentView consignmentId={consignment.id} />
+      ) : consignment.status === "SETTLED" ? (
+        <SettledConsignmentView consignmentId={consignment.id} />
       ) : (
         <div className={styles.stateBox}>Trạng thái: {consignment.status}</div>
       )}

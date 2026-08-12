@@ -60,7 +60,7 @@ public class ConsignmentService {
         Specification<Consignment> specification = Specification.allOf(
                 ConsignmentSpecification.hasIsExpiringSoon(request.getIsExpiringSoon()),
                 ConsignmentSpecification.hasKeyword(request.getKeyword()),
-                ConsignmentSpecification.hasStatus(request.getConsignmentStatus()),
+                ConsignmentSpecification.hasStatus(request.parseConsignmentStatus()),
                 ConsignmentSpecification.hasExpiryDateTo(request.getExpiryDateTo()),
                 ConsignmentSpecification.hasExpiryDateFrom(request.getExpiryDateFrom()),
                 ConsignmentSpecification.hasStartDateFrom(request.getStartDateFrom()),

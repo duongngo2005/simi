@@ -28,8 +28,7 @@ public class ItemDisposition extends BaseEntity {
     private ItemDispositionStatus itemDispositionStatus = ItemDispositionStatus.PENDING;
 
     private LocalDateTime pickupDeadline;
-    private LocalDateTime consentedAt;
-    private LocalDateTime processedAt;
+    private LocalDateTime processedAt; // thoi diem nhan vien ban giao do hoac chon quyen gop
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "processed_by")
     private User processedBy;

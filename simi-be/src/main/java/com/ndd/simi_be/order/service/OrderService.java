@@ -2,8 +2,10 @@ package com.ndd.simi_be.order.service;
 
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
+import com.ndd.simi_be.consignment.entity.Consignment;
 import com.ndd.simi_be.consignment.entity.ConsignmentItem;
 import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
+import com.ndd.simi_be.consignment.enums.ConsignmentStatus;
 import com.ndd.simi_be.consignment.repository.ConsignmentItemRepository;
 import com.ndd.simi_be.location.entity.Province;
 import com.ndd.simi_be.location.entity.Ward;
@@ -24,7 +26,10 @@ import com.ndd.simi_be.order.repository.OrderRepository;
 import com.ndd.simi_be.order.specification.OrderSpecification;
 import com.ndd.simi_be.payment.entity.Payment;
 import com.ndd.simi_be.payment.enums.PaymentMethod;
+import com.ndd.simi_be.payment.enums.PaymentStatus;
 import com.ndd.simi_be.payment.service.PaymentService;
+import com.ndd.simi_be.product.entity.Product;
+import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.user.entity.User;
 import com.ndd.simi_be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -242,6 +247,47 @@ public class OrderService {
             throw new BadRequestException(
                     String.format("Không thể chuyển trạng thái đơn hàng từ %s sang %s", currentStatus, status)
             );
+        }
+
+        if (status == OrderStatus.COMPLETED){
+            for (OrderItem item : order.getOrderItems()){
+                Product product = item.getProduct();
+                product.setProductStatus(ProductStatus.SOLD);
+
+                ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(product)
+                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng tương ứng"));
+                consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.SOLD);
+
+                for (Payment payment : order.getPayments()){
+                    if (payment.getPaymentStatus() == PaymentStatus.PENDING){
+                        payment.setPaymentStatus(PaymentStatus.PAID);
+                        payment.setPaidAt(LocalDateTime.now());
+                    }
+                }
+            }
+        }
+
+        if (status == OrderStatus.CANCELLED){
+            for (OrderItem item : order.getOrderItems()){
+                Product product = item.getProduct();
+                ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(product)
+                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng tương ứng"));
+
+                Consignment consignment = consignmentItem.getConsignment();
+                if (consignment.getConsignmentStatus() == ConsignmentStatus.PENDING_SETTLEMENT){
+                    product.setProductStatus(ProductStatus.EXPIRED);
+                    consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.EXPIRED);
+                }else{
+                    product.setProductStatus(ProductStatus.AVAILABLE);
+                    consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.ACTIVE);
+                }
+
+                for (Payment payment : order.getPayments()){
+                    if (payment.getPaymentStatus() == PaymentStatus.PENDING){
+                        payment.setPaymentStatus(PaymentStatus.CANCELLED);
+                    }
+                }
+            }
         }
 
         order.setOrderStatus(status);
