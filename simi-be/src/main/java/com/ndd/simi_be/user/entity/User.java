@@ -29,6 +29,10 @@ public class User extends BaseEntity implements UserDetails {
     private String avatarUrl;
     private String avatarPublicId;
 
+    private String bankName;
+    private String accountNumber;
+    private String accountHolder;
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private Role role = Role.CUSTOMER;

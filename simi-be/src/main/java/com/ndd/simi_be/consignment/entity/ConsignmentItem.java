@@ -41,4 +41,7 @@ public class ConsignmentItem extends BaseEntity {
     private List<PriceSchedule> priceSchedules = new ArrayList<>();
 
     private LocalDateTime activatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Settlement settlement;
 }
