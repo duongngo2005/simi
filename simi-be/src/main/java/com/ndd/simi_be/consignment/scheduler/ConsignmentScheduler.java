@@ -1,5 +1,6 @@
 package com.ndd.simi_be.consignment.scheduler;
 
+import com.ndd.simi_be.consignment.service.ConsignmentExpiryService;
 import com.ndd.simi_be.consignment.service.PriceMarkdownService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Component;
 public class ConsignmentScheduler {
 
     private final PriceMarkdownService priceMarkdownService;
+    private final ConsignmentExpiryService consignmentExpiryService;
 
-    @Scheduled(cron = "${app.scheduler.price-cron}")
+    @Scheduled(cron = "${app.scheduler.daily-cron}")
     public void runDailyConsignmentMaintenance(){
         priceMarkdownService.applyPendingPriceSchedules();
+        consignmentExpiryService.processExpiredConsignments();
     }
 }
