@@ -29,7 +29,7 @@ app:
     access-expiration-ms: 1800000
     refresh-expiration-ms: 604800000
   scheduler:
-    daily-cron: "0 11 21 * * ?"
+    daily-cron: "0 02 17 * * ?"
 
 cloudinary:
   cloud-name: docidan7t
