@@ -55,14 +55,14 @@ create table brands(
 ) engine=innodb;
 
 create table refresh_tokens(
-    id bigint auto_increment primary key,
-    created_date datetime not null,
-    updated_date datetime not null,
-    refresh_token varchar(500) not null,
-    expires_at datetime not null,
-    user_id bigint not null,
-    revoked boolean not null default false,
+   id bigint auto_increment primary key,
+   created_date DATETIME not null,
+   updated_date DATETIME not null,
+   refresh_token varchar(500) not null,
+   expires_at datetime not null,
+   user_id bigint not null,
+   revoked boolean not null default false,
 
-    constraint uq_refresh_tokens_refresh_token unique (refresh_token),
-    constraint fk_refresh_tokens foreign key (user_id) references users
-)
+   constraint uq_refresh_tokens_refresh_token unique (refresh_token),
+   constraint fk_refresh_tokens foreign key (user_id) references users(id)
+) engine=innodb;
