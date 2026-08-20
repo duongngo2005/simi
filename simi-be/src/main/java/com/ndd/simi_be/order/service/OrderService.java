@@ -7,6 +7,7 @@ import com.ndd.simi_be.consignment.entity.ConsignmentItem;
 import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
 import com.ndd.simi_be.consignment.enums.ConsignmentStatus;
 import com.ndd.simi_be.consignment.repository.ConsignmentItemRepository;
+import com.ndd.simi_be.email.dto.OrderConfirmationEmailData;
 import com.ndd.simi_be.location.entity.Province;
 import com.ndd.simi_be.location.entity.Ward;
 import com.ndd.simi_be.location.repository.ProvinceRepository;
@@ -21,6 +22,7 @@ import com.ndd.simi_be.order.entity.Order;
 import com.ndd.simi_be.order.entity.OrderItem;
 import com.ndd.simi_be.order.enums.OrderChannel;
 import com.ndd.simi_be.order.enums.OrderStatus;
+import com.ndd.simi_be.order.event.OrderCreatedEvent;
 import com.ndd.simi_be.order.mapper.OrderMapper;
 import com.ndd.simi_be.order.repository.OrderRepository;
 import com.ndd.simi_be.order.specification.OrderSpecification;
@@ -29,10 +31,12 @@ import com.ndd.simi_be.payment.enums.PaymentMethod;
 import com.ndd.simi_be.payment.enums.PaymentStatus;
 import com.ndd.simi_be.payment.service.PaymentService;
 import com.ndd.simi_be.product.entity.Product;
+import com.ndd.simi_be.product.entity.ProductImage;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.user.entity.User;
 import com.ndd.simi_be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +60,7 @@ public class OrderService {
     private final PaymentService paymentService;
     private final UserRepository userRepository;
     private final ConsignmentItemRepository consignmentItemRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public OrderDetailResponse createOrder(OrderRequest request, User customer){
@@ -108,6 +113,51 @@ public class OrderService {
             Payment payment = paymentService.createPayment(order, request.getPaymentMethod());
             order.getPayments().add(payment);
             order.setOrderStatus(OrderStatus.PACKING);
+        }
+
+        if (customer != null && customer.getEmail() != null){
+            OrderConfirmationEmailData emailData =
+                    OrderConfirmationEmailData.builder()
+                            .orderId(order.getId())
+                            .recipientEmail(customer.getEmail())
+                            .recipientName(customer.getFullName())
+                            .recipientPhone(customer.getPhoneNumber())
+                            .addressDetail(order.getAddressDetail())
+                            .ward(order.getWard())
+                            .province(order.getProvince())
+                            .paymentMethod(request.getPaymentMethod().name())
+                            .createdDate(order.getCreatedDate())
+                            .subtotalAmount(order.getSubtotalAmount())
+                            .shippingFee(order.getShippingFee())
+                            .finalAmount(order.getFinalAmount())
+                            .items(orderItems.stream()
+                                    .map(oi -> {
+                                        Product product = oi.getProduct();
+
+                                        String thumbnailUrl = product
+                                                .getProductImages().stream()
+                                                .filter(ProductImage::isThumbnail)
+                                                .map(ProductImage::getImageUrl)
+                                                .findFirst()
+                                                .orElse(null);
+
+                                        return OrderConfirmationEmailData
+                                                .ItemData.builder()
+                                                .productName(product.getName())
+                                                .size(product.getSize())
+                                                .color(product.getColor())
+                                                .thumbnailUrl(thumbnailUrl)
+                                                .unitPrice(oi.getUnitPrice())
+                                                .build();
+                                    })
+                                    .toList()
+                            )
+                            .build();
+
+            eventPublisher.publishEvent(
+                    new OrderCreatedEvent(this, emailData)
+            );
+
         }
 
         return OrderMapper.toOrderDetailResponse(order);
