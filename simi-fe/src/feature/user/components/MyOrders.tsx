@@ -1,20 +1,24 @@
+// src/feature/user/components/MyOrders.tsx
 import { useState } from "react";
 import styles from "./MyOrders.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
-import { useGetMyOrders } from "../../order/hooks/useOrder";
+import { useGetMyOrders, useRetryPayment } from "../../order/hooks/useOrder"; // 👈 Thêm useRetryPayment
 import type { OrderFilterRequest } from "../../order/types/order.type";
 import { OrderDetailModal } from "./OrderDetailModal";
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: "Chờ xác nhận",
+  PENDING_PAYMENT: "Chờ thanh toán",
   PACKING: "Đang đóng gói",
   SHIPPING: "Đang giao hàng",
   COMPLETED: "Đã hoàn thành",
   CANCELLED: "Đã hủy",
+  EXPIRED: "Hết hạn",               
 };
 
 const TABS = [
   { key: "", label: "Tất cả" },
+  { key: "PENDING_PAYMENT", label: "Chờ thanh toán" }, 
   { key: "PENDING", label: "Chờ xác nhận" },
   { key: "PACKING", label: "Đang đóng gói" },
   { key: "SHIPPING", label: "Đang giao hàng" },
@@ -40,12 +44,31 @@ export const MyOrders = () => {
   const { data: pageData, isLoading, isError } = useGetMyOrders(filters);
   const orders = pageData?.content || [];
 
+  const { mutateAsync: retryPayment, isPending: isRetrying } = useRetryPayment();
+
   const handleStatusChange = (status: string) => {
     setFilters((prev) => ({
       ...prev,
       orderStatus: status,
       page: 0,
     }));
+  };
+
+  const handleRetryPayment = async (orderId: number, e: React.MouseEvent) => {
+    e.stopPropagation(); 
+    try {
+      const res = await retryPayment(orderId);
+      if (res.body?.paymentUrl) {
+        window.location.href = res.body.paymentUrl;
+      } else {
+        alert("Không tìm thấy đường dẫn thanh toán.");
+      }
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.message ||
+        "Không thể thanh toán lại. Đơn hàng có thể đã hết thời gian giữ chỗ.";
+      alert(msg);
+    }
   };
 
   return (
@@ -105,6 +128,16 @@ export const MyOrders = () => {
               </div>
 
               <div className={styles.cardFooter}>
+                {order.orderStatus === "PENDING_PAYMENT" && (
+                  <button
+                    className={styles.btnRetry}
+                    onClick={(e) => handleRetryPayment(order.id, e)}
+                    disabled={isRetrying}
+                  >
+                    {isRetrying ? "Đang xử lý..." : "Thanh toán"}
+                  </button>
+                )}
+
                 <div className={styles.totalWrapper}>
                   <span className={styles.totalLabel}>Tổng tiền:</span>
                   <strong className={styles.totalAmount}>{formatPrice(order.finalAmount)}</strong>
@@ -115,7 +148,6 @@ export const MyOrders = () => {
         </div>
       )}
 
-      {/* Modal xem chi tiết đơn hàng */}
       <OrderDetailModal
         orderId={selectedOrderId}
         onClose={() => setSelectedOrderId(null)}
