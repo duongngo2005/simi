@@ -16,6 +16,8 @@ import { StaffConsignmentDetailPage } from "../feature/staff/consignment/pages/S
 import { CartPage } from "../feature/cart/page/CartPage";
 import { MyOrders } from "../feature/user/components/MyOrders";
 import { MyConsignment } from "../feature/user/components/MyConsignment";
+import { PaymentResultPage } from "../feature/order/pages/PaymentResultPage";
+import { OrderSuccessPage } from "../feature/order/pages/OrderSuccessPage";
 
 export const router = createBrowserRouter([
     {
@@ -61,6 +63,14 @@ export const router = createBrowserRouter([
             {
                 path: "/my-consignments",
                 element: <MyConsignment/>
+            },
+            {
+                path: "/payment/result",
+                element: <PaymentResultPage/>
+            },
+            {
+                path: "/orders/success",
+                element: <OrderSuccessPage/>
             }
         ]
     },

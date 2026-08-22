@@ -1,10 +1,16 @@
 import api from "../../../lib/http/apiClient";
 import { type PageResponse, type ApiResponse } from "../../../types/common";
-import { type OrderSummaryResponse, type OrderDetailResponse, type OrderRequest, type OrderFilterRequest } from "../types/order.type";
+import { type OrderSummaryResponse, type OrderDetailResponse, type OrderRequest, type OrderFilterRequest, type CreateOrderResponse } from "../types/order.type";
 
 export const orderApi = {
     createOrder: async (data: OrderRequest) => {
-        const response = await api.post<ApiResponse<OrderDetailResponse>>("/orders", data)
+        const response = await api.post<ApiResponse<CreateOrderResponse>>("/orders", data)
+        return response.data
+    },
+    retryPayment: async(orderId: number) => {
+        const response = await api.post<ApiResponse<CreateOrderResponse>>(
+            `/orders/${orderId}/retry-payment`
+        );
         return response.data
     },
     calcShippingFee: async (provinceCode: string, subtotalAmount: number) => {

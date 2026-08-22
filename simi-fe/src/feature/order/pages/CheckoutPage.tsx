@@ -35,7 +35,7 @@ export const CheckoutPage = () => {
     wardName: string;
     addressDetail: string;
     note: string;
-    paymentMethod: "COD" | "VNPAY";
+    paymentMethod: "COD" | "ONLINE";
   }>({
     fullName: "",
     phone: "",
@@ -121,15 +121,20 @@ export const CheckoutPage = () => {
           await Promise.all(cartItemIds.map((id) => cartApi.removeItem(id)));
           queryClient.invalidateQueries({ queryKey: ["my-cart"] });
         } catch {
-          // Bỏ qua lỗi xóa giỏ hàng nếu đơn hàng đã tạo thành công
+          
         }
       }
 
-      navigate("/orders/success", {
-        state: { orderId: res.body?.id },
-      });
-    } catch {
-      alert("Đặt hàng thất bại. Vui lòng thử lại.");
+      if (res.body?.paymentUrl){
+        window.location.href = res.body.paymentUrl
+      }else{
+        navigate("/orders/success", {
+          state: {orderId: res.body?.orderDetail?.id}
+        })
+      }
+    } catch (error: any) {
+        const msg = error?.response?.data?.message || "Đặt hàng thất bại. Vui lòng thử lại.";
+        alert(msg);
     }
   };
 
@@ -241,33 +246,33 @@ export const CheckoutPage = () => {
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Phương thức thanh toán</h2>
             <div className={styles.paymentMethods}>
-              {(["COD", "VNPAY"] as const).map((method) => (
+              {(["COD", "ONLINE"] as const).map((method) => (
                 <label
-                  key={method}
-                  className={`${styles.paymentLabel} ${
-                    formData.paymentMethod === method ? styles.paymentActive : ""
-                  }`}
+                    key={method}
+                    className={`${styles.paymentLabel} ${
+                        formData.paymentMethod === method ? styles.paymentActive : ""
+                    }`}
                 >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={method}
-                    checked={formData.paymentMethod === method}
-                    onChange={handleInputChange}
-                  />
-                  <div className={styles.paymentText}>
-                    {method === "COD" ? (
-                      <>
-                        <strong>Thanh toán khi nhận hàng (COD)</strong>
-                        <span>Trả tiền mặt trực tiếp khi nhận hàng</span>
-                      </>
-                    ) : (
-                      <>
-                        <strong>Cổng thanh toán VNPAY</strong>
-                        <span>Thanh toán online qua thẻ ATM / QR Code</span>
-                      </>
-                    )}
-                  </div>
+                    <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={method}
+                        checked={formData.paymentMethod === method}
+                        onChange={handleInputChange}
+                    />
+                    <div className={styles.paymentText}>
+                        {method === "COD" ? (
+                            <>
+                                <strong>Thanh toán khi nhận hàng (COD)</strong>
+                                <span>Trả tiền mặt trực tiếp khi nhận hàng</span>
+                            </>
+                        ) : (
+                            <>
+                                <strong>Cổng thanh toán VNPAY</strong>
+                                <span>Thanh toán online qua thẻ ATM / QR Code</span>
+                            </>
+                        )}
+                    </div>
                 </label>
               ))}
             </div>
