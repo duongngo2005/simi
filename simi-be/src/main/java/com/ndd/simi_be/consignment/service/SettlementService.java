@@ -99,7 +99,7 @@ public class SettlementService {
                 .consignment(consignment)
                 .processedBy(processedBy)
                 .proofImageUrl(cloudinaryResponse.getUrl())
-                .paymentMethod(PaymentMethod.BANK_TRANSFER)
+                .paymentMethod(PaymentMethod.ONLINE)
                 .settlementItems(settlementCalc.getSoldItems())
                 .netAmount(settlementCalc.getNetAmount())
                 .totalSoldAmount(settlementCalc.getTotalSoldAmount())

@@ -33,9 +33,11 @@ public class Settlement extends BaseEntity {
     private BigDecimal totalCommissionAmount;
     @Column(precision = 12, scale = 0)
     private BigDecimal netAmount;
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod = PaymentMethod.BANK_TRANSFER;
+    @Column(nullable = false)
+    private PaymentMethod paymentMethod = PaymentMethod.ONLINE;
     private String bankName;
     private String accountNumber;
     private String accountHolder;
