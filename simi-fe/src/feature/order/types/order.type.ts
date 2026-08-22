@@ -1,4 +1,3 @@
-import { number } from "zod";
 
 export interface Province {
   code: string;
@@ -23,8 +22,13 @@ export interface OrderRequest {
     recipientName: string;
     recipientPhone: string;
     discount: number;
-    paymentMethod: "COD" | "VNPAY",
+    paymentMethod: "COD" | "ONLINE",
     orderItemRequests: OrderItemRequest[]
+}
+
+export interface CreateOrderResponse{
+    orderDetail: OrderDetailResponse;
+    paymentUrl: string | null;
 }
 
 export interface OrderDetailResponse {
@@ -61,12 +65,18 @@ export interface OrderItemResponse {
 export interface PaymentResponse {
     id: number;
     orderId: number;
-    paymentStatus: string;
     amount: number;
-    paidAt?: string;
     paymentMethod: string;
+    paymentProvider: string;
+    paymentStatus: string;
+    gatewayTransactionRef?: string;
+    gatewayTransactionId?: string;
+    gatewayBankCode?: string;
+    gatewayResponseCode?: string;
+    gatewayCreatedAt?: string;
+    expiresAt?: string;
+    paidAt?: string;
     refundedAt?: string;
-    transactionId?: string;
 }
 
 export interface OrderSummaryResponse{

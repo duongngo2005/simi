@@ -1,12 +1,17 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { orderApi } from "../api/OrderApis"
 import type { OrderFilterRequest } from "../types/order.type"
-import api from "../../../lib/http/apiClient"
 
 export const useCreateOrder = () => {
     return useMutation({
         mutationFn: orderApi.createOrder,
         onSuccess: (response) => response.body
+    })
+}
+
+export const useRetryPayment = () => {
+    return useMutation({
+        mutationFn: orderApi.retryPayment
     })
 }
 

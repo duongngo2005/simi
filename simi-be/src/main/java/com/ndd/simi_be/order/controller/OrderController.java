@@ -1,14 +1,17 @@
 package com.ndd.simi_be.order.controller;
 
 import com.ndd.simi_be.common.response.ApiResponse;
+import com.ndd.simi_be.common.utils.IpUtils;
 import com.ndd.simi_be.order.dto.request.OrderFilterRequest;
 import com.ndd.simi_be.order.dto.request.CreatePosOrderRequest;
 import com.ndd.simi_be.order.dto.request.OrderRequest;
+import com.ndd.simi_be.order.dto.response.CreateOrderResponse;
 import com.ndd.simi_be.order.dto.response.OrderDetailResponse;
 import com.ndd.simi_be.order.dto.response.OrderSummaryResponse;
 import com.ndd.simi_be.order.enums.OrderStatus;
 import com.ndd.simi_be.order.service.OrderService;
 import com.ndd.simi_be.user.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,17 +30,34 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<OrderDetailResponse>> createOrder(
+    public ResponseEntity<ApiResponse<CreateOrderResponse>> createOrder(
             @Valid @RequestBody OrderRequest request,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal User user,
+            HttpServletRequest httpServletRequest
     ){
-        ApiResponse<OrderDetailResponse> response = ApiResponse.<OrderDetailResponse>builder()
+        String ipAddress = IpUtils.getClientIp(httpServletRequest);
+        ApiResponse<CreateOrderResponse> response = ApiResponse.<CreateOrderResponse>builder()
                 .message("Tạo đơn hàng thành công")
                 .status(201)
-                .body(orderService.createOrder(request, user))
+                .body(orderService.createOrder(request, user, ipAddress))
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/{orderId}/retry-payment")
+    public ResponseEntity<ApiResponse<CreateOrderResponse>> retryPayment(
+            @PathVariable("orderId") Long orderId,
+            @AuthenticationPrincipal User user,
+            HttpServletRequest request
+    ){
+        String ipAddress = IpUtils.getClientIp(request);
+        ApiResponse<CreateOrderResponse> response = ApiResponse.<CreateOrderResponse>builder()
+                .message("Tạo lại thanh toán thành công")
+                .status(200)
+                .body(orderService.retryPayment(orderId, user, ipAddress))
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/shipping-fee")

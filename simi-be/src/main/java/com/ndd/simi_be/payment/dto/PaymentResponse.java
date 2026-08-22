@@ -1,6 +1,7 @@
 package com.ndd.simi_be.payment.dto;
 
 import com.ndd.simi_be.payment.enums.PaymentMethod;
+import com.ndd.simi_be.payment.enums.PaymentProvider;
 import com.ndd.simi_be.payment.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,10 +18,16 @@ import java.time.LocalDateTime;
 public class PaymentResponse {
     private Long id;
     private Long orderId;
-    private PaymentStatus paymentStatus;
     private BigDecimal amount;
-    private LocalDateTime paidAt;
     private PaymentMethod paymentMethod;
+    private PaymentProvider paymentProvider;
+    private PaymentStatus paymentStatus;
+    private String gatewayTransactionRef;
+    private String gatewayTransactionId;
+    private String gatewayBankCode;
+    private String gatewayResponseCode;
+    private LocalDateTime gatewayCreatedAt;
+    private LocalDateTime expiresAt;
+    private LocalDateTime paidAt;
     private LocalDateTime refundedAt;
-    private String transactionId;
 }

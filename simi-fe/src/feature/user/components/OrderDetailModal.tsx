@@ -1,13 +1,15 @@
 import styles from "./OrderDetailModal.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
-import { useGetOrderDetails } from "../../order/hooks/useOrder";
+import { useGetOrderDetails, useRetryPayment } from "../../order/hooks/useOrder";
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: "Chờ xác nhận",
+  PENDING_PAYMENT: "Chờ thanh toán", 
   PACKING: "Đang đóng gói",
   SHIPPING: "Đang giao hàng",
   COMPLETED: "Đã hoàn thành",
   CANCELLED: "Đã hủy",
+  EXPIRED: "Hết hạn",               
 };
 
 interface OrderDetailModalProps {
@@ -17,8 +19,23 @@ interface OrderDetailModalProps {
 
 export const OrderDetailModal = ({ orderId, onClose }: OrderDetailModalProps) => {
   const { data: order, isLoading, isError } = useGetOrderDetails(orderId || 0);
+  const { mutateAsync: retryPayment, isPending: isRetrying } = useRetryPayment();
 
   if (!orderId) return null;
+
+  const handleRetry = async () => {
+    try {
+      const res = await retryPayment(orderId);
+      if (res.body?.paymentUrl) {
+        window.location.href = res.body.paymentUrl;
+      }
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.message ||
+        "Không thể thanh toán. Đơn hàng có thể đã hết thời gian giữ chỗ.";
+      alert(msg);
+    }
+  };
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -108,6 +125,18 @@ export const OrderDetailModal = ({ orderId, onClose }: OrderDetailModalProps) =>
                 <strong className={styles.totalPrice}>{formatPrice(order.finalAmount)}</strong>
               </div>
             </div>
+
+            {order.orderStatus === "PENDING_PAYMENT" && (
+              <div className={styles.actionSection}>
+                <button
+                  className={styles.btnModalRetry}
+                  onClick={handleRetry}
+                  disabled={isRetrying}
+                >
+                  {isRetrying ? "Đang tạo liên kết thanh toán..." : "Thanh toán"}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

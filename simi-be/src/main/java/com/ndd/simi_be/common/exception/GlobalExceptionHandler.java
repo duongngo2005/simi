@@ -3,6 +3,7 @@ package com.ndd.simi_be.common.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
@@ -80,6 +81,20 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLock(
+            ObjectOptimisticLockingFailureException ex,
+            HttpServletRequest request
+    ){
+        ErrorResponse response = ErrorResponse.builder()
+                .status(409)
+                .message("Sản phẩm vừa được khách hàng khác đặt mua. Vui lòng thử lại!")
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(Exception.class)

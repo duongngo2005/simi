@@ -236,3 +236,41 @@
   background-color: var(--color-danger-bg, #FDF2F0);
   border-color: var(--color-danger-border, #F5C6BA);
 }
+
+.statusPENDING_PAYMENT {
+  color: var(--color-warning, #D97706);
+  background-color: var(--color-warning-bg, #FEF3C7);
+  border-color: var(--color-warning-border, #FCD34D);
+}
+
+.statusEXPIRED {
+  color: var(--color-danger, #BC3908);
+  background-color: var(--color-danger-bg, #FDF2F0);
+  border-color: var(--color-danger-border, #F5C6BA);
+}
+
+.actionSection {
+  margin-top: 4px;
+}
+
+.btnModalRetry {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color-btn-primary, #B98B6F);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnModalRetry:hover {
+  background-color: var(--color-btn-primary-hover, #986a4e);
+}
+
+.btnModalRetry:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

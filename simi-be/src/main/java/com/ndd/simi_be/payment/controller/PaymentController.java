@@ -5,18 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/payments")
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @PostMapping("/{id}/pay")
-    public ResponseEntity<Void> simulatePayment(
-            @PathVariable("id") Long paymentId,
-            @RequestParam boolean success
+    @GetMapping("/vnpay-ipn")
+    public ResponseEntity<Map<String, String>> handleVnPayIpn(
+            @RequestParam Map<String, String> params
     ){
-        paymentService.simulatePayment(paymentId, success);
-        return ResponseEntity.noContent().build();
+        Map<String, String> result = paymentService.handleVnPayIpn(params);
+        return ResponseEntity.ok(result);
     }
 }

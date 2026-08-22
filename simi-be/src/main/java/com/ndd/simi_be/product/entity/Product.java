@@ -61,4 +61,8 @@ public class Product extends BaseEntity {
 
     @OneToOne(mappedBy = "product")
     private ConsignmentItem consignmentItem;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
 }

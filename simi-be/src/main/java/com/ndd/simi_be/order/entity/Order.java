@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,9 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderChannel orderChannel = OrderChannel.ONLINE;
 
+    @Column(name = "reservation_expires_at")
+    private LocalDateTime reservationExpiresAt;
+
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -59,4 +63,8 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Payment> payments = new ArrayList<>();
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
 }
