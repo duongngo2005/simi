@@ -3,7 +3,6 @@ import api from "../../../../lib/http/apiClient";
 import styles from "./ConsignmentItemForm.module.css";
 import {
   useCreateConsignmentItem,
-  useDeleteConsignmentItem,
   useUpdateConsignmentItem,
 } from "../hooks/useConsignments";
 import type { ConsignmentItemResponse } from "../types/staffConsignment.type";

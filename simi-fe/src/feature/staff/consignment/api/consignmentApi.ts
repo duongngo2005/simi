@@ -1,8 +1,7 @@
-import { number } from "zod";
 import api from "../../../../lib/http/apiClient";
 import type { ApiResponse, PageResponse } from "../../../../types/common";
 import type {ConsignmentResponse, ConsignmentFilterRequest, CreateConsignmentRequest, 
-    ConsignmentItemRequest, ConsignmentItemResponse, ConsignmentFullDetailResponse, 
+    ConsignmentItemResponse, ConsignmentFullDetailResponse, 
     CreateConsignmentItemRequest,
     UpdateConsignmentItemRequest} 
     from "../types/staffConsignment.type";

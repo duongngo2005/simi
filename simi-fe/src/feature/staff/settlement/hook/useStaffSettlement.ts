@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { staffSettlementApi } from "../api/staffSettlementApi"
 import { queryClient } from "../../../../app/queryClient"
-import { id } from "zod/locales"
 
 export const usePreviewSettlement = (consignmentId: number) => {
     return useQuery({

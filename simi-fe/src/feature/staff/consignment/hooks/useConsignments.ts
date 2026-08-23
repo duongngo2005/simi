@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import type { ConsignmentFilterRequest, ConsignmentItemRequest, CreateConsignmentItemRequest, CreateConsignmentRequest, UpdateConsignmentItemRequest } from "../types/staffConsignment.type";
+import type { ConsignmentFilterRequest, CreateConsignmentItemRequest, CreateConsignmentRequest, UpdateConsignmentItemRequest } from "../types/staffConsignment.type";
 import { consignmentApi } from "../api/consignmentApi";
 import { queryClient } from "../../../../app/queryClient";
 
