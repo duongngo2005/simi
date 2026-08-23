@@ -26,7 +26,7 @@ export const ConsignmentItemList = ({
     return schedule ? schedule.price.toLocaleString("vi-VN") + "đ" : "-";
   };
 
-  const {mutateAsync: deleteConsignmentItem, isPending: isDeleting} = useDeleteConsignmentItem();
+  const {mutateAsync: deleteConsignmentItem} = useDeleteConsignmentItem();
 
   const [deletingId, setDeletingId] = useState<number | null>(null);
 

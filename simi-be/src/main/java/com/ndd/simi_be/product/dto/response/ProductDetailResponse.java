@@ -1,5 +1,6 @@
 package com.ndd.simi_be.product.dto.response;
 
+import com.ndd.simi_be.product.enums.Gender;
 import com.ndd.simi_be.tag.dto.TagResponse;
 import lombok.*;
 
@@ -27,4 +28,6 @@ public class ProductDetailResponse {
     private List<ProductImageResponse> productImageResponses;
     private LocalDateTime createdDate;
     private String thumbnail;
+    private Gender gender;
+    private String material;
 }

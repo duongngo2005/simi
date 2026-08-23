@@ -29,6 +29,8 @@ export interface ProductDetailResponse {
   productImageResponses: { id: number, imageUrl: string; thumbnail: boolean }[];
   createdDate: string;
   thumbnail: string;
+  gender?: "MEN" | "WOMEN" | "UNISEX";
+  material?: string;
 }
 
 export interface ProductImageResponse {

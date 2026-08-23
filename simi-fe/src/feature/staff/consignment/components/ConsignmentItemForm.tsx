@@ -3,7 +3,6 @@ import api from "../../../../lib/http/apiClient";
 import styles from "./ConsignmentItemForm.module.css";
 import {
   useCreateConsignmentItem,
-  useDeleteConsignmentItem,
   useUpdateConsignmentItem,
 } from "../hooks/useConsignments";
 import type { ConsignmentItemResponse } from "../types/staffConsignment.type";
@@ -13,6 +12,12 @@ const PRODUCT_CONDITION = [
   { value: "LIKE_NEW", label: "Như mới (95%)" },
   { value: "GOOD", label: "Tốt (90-95%)" },
   { value: "FAIR", label: "Khá (80-90%)" },
+];
+
+const GENDER_OPTIONS = [
+  { value: "UNISEX", label: "Unisex (Nam / Nữ)" },
+  { value: "MEN", label: "Nam" },
+  { value: "WOMEN", label: "Nữ" },
 ];
 
 interface Props {
@@ -38,6 +43,8 @@ export const ConsignmentItemForm = ({
     size: "",
     color: "",
     productCondition: "",
+    gender: "UNISEX",
+    material: "",
     description: "",
     commissionRate: 0.3,
     tagInput: "",
@@ -63,7 +70,7 @@ export const ConsignmentItemForm = ({
     value: string
   ) => {
     const updated = [...priceSchedules];
-    if (field == "effectiveAfterDays") {
+    if (field === "effectiveAfterDays") {
       updated[index].effectiveAfterDays = Number(value);
     } else {
       updated[index].price = value;
@@ -165,6 +172,8 @@ export const ConsignmentItemForm = ({
         color: itemForm.color || undefined,
         description: itemForm.description || undefined,
         productCondition: itemForm.productCondition || undefined,
+        gender: (itemForm.gender as "MEN" | "WOMEN" | "UNISEX") || "UNISEX",
+        material: itemForm.material || undefined,
         tagNames: itemForm.tagInput
           ? itemForm.tagInput.split(",").map((t) => t.trim()).filter(Boolean)
           : [],
@@ -207,11 +216,13 @@ export const ConsignmentItemForm = ({
       size: "",
       color: "",
       productCondition: "",
+      gender: "UNISEX",
+      material: "",
       description: "",
       commissionRate: 0.3,
       tagInput: "",
-    }),
-      setPriceSchedules([{ effectiveAfterDays: 0, price: "" }]);
+    });
+    setPriceSchedules([{ effectiveAfterDays: 0, price: "" }]);
     setThumbnailFile(null);
     setThumbnailPreview("");
     setImageFiles([]);
@@ -238,6 +249,8 @@ export const ConsignmentItemForm = ({
       size: product.size || "",
       color: product.color || "",
       productCondition: product.productCondition || "",
+      gender: product.gender || "UNISEX",
+      material: product.material || "",
       description: product.description || "",
       commissionRate: editingItem.commissionRate,
       tagInput: product.tagNames?.join(", ") || "",
@@ -276,7 +289,7 @@ export const ConsignmentItemForm = ({
       </h3>
       <form onSubmit={handleSubmitForm} className={styles.form}>
         <div className={styles.field}>
-          <label htmlFor="" className={styles.label}>
+          <label htmlFor="name" className={styles.label}>
             Tên sản phẩm
           </label>
           <input
@@ -289,7 +302,7 @@ export const ConsignmentItemForm = ({
         </div>
         <div className={styles.row}>
           <div className={styles.field}>
-            <label htmlFor="" className={styles.label}>
+            <label htmlFor="categoryId" className={styles.label}>
               Loại sản phẩm
             </label>
             <select
@@ -307,7 +320,7 @@ export const ConsignmentItemForm = ({
             </select>
           </div>
           <div className={styles.field}>
-            <label htmlFor="" className={styles.label}>
+            <label htmlFor="brandId" className={styles.label}>
               Thương hiệu
             </label>
             <select
@@ -351,9 +364,44 @@ export const ConsignmentItemForm = ({
             />
           </div>
         </div>
+
+        {/* Giới tính & Chất liệu */}
         <div className={styles.row}>
           <div className={styles.field}>
-            <label htmlFor="condition" className={styles.label}>
+            <label htmlFor="gender" className={styles.label}>
+              Giới tính
+            </label>
+            <select
+              name="gender"
+              value={itemForm.gender}
+              onChange={handleChange}
+              className={styles.select}
+            >
+              {GENDER_OPTIONS.map((g) => (
+                <option value={g.value} key={g.value}>
+                  {g.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="material" className={styles.label}>
+              Chất liệu
+            </label>
+            <input
+              name="material"
+              type="text"
+              placeholder="VD: 100% Cotton, Linen, Denim..."
+              value={itemForm.material}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="productCondition" className={styles.label}>
               Tình trạng
             </label>
             <select
@@ -382,6 +430,7 @@ export const ConsignmentItemForm = ({
             />
           </div>
         </div>
+
         <div className={styles.scheduleBox}>
           <div className={styles.scheduleHeader}>
             <label htmlFor="" className={styles.label}>
@@ -437,7 +486,7 @@ export const ConsignmentItemForm = ({
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="" className={styles.label}>
+          <label htmlFor="tagInput" className={styles.label}>
             Thẻ tag
           </label>
           <input
@@ -449,7 +498,7 @@ export const ConsignmentItemForm = ({
           />
         </div>
         <div className={styles.field}>
-          <label htmlFor="" className={styles.label}>
+          <label htmlFor="description" className={styles.label}>
             Mô tả sản phẩm
           </label>
           <textarea

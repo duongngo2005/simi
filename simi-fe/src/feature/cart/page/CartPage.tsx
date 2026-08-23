@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useGetMyCart, useRemoveItem } from "../hook/useCart";
 import styles from "./CartPage.module.css";
-import { Link, useNavigate } from "react-router";
+import {useNavigate } from "react-router";
 import { formatPrice } from "../../../utils/formatPrice";
 
 export const CartPage = () => {

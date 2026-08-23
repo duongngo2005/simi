@@ -7,7 +7,6 @@
   margin: 0 auto;
 }
 
-/* Breadcrumb */
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -32,7 +31,6 @@
   font-weight: 600;
 }
 
-/* Layout 2 cột */
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -40,7 +38,6 @@
   align-items: start;
 }
 
-/* ── Gallery ── */
 .gallery {
   display: flex;
   flex-direction: column;
@@ -116,7 +113,6 @@
   border-color: var(--color-btn-primary);
 }
 
-/* ── Info Panel ── */
 .info {
   display: flex;
   flex-direction: column;
@@ -171,7 +167,6 @@
   margin: 0;
 }
 
-/* Detail grid */
 .detailGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -198,7 +193,6 @@
   font-weight: 600;
 }
 
-/* Tags */
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -214,7 +208,6 @@
   border: 1px solid var(--color-input-border);
 }
 
-/* Description */
 .descriptionSection {
   background-color: #fbf8f3;
   border: 1px solid var(--color-input-border);
@@ -238,7 +231,6 @@
   margin: 0;
 }
 
-/* Action buttons */
 .actions {
   display: flex;
   gap: 12px;
@@ -276,7 +268,6 @@
   background-color: var(--color-btn-primary-hover);
 }
 
-/* Guarantees */
 .guarantees {
   display: flex;
   flex-direction: column;
@@ -298,7 +289,6 @@
   font-size: 0.9rem;
 }
 
-/* Loading / Error */
 .stateWrapper {
   display: flex;
   flex-direction: column;

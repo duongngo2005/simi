@@ -1,10 +1,12 @@
 package com.ndd.simi_be.product.dto.request;
 
+import com.ndd.simi_be.product.enums.Gender;
 import com.ndd.simi_be.product.enums.ProductCondition;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ProductFilterRequest {
@@ -17,6 +19,8 @@ public class ProductFilterRequest {
     private ProductCondition productCondition;
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
+    private Gender gender;
+    private List<String> materials;
     @Pattern(
             regexp = "createdDate|name|currentPrice",
             message = "Chỉ được sắp xếp theo giá, tên và ngày đăng"

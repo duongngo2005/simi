@@ -3,23 +3,40 @@ import type { ApiResponse, PageResponse } from "../../../types/common";
 import  { type ProductDetailResponse, type ProductImageResponse, type ProductSummaryResponse } from "../types/product.type";
 
 export const getProducts = async (params: {
-    page?: number;
-    size?: number;
-    keyword?: string;
-    categoryId?: number;
-    brandId?: number;
-    sizeProduct?: string;
-    color?: string;
-    productCondition?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    sortBy?: string;
-    sortDir?: "desc" | "asc";
-    categorySlug?: string;
-}) =>  {
-    const response = await api.get<ApiResponse<PageResponse<ProductSummaryResponse>>>("/products", {params})
-    return response.data
-}
+  page?: number;
+  size?: number;
+  keyword?: string;
+  categoryId?: number;
+  brandId?: number;
+  sizeProduct?: string;
+  color?: string;
+  productCondition?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: string;
+  sortDir?: "desc" | "asc";
+  categorySlug?: string;
+  gender?: "MEN" | "WOMEN" | "UNISEX";
+  materials?: string[];
+}) => {
+  const response = await api.get<ApiResponse<PageResponse<ProductSummaryResponse>>>("/products", {
+    params,
+    paramsSerializer: (params) => {
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          if (Array.isArray(value)) {
+            value.forEach((v) => searchParams.append(key, v));
+          } else {
+            searchParams.append(key, String(value));
+          }
+        }
+      });
+      return searchParams.toString();
+    },
+  });
+  return response.data;
+};
 
 export const getThumbnail = async (id: number) => {
     const response = await api.get<ApiResponse<ProductImageResponse>>(`/products/${id}/thumbnail`);

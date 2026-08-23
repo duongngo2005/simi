@@ -4,6 +4,7 @@ import com.ndd.simi_be.brand.entity.Brand;
 import com.ndd.simi_be.category.entity.Category;
 import com.ndd.simi_be.common.entity.BaseEntity;
 import com.ndd.simi_be.consignment.entity.ConsignmentItem;
+import com.ndd.simi_be.product.enums.Gender;
 import com.ndd.simi_be.product.enums.ProductCondition;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.tag.entity.Tag;
@@ -65,4 +66,12 @@ public class Product extends BaseEntity {
     @Version
     @Column(nullable = false)
     private Long version;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private Gender gender = Gender.UNISEX;
+
+    @Column(length = 100)
+    private String material;
 }
