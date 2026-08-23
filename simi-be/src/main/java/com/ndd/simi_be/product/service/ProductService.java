@@ -205,6 +205,8 @@ public class ProductService {
         existingProduct.setSize(request.getSize());
         existingProduct.setColor(request.getColor());
         existingProduct.setProductCondition(request.getProductCondition());
+        existingProduct.setGender(request.getGender() != null ? request.getGender() : Gender.UNISEX);
+        existingProduct.setMaterial(request.getMaterial());
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy loại sản phẩm"));

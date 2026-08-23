@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,  "/brands/**").permitAll()
                         .requestMatchers(HttpMethod.GET,  "/tags/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/payments/vnpay-ipn").permitAll()
+                        .requestMatchers("/ai/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(
