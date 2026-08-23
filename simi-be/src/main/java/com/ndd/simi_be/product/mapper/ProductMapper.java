@@ -37,6 +37,8 @@ public class ProductMapper {
                                 .orElse(null)
                 )
                 .currentPrice(product.getCurrentPrice())
+                .gender(product.getGender())
+                .material(product.getMaterial())
                 .build();
     }
 

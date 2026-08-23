@@ -37,7 +37,7 @@ server:
 
 app:
   jwt:
-    secret: U21hcnREaWdpdGFsTGlicmFyeVNlY3JldEtleUZvckhTMjU2QWxnb3JpdGhtMjAyNA
+    secret: ${JWT_SECRET}
     access-expiration-ms: 1800000
     refresh-expiration-ms: 604800000
   scheduler:
@@ -47,6 +47,9 @@ app:
     pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
     return-url: ${VNPAY_RETURN_URL:http://localhost:5173/payment/result}
     tmn-code: ${VNPAY_TMN_CODE}
+  gemini:
+    api-key: ${GEMINI_API_KEY}
+    model: gemini-2.5-flash
 
 cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME:docidan7t}

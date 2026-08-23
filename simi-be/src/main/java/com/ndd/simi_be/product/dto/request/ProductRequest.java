@@ -1,5 +1,6 @@
 package com.ndd.simi_be.product.dto.request;
 
+import com.ndd.simi_be.product.enums.Gender;
 import com.ndd.simi_be.product.enums.ProductCondition;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import jakarta.validation.constraints.NotBlank;
@@ -29,4 +30,7 @@ public class ProductRequest {
     private ProductStatus productStatus = ProductStatus.DRAFT;
     @Builder.Default
     private List<String> tagNames = new ArrayList<>();
+    @Builder.Default
+    private Gender gender = Gender.UNISEX;
+    private String material;
 }

@@ -45,6 +45,8 @@ export interface ProductRequest {
     color?: string;
     productCondition?: string;
     tagNames: string[];
+    gender?: "MEN" | "WOMEN" | "UNISEX";
+    material?: string;
 }
 
 export interface PriceScheduleRequest {

@@ -8,6 +8,7 @@ import com.ndd.simi_be.cloudinary.CloudinaryResponse;
 import com.ndd.simi_be.cloudinary.CloudinaryService;
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
+import com.ndd.simi_be.product.enums.Gender;
 import com.ndd.simi_be.product.repository.ProductImageRepository;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
 import com.ndd.simi_be.product.dto.request.ProductRequest;
@@ -75,7 +76,9 @@ public class ProductService {
                 ProductSpecification.hasSize(filterRequest.getSizeProduct()),
                 ProductSpecification.hasKeyword(filterRequest.getKeyword()),
                 ProductSpecification.hasMaxPrice(filterRequest.getMaxPrice()),
-                ProductSpecification.hasMinPrice(filterRequest.getMinPrice())
+                ProductSpecification.hasMinPrice(filterRequest.getMinPrice()),
+                ProductSpecification.hasGender(filterRequest.getGender()),
+                ProductSpecification.hasMaterials(filterRequest.getMaterials())
         );
 
         Sort sort = filterRequest.getSortDir().equalsIgnoreCase("asc")
@@ -111,6 +114,8 @@ public class ProductService {
                 .brand(brand)
                 .productCondition(request.getProductCondition())
                 .tags(tags)
+                .gender(request.getGender() != null ? request.getGender() : Gender.UNISEX)
+                .material(request.getMaterial())
                 .build();
 
         product = productRepository.save(product);

@@ -1,11 +1,13 @@
 package com.ndd.simi_be.product.repository;
 
 import com.ndd.simi_be.product.entity.Product;
+import com.ndd.simi_be.product.enums.Gender;
 import com.ndd.simi_be.product.enums.ProductCondition;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.tag.entity.Tag;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -29,6 +31,35 @@ public class ProductSpecification {
                     cb.like(cb.lower(brandJoin.get("name")), pattern)
             );
         });
+    }
+
+    public static Specification<Product> hasGender(Gender gender){
+        return ((root, query, cb) -> {
+            if (gender == null){
+                return cb.conjunction();
+            }
+            return cb.or(
+                    cb.equal(root.get("gender"), gender),
+                    cb.equal(root.get("gender"), Gender.UNISEX)
+            );
+        });
+    }
+
+    public static Specification<Product> hasMaterials(List<String> materials) {
+        return (root, query, cb) -> {
+            if (materials == null || materials.isEmpty()) {
+                return cb.conjunction();
+            }
+
+            List<Predicate> predicates = materials.stream()
+                    .filter(m -> m != null && !m.isBlank())
+                    .map(m -> cb.like(cb.lower(root.get("material")), "%" + m.toLowerCase().trim() + "%"))
+                    .toList();
+            if (predicates.isEmpty()) {
+                return cb.conjunction();
+            }
+            return cb.or(predicates.toArray(new Predicate[0]));
+        };
     }
 
     public static Specification<Product> hasColor(String color){
