@@ -111,36 +111,37 @@ public class ItemDispositionService {
             User processedBy,
             UpdateItemDispositionsTypeRequest request
     ){
+        if (request.getItemDispositionIds() == null || request.getItemDispositionIds().isEmpty()) {
+            throw new BadRequestException("Danh sách xử lý không được để trống");
+        }
 
         List<ItemDisposition> dispositions = itemDispositionRepository.findAllById(request.getItemDispositionIds());
 
-        for (ItemDisposition item: dispositions){
+        if (dispositions.size() != request.getItemDispositionIds().size()) {
+            throw new ResourceNotFoundException("Một số chi tiết không tồn tại");
+        }
+
+        for (ItemDisposition item : dispositions){
+            if (item.getItemDispositionStatus() == ItemDispositionStatus.COMPLETED) {
+                throw new BadRequestException("Trạng thái món hàng đã hoàn thành");
+            }
+
+            if (item.getItemDispositionType() == ItemDispositionType.DONATE && request.getType() == ItemDispositionType.RETURN) {
+                throw new BadRequestException("Món đồ đã quá hạn và chuyển sang trạng thái DONATE");
+            }
+
             item.setItemDispositionStatus(ItemDispositionStatus.COMPLETED);
             item.setProcessedAt(LocalDateTime.now());
             item.setItemDispositionType(request.getType());
             item.setProcessedBy(processedBy);
+
             if (item.getConsignmentItem() != null){
                 if (request.getType() == ItemDispositionType.RETURN){
                     item.getConsignmentItem().setConsignmentItemStatus(ConsignmentItemStatus.RETURNED);
-                }else if(request.getType() == ItemDispositionType.DONATE){
+                } else if (request.getType() == ItemDispositionType.DONATE){
                     item.getConsignmentItem().setConsignmentItemStatus(ConsignmentItemStatus.DONATED);
                 }
             }
-        }
-    }
-
-    @Transactional
-    public void confirmDonateItemDispositions(
-            ConfirmDonateItemDispositionsRequest request,
-            User processedBy
-    ) {
-        for (Long id : request.getItemDispositionIds()) {
-            ItemDisposition item = itemDispositionRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết trả hàng này "));
-            item.setItemDispositionStatus(ItemDispositionStatus.COMPLETED);
-            item.setProcessedAt(LocalDateTime.now());
-            item.setItemDispositionType(ItemDispositionType.DONATE);
-            item.setProcessedBy(processedBy);
         }
     }
 }
