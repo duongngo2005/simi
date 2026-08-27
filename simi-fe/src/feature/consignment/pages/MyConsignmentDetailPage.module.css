@@ -1,0 +1,466 @@
+.page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stateBox {
+  padding: 40px 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+}
+
+.topBar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btnBack {
+  align-self: flex-start;
+  padding: 6px 12px;
+  background-color: transparent;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnBack:hover {
+  background-color: var(--color-input);
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-heading);
+  letter-spacing: -0.02em;
+}
+
+.statusBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.statusDRAFT {
+  color: var(--color-text);
+  background-color: var(--color-input);
+  border-color: var(--color-input-border);
+}
+
+.statusACTIVE {
+  color: var(--color-info);
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info-border);
+}
+
+.statusPENDING_SETTLEMENT {
+  color: var(--color-warning);
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+}
+
+.statusSETTLED,
+.statusCLOSED {
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success-border);
+}
+
+.infoCard {
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.infoItemFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.infoLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.infoValue {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.summaryBar {
+  display: flex;
+  gap: 0;
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.summaryItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 8px;
+  border-right: 1px solid var(--color-input-border);
+}
+
+.summaryItem:last-child {
+  border-right: none;
+}
+
+.summaryNumber {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-heading);
+}
+
+.summaryLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+}
+
+.itemThumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-input-border);
+  flex-shrink: 0;
+}
+
+.itemNoThumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background-color: var(--color-input);
+  border: 1px solid var(--color-input-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemMeta {
+  display: flex;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+
+.itemRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.itemPrice {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.itemStatusBadge {
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.itemStatusDRAFT {
+  color: var(--color-text);
+  background-color: var(--color-input);
+  border-color: var(--color-input-border);
+}
+
+.itemStatusACTIVE {
+  color: var(--color-info);
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info-border);
+}
+
+.itemStatusRESERVED {
+  color: var(--color-warning);
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+}
+
+.itemStatusSOLD {
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success-border);
+}
+
+.itemStatusEXPIRED,
+.itemStatusCANCELLED {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
+}
+
+.itemStatusRETURNED {
+  color: var(--color-text);
+  background-color: var(--color-input);
+  border-color: var(--color-input-border);
+}
+
+.itemStatusDONATED {
+  color: var(--color-info);
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info-border);
+}
+
+.settlementCard {
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settlementRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--color-text);
+}
+
+.settlementAmount {
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.settlementDeduct {
+  font-weight: 600;
+  color: var(--color-danger);
+}
+
+.settlementDivider {
+  height: 1px;
+  background-color: var(--color-input-border);
+  margin: 4px 0;
+}
+
+.settlementRowTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.settlementTotal {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-success);
+}
+
+.settlementDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.settlementDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.proofSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.proofImage {
+  max-width: 280px;
+  border-radius: 4px;
+  border: 1px solid var(--color-input-border);
+}
+
+.dispositionList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dispositionCard {
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dispositionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dispositionName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.dispositionTypeBadge {
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.typeReturn {
+  color: var(--color-heading);
+  background-color: var(--color-input);
+  border-color: var(--color-input-border);
+}
+
+.typeDonate {
+  color: var(--color-info);
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info-border);
+}
+
+.dispositionBody {
+  display: flex;
+  gap: 16px;
+  font-size: 0.78rem;
+  color: var(--color-text);
+}
+
+.dispositionStatus {
+  font-weight: 600;
+}
+
+.dispositionDeadline {
+  opacity: 0.85;
+}
+
+@media (max-width: 600px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .settlementDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryItem {
+    padding: 10px 4px;
+  }
+
+  .summaryNumber {
+    font-size: 0.95rem;
+  }
+}

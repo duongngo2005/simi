@@ -1,27 +1,27 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import styles from "./MyConsignment.module.css";
 import { useGetMyConsignments } from "../../consignment/hooks/useConsignment";
-import { ConsignmentDetailModal } from "./ConsignmentDetailModal";
 
 const STATUS_LABEL: Record<string, string> = {
   DRAFT: "Nháp",
   ACTIVE: "Đang ký gửi",
-  PENDING_SETTLEMENT: "Chờ thanh toán",
-  SETTLED: "Đã thanh toán",
+  PENDING_SETTLEMENT: "Chờ kết toán",
+  SETTLED: "Đã kết toán",
   CLOSED: "Đã hoàn tất",
 };
 
 const TABS = [
   { key: "", label: "Tất cả" },
   { key: "ACTIVE", label: "Đang ký gửi" },
-  { key: "PENDING_SETTLEMENT", label: "Chờ thanh toán" },
-  { key: "SETTLED", label: "Đã thanh toán" },
+  { key: "PENDING_SETTLEMENT", label: "Chờ kết toán" },
+  { key: "SETTLED", label: "Đã kết toán" },
   { key: "CLOSED", label: "Đã hoàn tất" },
 ];
 
 export const MyConsignment = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const { data: consignments = [], isLoading, isError } = useGetMyConsignments();
 
@@ -58,7 +58,7 @@ export const MyConsignment = () => {
             <div
               key={item.id}
               className={styles.consignmentCard}
-              onClick={() => setSelectedId(item.id)}
+              onClick={() => navigate(`/my-consignments/${item.id}`)}
             >
               <div className={styles.cardHeader}>
                 <div className={styles.headerLeft}>
@@ -83,8 +83,6 @@ export const MyConsignment = () => {
           ))}
         </div>
       )}
-
-      <ConsignmentDetailModal id={selectedId} onClose={() => setSelectedId(null)} />
     </div>
   );
 };
