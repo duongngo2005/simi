@@ -7,7 +7,6 @@ export const OrderSuccessPage = () => {
   const navigate = useNavigate();
   const orderId = location.state?.orderId as number | undefined;
 
-  // Nếu truy cập thẳng URL không có orderId thì đá về trang chủ
   useEffect(() => {
     if (!orderId) navigate("/");
   }, [orderId, navigate]);
@@ -17,7 +16,6 @@ export const OrderSuccessPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        {/* Icon thành công */}
         <div className={styles.iconWrapper}>
           <div className={styles.iconCircle}>
             <svg
@@ -34,45 +32,43 @@ export const OrderSuccessPage = () => {
           </div>
         </div>
 
-        {/* Nội dung */}
         <h1 className={styles.title}>Đặt hàng thành công!</h1>
         <p className={styles.subtitle}>
-          Cảm ơn bạn đã mua sắm tại <strong>Simi</strong>. 
-          Đơn hàng của bạn đang được xử lý và sẽ sớm được giao đến tay bạn.
+          Cảm ơn bạn đã mua sắm tại <strong>Simi</strong>. Đơn hàng của bạn đã được ghi nhận và đang chờ nhân viên xác nhận đóng gói.
         </p>
 
-        {/* Mã đơn hàng */}
         <div className={styles.orderIdBox}>
           <span className={styles.orderIdLabel}>Mã đơn hàng</span>
           <span className={styles.orderIdValue}>#{String(orderId).padStart(6, "0")}</span>
+          <span className={styles.paymentMethodText}>Thanh toán khi nhận hàng (COD)</span>
         </div>
 
-        {/* Thông tin bước tiếp theo */}
         <div className={styles.steps}>
           <div className={styles.step}>
-            <span className={styles.stepIcon}>📧</span>
+            <span className={styles.stepNumber}>1</span>
             <div className={styles.stepText}>
               <strong>Xác nhận qua email</strong>
-              <span>Chúng tôi sẽ gửi hóa đơn và thông tin đơn hàng vào email của bạn</span>
+              <span>Hóa đơn và thông tin chi tiết đơn hàng đã được gửi tới email của bạn.</span>
             </div>
           </div>
+
           <div className={styles.step}>
-            <span className={styles.stepIcon}>📦</span>
+            <span className={styles.stepNumber}>2</span>
             <div className={styles.stepText}>
-              <strong>Đang đóng gói</strong>
-              <span>Đơn hàng sẽ được chuẩn bị và giao trong 2-5 ngày làm việc</span>
+              <strong>Chuẩn bị & Đóng gói</strong>
+              <span>Nhân viên Simi sẽ kiểm tra tình trạng đồ và đóng gói cẩn thận.</span>
             </div>
           </div>
+
           <div className={styles.step}>
-            <span className={styles.stepIcon}>🚚</span>
+            <span className={styles.stepNumber}>3</span>
             <div className={styles.stepText}>
-              <strong>Theo dõi vận chuyển</strong>
-              <span>Bạn sẽ nhận được thông báo khi đơn hàng được giao cho đơn vị vận chuyển</span>
+              <strong>Giao hàng tận nơi</strong>
+              <span>Đơn vị vận chuyển sẽ giao hàng trong vòng 2 - 4 ngày làm việc.</span>
             </div>
           </div>
         </div>
 
-        {/* Nút điều hướng */}
         <div className={styles.actions}>
           <Link to="/" className={styles.btnPrimary}>
             Tiếp tục mua sắm

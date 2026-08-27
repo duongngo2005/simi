@@ -7,7 +7,6 @@ import { getServerError } from "../../../../utils/getMessageError";
 import { queryClient } from "../../../../app/queryClient";
 
 export const StaffOrderListPage = () => {
-
   const [filters, setFilters] = useState<OrderFilterRequest>({
     orderStatus: "",
     orderChannel: "",
@@ -21,7 +20,6 @@ export const StaffOrderListPage = () => {
   });
 
   const { data: pageData, isLoading, isError, error } = useStaffOrder(filters);
-
   const updateStatus = useChangeOrderStatus();
 
   const handleStatusChange = (orderId: number, status: string) => {
@@ -29,8 +27,8 @@ export const StaffOrderListPage = () => {
       { orderId, status },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['orders', 'staff'] });
-          alert(`Đã cập nhật trạng thái đơn #${orderId} thành công!`);
+          queryClient.invalidateQueries({ queryKey: ["orders", "staff"] });
+          alert(`Đã cập nhật trạng thái đơn #${orderId} thành công.`);
         },
         onError: (err) => {
           const message = getServerError(err, "Cập nhật trạng thái thất bại");
@@ -62,23 +60,59 @@ export const StaffOrderListPage = () => {
     }));
   };
 
+  const handleResetFilters = () => {
+    setFilters({
+      orderStatus: "",
+      orderChannel: "",
+      keyword: "",
+      fromDate: "",
+      toDate: "",
+      page: 0,
+      size: 10,
+      sortBy: "createdDate",
+      sortDir: "desc",
+    });
+  };
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.pageTitle}>Quản lý Đơn hàng (Staff)</h1>
+      {/* TIÊU ĐỀ TRANG */}
+      <div className={styles.topBar}>
+        <div>
+          <h1 className={styles.pageTitle}>Quản lý đơn hàng</h1>
+          <p className={styles.subtitle}>
+            Theo dõi, xử lý và cập nhật tiến độ giao nhận đơn hàng
+          </p>
+        </div>
+      </div>
 
-      <div className={styles.filterSection}>
+      {/* BỘ LỌC TÌM KIẾM */}
+      <div className={styles.filterCard}>
+        <div className={styles.filterHeader}>
+          <span className={styles.filterTitle}>Bộ lọc tìm kiếm</span>
+          <button
+            type="button"
+            className={styles.btnReset}
+            onClick={handleResetFilters}
+          >
+            Đặt lại bộ lọc
+          </button>
+        </div>
+
         <div className={styles.filterGrid}>
+          {/* Ô Tìm kiếm từ khóa (chiếm 2 cột) */}
           <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
-            <label>Tìm kiếm</label>
+            <label>Từ khóa</label>
             <input
               type="text"
               name="keyword"
-              placeholder="Mã đơn, Tên khách, SĐT..."
+              placeholder="Nhập mã đơn, tên khách, số điện thoại..."
               value={filters.keyword}
               onChange={handleInputChange}
             />
           </div>
 
+          {/* Lọc Kênh bán (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Kênh bán</label>
             <select
@@ -88,10 +122,11 @@ export const StaffOrderListPage = () => {
             >
               <option value="">Tất cả kênh</option>
               <option value="ONLINE">Online</option>
-              <option value="IN_STORE">Mua tại quầy</option>
+              <option value="IN_STORE">Tại quầy</option>
             </select>
           </div>
 
+          {/* Lọc Trạng thái (Đầy đủ 7 trạng thái) */}
           <div className={styles.inputGroup}>
             <label>Trạng thái</label>
             <select
@@ -100,14 +135,17 @@ export const StaffOrderListPage = () => {
               onChange={handleInputChange}
             >
               <option value="">Tất cả trạng thái</option>
-              <option value="PENDING">Chờ xử lý</option>
+              <option value="PENDING">Chờ xác nhận</option>
+              <option value="PENDING_PAYMENT">Chờ thanh toán</option>
               <option value="PACKING">Đang đóng gói</option>
               <option value="SHIPPING">Đang giao hàng</option>
               <option value="COMPLETED">Hoàn thành</option>
-              <option value="CANCELLED">Đã huỷ</option>
+              <option value="CANCELLED">Đã hủy</option>
+              <option value="EXPIRED">Hết hạn thanh toán</option>
             </select>
           </div>
 
+          {/* Từ ngày (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Từ ngày</label>
             <input
@@ -118,6 +156,7 @@ export const StaffOrderListPage = () => {
             />
           </div>
 
+          {/* Đến ngày (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Đến ngày</label>
             <input
@@ -128,147 +167,158 @@ export const StaffOrderListPage = () => {
             />
           </div>
 
+          {/* Sắp xếp theo (1 cột) */}
           <div className={styles.inputGroup}>
-            <label>Sắp xếp theo</label>
+            <label>Sắp xếp</label>
             <select
               name="sortBy"
               value={filters.sortBy}
               onChange={handleInputChange}
             >
               <option value="createdDate">Ngày tạo đơn</option>
-              <option value="finalAmount">Tổng giá trị</option>
-              <option value="id">ID đơn hàng</option>
+              <option value="finalAmount">Tổng tiền</option>
+              <option value="id">Mã đơn hàng</option>
             </select>
           </div>
 
+          {/* Thứ tự hiển thị (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Thứ tự</label>
             <button
               type="button"
-              className={styles.sortDirBtn}
+              className={styles.btnSort}
               onClick={handleToggleSortDir}
-              title={filters.sortDir === "desc" ? "Giảm dần" : "Tăng dần"}
             >
-              {filters.sortDir === "desc" ? (
-                <>
-                  <span className={styles.arrowIcon}>↓</span> Giảm dần
-                </>
-              ) : (
-                <>
-                  <span className={styles.arrowIcon}>↑</span> Tăng dần
-                </>
-              )}
+              {filters.sortDir === "desc" ? "Mới nhất trước" : "Cũ nhất trước"}
             </button>
           </div>
         </div>
       </div>
 
-      <div className={styles.tableWrapper}>
+      {/* BẢNG DỮ LIỆU ĐƠN HÀNG */}
+      <div className={styles.tableCard}>
         {isLoading ? (
-          <div className={styles.loading}>Đang tải dữ liệu từ máy chủ...</div>
+          <div className={styles.centerText}>Đang tải dữ liệu đơn hàng...</div>
         ) : isError ? (
-          <div className={styles.error}>
-            Đã xảy ra lỗi khi tải đơn hàng: {(error as Error)?.message || "Lỗi không xác định"}
+          <div className={styles.errorText}>
+            Lỗi khi tải dữ liệu: {(error as Error)?.message || "Không xác định"}
           </div>
         ) : orders.length === 0 ? (
-          <div className={styles.empty}>Không tìm thấy đơn hàng nào phù hợp.</div>
+          <div className={styles.centerText}>Không tìm thấy đơn hàng nào phù hợp.</div>
         ) : (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Mã đơn</th>
-                <th>Ngày tạo</th>
-                <th>Sản phẩm đầu</th>
-                <th>Tổng thanh toán</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order.id}>
-                  <td className={styles.orderId}>#{order.id}</td>
-                  <td className={styles.dateCell}>
-                    {new Date(order.createdDate).toLocaleDateString("vi-VN", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
-                  </td>
-                  <td className={styles.productCell}>
-                    {order.firstItemThumbnail ? (
-                      <img
-                        src={order.firstItemThumbnail}
-                        alt={order.firstItemName}
-                        className={styles.thumbnailImg}
-                      />
-                    ) : (
-                      <div className={styles.noThumbnail}>No Img</div>
-                    )}
-                    <div className={styles.productInfo}>
-                      <span className={styles.productName}>
-                        {order.firstItemName || "Chưa có tên sản phẩm"}
-                      </span>
-                      {order.totalItem > 1 && (
-                        <span className={styles.totalItemsCount}>
-                          +{order.totalItem - 1} sản phẩm khác
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className={styles.amount}>
-                    {formatPrice(order.finalAmount)}
-                  </td>
-                  <td>
-                    <select
-                      className={`${styles.statusSelect} ${
-                        styles[`status_${order.orderStatus}`]
-                      }`}
-                      value={order.orderStatus}
-                      onChange={(e) =>
-                        handleStatusChange(order.id, e.target.value)
-                      }
-                      disabled={updateStatus.isPending}
-                    >
-                      <option value="PENDING">Chờ xử lý</option>
-                      <option value="PACKING">Đang đóng gói</option>
-                      <option value="SHIPPING">Đang giao hàng</option>
-                      <option value="COMPLETED">Hoàn thành</option>
-                      <option value="CANCELLED">Đã huỷ</option>
-                    </select>
-                  </td>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th style={{ width: "90px" }}>Mã đơn</th>
+                  <th style={{ width: "130px", textAlign: "center" }}>Ngày tạo</th>
+                  <th>Sản phẩm</th>
+                  <th style={{ width: "130px", textAlign: "right" }}>Tổng tiền</th>
+                  <th style={{ width: "170px", textAlign: "center" }}>Trạng thái</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id}>
+                    {/* Mã đơn */}
+                    <td>
+                      <span className={styles.orderId}>#{order.id}</span>
+                    </td>
+
+                    {/* Ngày tạo */}
+                    <td className={styles.dateCell}>
+                      {new Date(order.createdDate).toLocaleDateString("vi-VN", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </td>
+
+                    {/* Thông tin sản phẩm */}
+                    <td>
+                      <div className={styles.productCell}>
+                        {order.firstItemThumbnail ? (
+                          <img
+                            src={order.firstItemThumbnail}
+                            alt={order.firstItemName}
+                            className={styles.thumbnail}
+                          />
+                        ) : (
+                          <div className={styles.noThumbnail}>Chưa có ảnh</div>
+                        )}
+                        <div className={styles.productMeta}>
+                          <span className={styles.productName}>
+                            {order.firstItemName || "Sản phẩm không có tên"}
+                          </span>
+                          {order.totalItem > 1 && (
+                            <span className={styles.moreCount}>
+                              +{order.totalItem - 1} món khác
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Tổng tiền */}
+                    <td className={styles.amountCell}>
+                      {formatPrice(order.finalAmount || 0)}
+                    </td>
+
+                    {/* Dropdown chỉnh sửa trạng thái trực tiếp */}
+                    <td style={{ textAlign: "center" }}>
+                      <select
+                        className={`${styles.statusSelect} ${styles[`status_${order.orderStatus}`]}`}
+                        value={order.orderStatus}
+                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                        disabled={
+                          updateStatus.isPending ||
+                          order.orderStatus === "COMPLETED" ||
+                          order.orderStatus === "CANCELLED" ||
+                          order.orderStatus === "EXPIRED"
+                        }
+                      >
+                        <option value="PENDING">Chờ xác nhận </option>
+                        <option value="PENDING_PAYMENT">Chờ thanh toán</option>
+                        <option value="PACKING">Đang đóng gói</option>
+                        <option value="SHIPPING">Đang giao hàng</option>
+                        <option value="COMPLETED">Hoàn thành</option>
+                        <option value="CANCELLED">Đã hủy</option>
+                        <option value="EXPIRED">Hết hạn</option>
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
-      </div>
 
-      <div className={styles.pagination}>
-        <button
-          disabled={filters.page === 0 || isLoading}
-          onClick={() =>
-            setFilters((prev) => ({ ...prev, page: prev.page - 1 }))
-          }
-          className={styles.pageBtn}
-        >
-          Trước
-        </button>
+        {/* PHÂN TRANG */}
+        <div className={styles.pagination}>
+          <button
+            type="button"
+            disabled={filters.page === 0 || isLoading}
+            onClick={() => setFilters((prev) => ({ ...prev, page: prev.page - 1 }))}
+            className={styles.pageBtn}
+          >
+            Trang trước
+          </button>
 
-        <span className={styles.pageInfo}>
-          Trang {filters.page + 1} / {totalPages}
-        </span>
+          <span className={styles.pageInfo}>
+            Trang {filters.page + 1} / {totalPages}
+          </span>
 
-        <button
-          disabled={pageData?.last || filters.page + 1 >= totalPages || isLoading}
-          onClick={() =>
-            setFilters((prev) => ({ ...prev, page: prev.page + 1 }))
-          }
-          className={styles.pageBtn}
-        >
-          Sau
-        </button>
+          <button
+            type="button"
+            disabled={pageData?.last || filters.page + 1 >= totalPages || isLoading}
+            onClick={() => setFilters((prev) => ({ ...prev, page: prev.page + 1 }))}
+            className={styles.pageBtn}
+          >
+            Trang sau
+          </button>
+        </div>
       </div>
     </div>
   );
