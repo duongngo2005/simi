@@ -121,14 +121,14 @@ public class ConsignmentController {
 
     @GetMapping("/details/{id}")
     public ResponseEntity<ApiResponse<ConsignmentFullDetailResponse>> getConsignmentFullDetail(
-            @PathVariable("id") Long consignmentId
+            @PathVariable("id") Long consignmentId,
+            @AuthenticationPrincipal User user
     ){
         ApiResponse<ConsignmentFullDetailResponse> response =
                 ApiResponse.<ConsignmentFullDetailResponse>builder()
                         .status(200)
-                        .body(consignmentService.getConsignmentFullDetail(consignmentId))
+                        .body(consignmentService.getConsignmentFullDetail(consignmentId, user))
                         .build();
-
         return ResponseEntity.ok(response);
     }
 }

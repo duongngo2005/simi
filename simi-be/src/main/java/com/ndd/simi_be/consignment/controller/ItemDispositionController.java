@@ -70,4 +70,17 @@ public class ItemDispositionController {
         itemDispositionService.confirmDonation(request.getItemDispositionIds(), user);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/my/{consignmentId}")
+    public ResponseEntity<ApiResponse<List<ItemDispositionResponse>>> getMyItemDispositions(
+            @PathVariable Long consignmentId,
+            @AuthenticationPrincipal User user
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.<List<ItemDispositionResponse>>builder()
+                        .status(200)
+                        .body(itemDispositionService.getMyItemDispositionsByConsignmentId(consignmentId, user))
+                        .build()
+        );
+    }
 }

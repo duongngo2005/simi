@@ -2,22 +2,26 @@ package com.ndd.simi_be.consignment.service;
 
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ConflictException;
+import com.ndd.simi_be.common.exception.ForbiddenException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.dto.request.ConsignmentFilterRequest;
 import com.ndd.simi_be.consignment.dto.request.CreateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.request.UpdateConsignmentRequest;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentFullDetailResponse;
+import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.entity.Consignment;
 import com.ndd.simi_be.consignment.entity.PriceSchedule;
 import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
 import com.ndd.simi_be.consignment.enums.ConsignmentStatus;
 import com.ndd.simi_be.consignment.enums.PriceScheduleStatus;
+import com.ndd.simi_be.consignment.mapper.ConsignmentItemMapper;
 import com.ndd.simi_be.consignment.mapper.ConsignmentMapper;
 import com.ndd.simi_be.consignment.repository.ConsignmentRepository;
 import com.ndd.simi_be.consignment.specification.ConsignmentSpecification;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.user.entity.User;
+import com.ndd.simi_be.user.enums.Role;
 import com.ndd.simi_be.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -147,11 +151,22 @@ public class ConsignmentService {
         ).toList();
     }
 
-    @Transactional(readOnly = true)
-    public ConsignmentFullDetailResponse getConsignmentFullDetail(Long consignmentId){
+    public ConsignmentFullDetailResponse getConsignmentFullDetail(Long consignmentId, User user) {
         Consignment consignment = consignmentRepository.findById(consignmentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô ký gửi"));
 
-        return ConsignmentMapper.toConsignmentFullDetailResponse(consignment);
+        if (user.getRole() == Role.CUSTOMER && !consignment.getConsignor().getId().equals(user.getId())) {
+            throw new ForbiddenException("Bạn không có quyền xem lô ký gửi này");
+        }
+
+        List<ConsignmentItemResponse> itemResponses = consignment.getConsignmentItems()
+                .stream()
+                .map(ConsignmentItemMapper::toConsignmentItemResponse)
+                .toList();
+
+        return ConsignmentFullDetailResponse.builder()
+                .consignmentResponse(ConsignmentMapper.toConsignmentResponse(consignment))
+                .consignmentItemResponses(itemResponses)
+                .build();
     }
 }
