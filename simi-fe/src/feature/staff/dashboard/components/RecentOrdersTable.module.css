@@ -1,0 +1,114 @@
+.container {
+  background-color: #ffffff;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.72rem;
+  color: var(--color-text);
+  opacity: 0.75;
+  margin: 2px 0 0 0;
+}
+
+.viewLink {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  text-decoration: underline;
+}
+
+.empty {
+  font-size: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.7;
+  padding: 16px;
+  text-align: center;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.table th {
+  padding: 8px 10px;
+  background-color: #fbf8f3;
+  color: var(--color-heading);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--color-input-border);
+  text-align: left;
+}
+
+.table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #f2ece4;
+  color: var(--color-heading);
+}
+
+.table tbody tr:hover {
+  background-color: #faf6ef;
+}
+
+.orderId {
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.customerName {
+  font-weight: 600;
+}
+
+.channelText {
+  font-size: 0.72rem;
+  color: var(--color-text);
+}
+
+.amount {
+  text-align: right;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.statusPill {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  background-color: #f2ece4;
+  color: var(--color-heading);
+  border: 1px solid #e5ded6;
+}
+
+.dateText {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--color-text);
+  opacity: 0.75;
+}
