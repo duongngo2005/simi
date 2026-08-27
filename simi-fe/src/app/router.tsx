@@ -20,90 +20,88 @@ import { OrderSuccessPage } from "../feature/order/pages/OrderSuccessPage";
 import { StaffDashboard } from "../feature/staff/dashboard/pages/StaffDashboard";
 import { StaffDispositionQueuePage } from "../feature/disposition/pages/StaffDispositionQueuePage";
 
-
 export const router = createBrowserRouter([
-    {
-        element: <AuthLayout/>,
-        children: [
-            {
-                path: '/login',
-                element: <LoginPage/>
-            },
-            {
-                path: '/register',
-                element: <RegisterPage/>
-            }
-        ]
-    }, 
-    {
-        element: <MainLayout/>,
-        children: [
-            {
-                path: "/",
-                element: <HomePage/>
-            },
-            {
-                path: "/products/:id",
-                element: <ProductDetailPage/>
-            },
-            {
-                path: "/checkout",
-                element: <CheckoutPage/>
-            },
-            {
-                path: "/profile",
-                element: <ProfilePage/>
-            },
-            {
-                path: "/cart",
-                element: <CartPage/>
-            },
-            {
-                path: "/my-orders",
-                element: <MyOrders/>
-            }, 
-            {
-                path: "/my-consignments",
-                element: <MyConsignment/>
-            },
-            {
-                path: "/payment/result",
-                element: <PaymentResultPage/>
-            },
-            {
-                path: "/orders/success",
-                element: <OrderSuccessPage/>
-            }
-        ]
-    },
-    {
-        element: <StaffLayout/>,
-        children: [
-            {
-                path: "/staff/dashboard",
-                element: <StaffDashboard/>
-            },
-            {
-                path: "/staff/orders",
-                element: <StaffOrderListPage/>
-            },
-            {
-                path: "/staff/consignments",
-                element: <StaffConsignmentPage/>
-
-            },
-            {
-                path: "staff/consignments/:id",
-                element: <StaffConsignmentDetailPage/>
-            },
-            {
-                path: "/staff/pos",
-                element: <StaffPOSPage/>
-            },
-            {
-                path: "/staff/dispositions",
-                element: <StaffDispositionQueuePage />
-            }
-        ]
-    }
-])
+  {
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
+      },
+    ],
+  },
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/products/:id",
+        element: <ProductDetailPage />,
+      },
+      {
+        path: "/checkout",
+        element: <CheckoutPage />,
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+      },
+      {
+        path: "/cart",
+        element: <CartPage />,
+      },
+      {
+        path: "/my-orders",
+        element: <MyOrders />,
+      },
+      {
+        path: "/my-consignments",
+        element: <MyConsignment />,
+      },
+      {
+        path: "/payment/result",
+        element: <PaymentResultPage />,
+      },
+      {
+        path: "/orders/success",
+        element: <OrderSuccessPage />,
+      },
+    ],
+  },
+  {
+    element: <StaffLayout />,
+    children: [
+      {
+        path: "/staff/dashboard",
+        element: <StaffDashboard />,
+      },
+      {
+        path: "/staff/orders",
+        element: <StaffOrderListPage />,
+      },
+      {
+        path: "/staff/consignments",
+        element: <StaffConsignmentPage />,
+      },
+      {
+        path: "/staff/consignments/:id",
+        element: <StaffConsignmentDetailPage />,
+      },
+      {
+        path: "/staff/pos",
+        element: <StaffPOSPage />,
+      },
+      {
+        path: "/staff/dispositions",
+        element: <StaffDispositionQueuePage />,
+      },
+    ],
+  },
+]);

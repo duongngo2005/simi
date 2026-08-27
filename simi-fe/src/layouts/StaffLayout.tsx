@@ -75,6 +75,16 @@ export const StaffLayout = () => {
           </NavLink>
 
           <NavLink
+            to="/staff/dispositions"
+            className={({ isActive }) =>
+              `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
+            }
+          >
+            <span className={styles.navIcon}></span>
+            Trả hàng
+          </NavLink>
+
+          <NavLink
             to="/staff/products"
             className={({ isActive }) =>
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
