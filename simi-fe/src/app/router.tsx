@@ -15,6 +15,7 @@ import { StaffConsignmentDetailPage } from "../feature/staff/consignment/pages/S
 import { CartPage } from "../feature/cart/page/CartPage";
 import { MyOrders } from "../feature/user/components/MyOrders";
 import { MyConsignment } from "../feature/user/components/MyConsignment";
+import { MyConsignmentDetailPage } from "../feature/consignment/pages/MyConsignmentDetailPage";
 import { PaymentResultPage } from "../feature/order/pages/PaymentResultPage";
 import { OrderSuccessPage } from "../feature/order/pages/OrderSuccessPage";
 import { StaffDashboard } from "../feature/staff/dashboard/pages/StaffDashboard";
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
       {
         path: "/my-consignments",
         element: <MyConsignment />,
+      },
+      {
+        path: "/my-consignments/:id",
+        element: <MyConsignmentDetailPage />,
       },
       {
         path: "/payment/result",
