@@ -49,6 +49,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ndd.simi_be.order.event.StaffOrderCreatedEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -188,10 +189,11 @@ public class OrderService {
             );
         }
 
+        eventPublisher.publishEvent(new StaffOrderCreatedEvent(order.getId()));
+
         return CreateOrderResponse.builder()
                 .orderDetail(OrderMapper.toOrderDetailResponse(order))
                 .paymentUrl(paymentUrl)
-
                 .build();
     }
 
@@ -363,6 +365,7 @@ public class OrderService {
             Payment payment = paymentService.createPayment(order, PaymentMethod.CASH);
             order.getPayments().add(payment);
             order.setOrderStatus(OrderStatus.COMPLETED);
+            order.setCompletedAt(LocalDateTime.now());
 
             for (OrderItem orderItem : orderItems) {
                 ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(orderItem.getProduct())
@@ -411,6 +414,8 @@ public class OrderService {
                     }
                 }
             }
+
+            order.setCompletedAt(LocalDateTime.now());
         }
 
         if (status == OrderStatus.CANCELLED) {
