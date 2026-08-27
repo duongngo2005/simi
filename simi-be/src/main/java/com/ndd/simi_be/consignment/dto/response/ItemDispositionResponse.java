@@ -13,8 +13,9 @@ public class ItemDispositionResponse {
     private Long id;
     private String type;
     private String status;
+    private String productName;
+    private Long consignmentId;
+    private String consignorName;
+    private String consignorPhone;
     private LocalDateTime pickupDeadline;
-    private LocalDateTime processedAt;
-    private Long processedBy;
-    private String note;
 }
