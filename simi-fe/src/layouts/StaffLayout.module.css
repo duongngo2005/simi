@@ -5,7 +5,12 @@
   font-family: var(--font-sans);
 }
 
-/* Sidebar Styles */
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 .sidebar {
   width: 260px;
   background-color: #fffdf9;

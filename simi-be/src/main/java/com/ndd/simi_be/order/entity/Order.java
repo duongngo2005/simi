@@ -67,4 +67,7 @@ public class Order extends BaseEntity {
     @Version
     @Column(nullable = false)
     private Long version;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
 }

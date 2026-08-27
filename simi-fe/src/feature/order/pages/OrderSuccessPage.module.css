@@ -5,33 +5,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 24px;
+  padding: 40px 20px;
 }
 
 .card {
-  background-color: #fffdf9;
+  background-color: #ffffff;
   border: 1px solid var(--color-input-border);
-  border-radius: 16px;
-  padding: 52px 48px;
-  max-width: 560px;
+  border-radius: 8px;
+  padding: 40px 36px;
+  max-width: 520px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   text-align: center;
-  box-shadow: 0 8px 40px rgba(74, 53, 45, 0.08);
+  box-shadow: 0 4px 20px rgba(74, 53, 45, 0.05);
 }
 
-/* Icon thành công */
 .iconWrapper {
-  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation: popIn 0.4s ease forwards;
 }
 
 @keyframes popIn {
   from {
     opacity: 0;
-    transform: scale(0.5);
+    transform: scale(0.6);
   }
   to {
     opacity: 1;
@@ -40,84 +39,82 @@
 }
 
 .iconCircle {
-  width: 80px;
-  height: 80px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background-color: var(--color-success-bg);
-  border: 2px solid var(--color-success-border);
+  border: 1.5px solid var(--color-success-border);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .checkIcon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   color: var(--color-success);
-  stroke-dasharray: 40;
-  stroke-dashoffset: 40;
-  animation: drawCheck 0.4s ease 0.3s forwards;
 }
 
-@keyframes drawCheck {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Title */
 .title {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.45rem;
+  font-weight: 800;
   color: var(--color-heading);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   color: var(--color-text);
-  line-height: 1.65;
+  line-height: 1.55;
   margin: 0;
-  max-width: 400px;
+  max-width: 420px;
+  opacity: 0.9;
 }
 
 .subtitle strong {
-  color: var(--color-btn-primary);
+  color: var(--color-heading);
+  font-weight: 700;
 }
 
-/* Mã đơn hàng */
 .orderIdBox {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  background-color: var(--color-background);
+  background-color: #fdfaf6;
   border: 1px dashed var(--color-btn-primary);
-  border-radius: 10px;
-  padding: 14px 32px;
+  border-radius: 6px;
+  padding: 12px 24px;
   width: 100%;
 }
 
 .orderIdLabel {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--color-divider);
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+  opacity: 0.75;
   font-weight: 600;
 }
 
 .orderIdValue {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-btn-primary);
-  letter-spacing: 2px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-heading);
+  letter-spacing: 1px;
 }
 
-/* Steps */
+.paymentMethodText {
+  font-size: 0.74rem;
+  color: var(--color-btn-primary-hover);
+  font-weight: 600;
+}
+
 .steps {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   width: 100%;
   text-align: left;
 }
@@ -125,15 +122,24 @@
 .step {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  padding: 14px 16px;
-  background-color: var(--color-background);
-  border-radius: 8px;
-  border: 1px solid var(--color-input-border);
+  gap: 12px;
+  padding: 12px 14px;
+  background-color: #fdfaf6;
+  border-radius: 6px;
+  border: 1px solid #f0e6dc;
 }
 
-.stepIcon {
-  font-size: 1.3rem;
+.stepNumber {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: var(--color-btn-primary);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   margin-top: 1px;
 }
@@ -141,71 +147,70 @@
 .stepText {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .stepText strong {
-  font-size: 0.88rem;
+  font-size: 0.8rem;
   color: var(--color-heading);
   font-weight: 700;
 }
 
 .stepText span {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: var(--color-text);
-  line-height: 1.5;
+  line-height: 1.45;
   opacity: 0.85;
 }
 
-/* Actions */
 .actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
+  margin-top: 6px;
+}
+
+.btnPrimary,
+.btnSecondary {
+  padding: 11px;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  display: block;
 }
 
 .btnPrimary {
   background-color: var(--color-btn-primary);
-  color: var(--color-btn-primary-text);
-  padding: 13px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-align: center;
-  transition: background-color 0.2s;
-  display: block;
+  color: #ffffff;
+  border: 1px solid var(--color-btn-primary);
 }
 
 .btnPrimary:hover {
   background-color: var(--color-btn-primary-hover);
+  border-color: var(--color-btn-primary-hover);
 }
 
 .btnSecondary {
   background-color: transparent;
-  color: var(--color-btn-primary);
-  padding: 12px;
-  border-radius: 8px;
-  border: 1.5px solid var(--color-btn-primary);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-align: center;
-  transition: background-color 0.2s;
-  display: block;
+  color: var(--color-heading);
+  border: 1px solid var(--color-input-border);
 }
 
 .btnSecondary:hover {
-  background-color: #f7f0ea;
+  background-color: #fdfaf6;
+  border-color: #baa798;
 }
 
 @media (max-width: 600px) {
   .card {
-    padding: 36px 24px;
+    padding: 30px 20px;
   }
 
   .title {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 }

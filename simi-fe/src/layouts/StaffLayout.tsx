@@ -1,21 +1,22 @@
 import { Outlet, NavLink, useNavigate, Navigate } from "react-router";
 import { useAuthStore } from "../store/useAuthStore";
 import styles from "./StaffLayout.module.css";
+import { StaffOrderNotificationBell } from "../feature/staff/dashboard/components/StaffOrderNotificationBell";
 
 export const StaffLayout = () => {
   const { user, clearAuth, isInitialized } = useAuthStore();
   const navigate = useNavigate();
 
-  if(!isInitialized){
+  if (!isInitialized) {
     return null;
   }
 
-  if(!user){
-    return <Navigate to="/login" replace/>
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
 
-  if(user.role !== "STAFF" && user.role !== "ADMIN"){
-    return <Navigate to="/" replace/>
+  if (user.role !== "STAFF" && user.role !== "ADMIN") {
+    return <Navigate to="/" replace />;
   }
 
   const handleLogout = () => {
@@ -25,7 +26,6 @@ export const StaffLayout = () => {
 
   return (
     <div className={styles.layout}>
-      {/* SIDEBAR BÊN TRÁI */}
       <aside className={styles.sidebar}>
         <div className={styles.brandSection}>
           <span className={styles.logo}>Simi.</span>
@@ -94,24 +94,29 @@ export const StaffLayout = () => {
       </aside>
 
       <div className={styles.mainContainer}>
-        {/* TOP HEADER */}
         <header className={styles.header}>
           <div className={styles.headerLeft}>
-            <h2 className={styles.pageTitle}>Xin chào, {user?.fullName || "Staff"}</h2>
+            <h2 className={styles.pageTitle}>
+              Xin chào, {user?.fullName || "Staff"}
+            </h2>
           </div>
-          
-          <div className={styles.userInfo}>
-            <div className={styles.avatar}>
-              {user?.fullName?.charAt(0).toUpperCase() || "S"}
-            </div>
-            <div className={styles.userMeta}>
-              <span className={styles.userName}>{user?.fullName}</span>
-              <span className={styles.userRole}>{user?.role}</span>
+
+          <div className={styles.headerRight}>
+            <StaffOrderNotificationBell />
+
+            <div className={styles.userInfo}>
+              <div className={styles.avatar}>
+                {user?.fullName?.charAt(0).toUpperCase() || "S"}
+              </div>
+
+              <div className={styles.userMeta}>
+                <span className={styles.userName}>{user?.fullName}</span>
+                <span className={styles.userRole}>{user?.role}</span>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* NỘI DUNG TRANG DƯỚI BẢNG ĐIỀU KHIỂN */}
         <main className={styles.content}>
           <Outlet />
         </main>

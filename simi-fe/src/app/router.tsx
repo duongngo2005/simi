@@ -8,7 +8,6 @@ import { ProductDetailPage } from "../feature/product/pages/ProductDetailPage";
 import { CheckoutPage } from "../feature/order/pages/CheckoutPage";
 import { ProfilePage } from "../feature/user/pages/ProfilePage";
 import { StaffLayout } from "../layouts/StaffLayout";
-import { StaffDashboard } from "../feature/staff/order/pages/StaffDashboard";
 import { StaffOrderListPage } from "../feature/staff/order/pages/StaffOrderListPage";
 import { StaffConsignmentPage } from "../feature/staff/consignment/pages/StaffConsignmentPage";
 import { StaffPOSPage } from "../feature/staff/pos/pages/StaffPOSPage";
@@ -18,6 +17,9 @@ import { MyOrders } from "../feature/user/components/MyOrders";
 import { MyConsignment } from "../feature/user/components/MyConsignment";
 import { PaymentResultPage } from "../feature/order/pages/PaymentResultPage";
 import { OrderSuccessPage } from "../feature/order/pages/OrderSuccessPage";
+import { StaffDashboard } from "../feature/staff/dashboard/pages/StaffDashboard";
+import { StaffDispositionQueuePage } from "../feature/disposition/pages/StaffDispositionQueuePage";
+
 
 export const router = createBrowserRouter([
     {
@@ -97,6 +99,10 @@ export const router = createBrowserRouter([
             {
                 path: "/staff/pos",
                 element: <StaffPOSPage/>
+            },
+            {
+                path: "/staff/dispositions",
+                element: <StaffDispositionQueuePage />
             }
         ]
     }

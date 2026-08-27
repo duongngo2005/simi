@@ -1,0 +1,91 @@
+.chartContainer {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: 10px;
+}
+
+.chartBars {
+  height: 170px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  border-bottom: 1px solid #f0e6dc;
+  padding-bottom: 2px;
+}
+
+.chartCol {
+  position: relative;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.barFill {
+  width: min(28px, 80%);
+  background: var(--color-btn-primary);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.3s ease, background-color 0.2s ease;
+}
+
+.chartCol:hover .barFill {
+  background: var(--color-btn-primary-hover);
+}
+
+.chartDateLabel {
+  font-size: 0.65rem;
+  color: var(--color-text);
+  opacity: 0.75;
+  margin-top: 6px;
+}
+
+.chartTooltip {
+  position: absolute;
+  top: -8px;
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-heading);
+  color: #ffffff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tooltipRevenue {
+  font-weight: 700;
+}
+
+.tooltipCount {
+  opacity: 0.8;
+  font-size: 0.6rem;
+}
+
+.chartCol:hover .chartTooltip {
+  display: flex;
+}
+
+.emptyState {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .chartBars {
+    gap: 4px;
+  }
+}

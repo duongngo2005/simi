@@ -3,6 +3,7 @@ import styles from "./StaffPOSPage.module.css";
 import { useCreatePosOrder, useProductForPos } from "../hooks/usePos";
 import type { ProductSummaryResponse } from "../../../product/types/product.type";
 import { getServerError } from "../../../../utils/getMessageError";
+import { formatPrice } from "../../../../utils/formatPrice";
 
 export const StaffPOSPage = () => {
   // ── HOOKS ──
@@ -25,19 +26,18 @@ export const StaffPOSPage = () => {
     const productId = Number(inputProductId.trim());
     if (!productId) return;
 
-    // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+    // Kiểm tra sản phẩm đã có trong giỏ chưa
     if (cartItems.some((item) => item.id === productId)) {
-      setErrorMessage(`ℹ️ Sản phẩm #${productId} đã có sẵn trong giỏ hàng!`);
+      setErrorMessage(`Sản phẩm #${productId} đã có sẵn trong danh sách.`);
       return;
     }
 
     try {
-      // Gọi API lấy thông tin sản phẩm (BE tự kiểm tra RESERVED / SOLD / 404)
       const res = await getProductMutation.mutateAsync(productId);
       const product = res.body;
 
       if (!product) {
-        setErrorMessage(`❌ Không tìm thấy sản phẩm nào với ID: #${productId}`);
+        setErrorMessage(`Không tìm thấy sản phẩm với mã ID #${productId}.`);
         return;
       }
 
@@ -45,7 +45,7 @@ export const StaffPOSPage = () => {
       setInputProductId("");
     } catch (error) {
       const message = getServerError(error, "Không thể lấy thông tin sản phẩm");
-      setErrorMessage(`❌ ${message}`);
+      setErrorMessage(message);
     }
   };
 
@@ -55,41 +55,42 @@ export const StaffPOSPage = () => {
   };
 
   // ── TÍNH TỔNG TIỀN ──
-  const totalAmount = cartItems.reduce((sum, item) => sum + item.currentPrice, 0);
+  const totalAmount = cartItems.reduce((sum, item) => sum + (item.currentPrice || 0), 0);
 
-  // ── XÁC NHẬN THANH TOÁN (GỌI API THẬT) ──
+  // ── XÁC NHẬN THANH TOÁN ──
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
-      return alert("Giỏ hàng đang rỗng! Vui lòng nhập ID sản phẩm.");
+      return alert("Danh sách thanh toán đang trống. Vui lòng nhập mã sản phẩm.");
     }
-    if (!customerPhone) {
-      return alert("Vui lòng nhập Số điện thoại khách hàng.");
+    if (!customerPhone.trim()) {
+      return alert("Vui lòng nhập số điện thoại khách hàng.");
     }
 
     try {
       await createPosOrder.mutateAsync({
         orderItemRequests: cartItems.map((item) => ({ productId: item.id })),
-        recipientPhone: customerPhone,
-        recipientName: customerName || "Khách mua tại quầy",
+        recipientPhone: customerPhone.trim(),
+        recipientName: customerName.trim() || "Khách mua tại quầy",
         discount: 0,
         paymentMethod: paymentMethod,
       });
 
       alert(
-        `🎉 Thanh toán thành công!\n` +
-        `- Khách: ${customerName || "Khách mua tại quầy"} (${customerPhone})\n` +
-        `- Số lượng: ${cartItems.length} món\n` +
-        `- Tổng thanh toán: ${totalAmount.toLocaleString("vi-VN")}đ\n` +
-        `- Hình thức: ${paymentMethod === "CASH" ? "Tiền mặt" : "VNPAY"}`
+        `Thanh toán thành công!\n` +
+        `- Khách hàng: ${customerName.trim() || "Khách mua tại quầy"} (${customerPhone.trim()})\n` +
+        `- Số lượng: ${cartItems.length} sản phẩm\n` +
+        `- Tổng tiền: ${formatPrice(totalAmount)}\n` +
+        `- Phương thức: ${paymentMethod === "CASH" ? "Tiền mặt" : "VNPAY / Chuyển khoản"}`
       );
 
-      // Reset toàn bộ sau thanh toán thành công
+      // Reset form sau khi thanh toán thành công
       setCartItems([]);
       setCustomerPhone("");
       setCustomerName("");
+      setErrorMessage("");
     } catch (error) {
       const message = getServerError(error, "Thanh toán thất bại, vui lòng thử lại");
-      alert(`❌ ${message}`);
+      alert(message);
     }
   };
 
@@ -98,24 +99,24 @@ export const StaffPOSPage = () => {
       {/* HEADER */}
       <div className={styles.header}>
         <div>
-          <h1 className={styles.pageTitle}>Bán Hàng Tại Quầy (POS Offline)</h1>
+          <h1 className={styles.pageTitle}>Bán hàng tại quầy (POS)</h1>
           <p className={styles.subtitle}>
-            Nhập ID sản phẩm để kiểm tra và tiến hành thanh toán cho khách tại cửa hàng
+            Nhập mã sản phẩm để tạo đơn và thanh toán trực tiếp cho khách tại cửa hàng
           </p>
         </div>
       </div>
 
       <div className={styles.posGrid}>
-        {/* CỘT TRÁI: Ô NHẬP ID & GIỎ HÀNG */}
+        {/* CỘT TRÁI: NHẬP MÃ SẢN PHẨM & DANH SÁCH HÀNG CHỌN */}
         <div className={styles.leftColumn}>
-          {/* Ô Nhập ID */}
+          {/* Ô Tìm kiếm ID */}
           <div className={styles.card}>
             <form onSubmit={handleAddProductById} className={styles.searchForm}>
               <div className={styles.inputBox}>
-                <span className={styles.icon}>🏷️</span>
+                <span className={styles.inputPrefix}>Mã SP:</span>
                 <input
                   type="number"
-                  placeholder="Nhập ID sản phẩm..."
+                  placeholder="Nhập mã ID sản phẩm..."
                   value={inputProductId}
                   onChange={(e) => setInputProductId(e.target.value)}
                   disabled={getProductMutation.isPending}
@@ -125,60 +126,72 @@ export const StaffPOSPage = () => {
               <button
                 type="submit"
                 className={styles.btnAdd}
-                disabled={getProductMutation.isPending}
+                disabled={getProductMutation.isPending || !inputProductId.trim()}
               >
-                {getProductMutation.isPending ? "Đang tìm..." : "+ Thêm VÀO GIỎ"}
+                {getProductMutation.isPending ? "Đang tìm..." : "Thêm vào đơn"}
               </button>
             </form>
 
-            {/* Thông báo lỗi từ Backend */}
+            {/* Thông báo lỗi */}
             {errorMessage && <div className={styles.alertError}>{errorMessage}</div>}
           </div>
 
           {/* Danh sách sản phẩm trong giỏ */}
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>
-              Danh Sách Món Đang Chọn ({cartItems.length})
-            </h3>
+            <div className={styles.cardHeader}>
+              <h3 className={styles.cardTitle}>
+                Sản phẩm đã chọn ({cartItems.length})
+              </h3>
+              {cartItems.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setCartItems([])}
+                  className={styles.btnClearAll}
+                >
+                  Xóa tất cả
+                </button>
+              )}
+            </div>
 
             {cartItems.length === 0 ? (
               <div className={styles.emptyCart}>
-                <span>🛒</span>
-                <p>Chưa có sản phẩm nào được nhập.</p>
-                <small>Nhập ID sản phẩm ở ô phía trên để bắt đầu tạo đơn hàng tại quầy.</small>
+                <p className={styles.emptyText}>Chưa có sản phẩm nào được chọn.</p>
+                <span className={styles.emptySub}>
+                  Nhập mã ID sản phẩm ở ô phía trên để bắt đầu tạo đơn hàng.
+                </span>
               </div>
             ) : (
               <div className={styles.cartList}>
                 {cartItems.map((item, idx) => (
-                  <div key={item.id} className={styles.cartItemCard}>
+                  <div key={item.id} className={styles.cartItem}>
                     <span className={styles.itemIndex}>{idx + 1}</span>
 
                     {item.thumbnail ? (
                       <img src={item.thumbnail} alt={item.name} className={styles.itemThumb} />
                     ) : (
-                      <div className={styles.noThumb}>No Img</div>
+                      <div className={styles.noThumb}>Chưa có ảnh</div>
                     )}
 
-                    <div className={styles.itemMeta}>
-                      <strong className={styles.itemName}>{item.name}</strong>
-                      <span className={styles.itemSpecs}>
-                        Mã ID: <strong>#{item.id}</strong>
-                        {item.size && ` | Size: ${item.size}`}
-                        {item.brandName && ` | Hãng: ${item.brandName}`}
-                        {item.productCondition && ` | Độ mới: ${item.productCondition}`}
-                      </span>
+                    <div className={styles.itemInfo}>
+                      <span className={styles.itemName}>{item.name}</span>
+                      <div className={styles.itemMeta}>
+                        <span>Mã #{item.id}</span>
+                        {item.size && <span>Size {item.size}</span>}
+                        {item.brandName && <span>{item.brandName}</span>}
+                        {item.productCondition && <span>Độ mới: {item.productCondition}</span>}
+                      </div>
                     </div>
 
                     <div className={styles.itemPrice}>
-                      {item.currentPrice.toLocaleString("vi-VN")}đ
+                      {formatPrice(item.currentPrice || 0)}
                     </div>
 
                     <button
+                      type="button"
                       className={styles.btnDelete}
                       onClick={() => handleRemoveItem(item.id)}
-                      title="Xóa món"
                     >
-                      🗑️
+                      Xóa
                     </button>
                   </div>
                 ))}
@@ -190,73 +203,71 @@ export const StaffPOSPage = () => {
         {/* CỘT PHẢI: THÔNG TIN KHÁCH & THANH TOÁN */}
         <div className={styles.rightColumn}>
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Thông Tin Đơn Hàng</h3>
+            <h3 className={styles.cardTitle}>Thông tin thanh toán</h3>
 
             <div className={styles.formGroup}>
-              <label>Số Điện Thoại Khách Hàng *</label>
+              <label>Số điện thoại khách hàng *</label>
               <input
                 type="tel"
-                placeholder="Nhập SĐT khách (VD: 0901234567)"
+                placeholder="Nhập SĐT khách hàng..."
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label>Họ Tên Khách (Tùy chọn)</label>
+              <label>Tên khách hàng (Tùy chọn)</label>
               <input
                 type="text"
-                placeholder="Mặc định: Khách mua tại quầy"
+                placeholder="Khách mua tại quầy"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label>Phương Thức Thanh Toán</label>
+              <label>Phương thức thanh toán</label>
               <div className={styles.paymentSelector}>
                 <button
                   type="button"
-                  className={`${styles.payMethodBtn} ${paymentMethod === "CASH" ? styles.payActive : ""}`}
+                  className={`${styles.payBtn} ${paymentMethod === "CASH" ? styles.payActive : ""}`}
                   onClick={() => setPaymentMethod("CASH")}
                 >
-                  💵 Tiền Mặt (CASH)
+                  Tiền mặt
                 </button>
                 <button
                   type="button"
-                  className={`${styles.payMethodBtn} ${paymentMethod === "VNPAY" ? styles.payActive : ""}`}
+                  className={`${styles.payBtn} ${paymentMethod === "VNPAY" ? styles.payActive : ""}`}
                   onClick={() => setPaymentMethod("VNPAY")}
                 >
-                  📱 VNPAY / Chuyển Khoản
+                  VNPAY / Chuyển khoản
                 </button>
               </div>
             </div>
 
-            <div className={styles.billSummary}>
+            {/* Bảng tóm tắt tiền */}
+            <div className={styles.billBox}>
               <div className={styles.billRow}>
-                <span>Số lượng sản phẩm:</span>
-                <strong>{cartItems.length} món</strong>
+                <span>Số lượng:</span>
+                <span>{cartItems.length} món</span>
               </div>
               <div className={styles.billRow}>
-                <span>Phí giao hàng:</span>
-                <span>0đ (Tại quầy)</span>
+                <span>Phí quầy:</span>
+                <span>0đ</span>
               </div>
               <div className={`${styles.billRow} ${styles.totalRow}`}>
-                <span>Tổng Tiền Thanh Toán:</span>
-                <span className={styles.totalPrice}>
-                  {totalAmount.toLocaleString("vi-VN")}đ
-                </span>
+                <span>Tổng tiền:</span>
+                <span className={styles.totalAmount}>{formatPrice(totalAmount)}</span>
               </div>
             </div>
 
             <button
+              type="button"
               className={styles.btnCheckout}
               onClick={handleCheckout}
               disabled={cartItems.length === 0 || createPosOrder.isPending}
             >
-              {createPosOrder.isPending
-                ? "⏳ Đang xử lý..."
-                : "⚡ XÁC NHẬN THANH TOÁN (IN HÓA ĐƠN)"}
+              {createPosOrder.isPending ? "Đang xử lý..." : "Xác nhận thanh toán"}
             </button>
           </div>
         </div>
