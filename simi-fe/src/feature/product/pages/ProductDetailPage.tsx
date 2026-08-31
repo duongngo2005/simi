@@ -145,15 +145,6 @@ export const ProductDetailPage = () => {
         </div>
 
         <div className={styles.info}>
-          <div className={styles.metaRow}>
-            {product.brand && (
-              <span className={styles.brand}>{product.brand}</span>
-            )}
-            {product.category && (
-              <span className={styles.category}>{product.category}</span>
-            )}
-          </div>
-
           <h1 className={styles.productName}>{product.name}</h1>
 
           <div className={styles.priceSection}>

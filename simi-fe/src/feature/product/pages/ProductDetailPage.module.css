@@ -134,34 +134,10 @@
   gap: var(--space-5);
 }
 
-.metaRow {
-  min-height: 20px;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.brand {
-  padding: 4px 7px;
-  color: var(--color-verified);
-  background: var(--color-success-bg);
-  border: 1px solid var(--color-success-border);
-  border-radius: 4px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.category {
-  color: var(--color-muted);
-  font-size: var(--text-xs);
-}
-
 .productName {
   margin: calc(var(--space-2) * -1) 0 0;
   color: var(--color-ink);
-  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 600;
   letter-spacing: -0.055em;
   line-height: 0.96;
