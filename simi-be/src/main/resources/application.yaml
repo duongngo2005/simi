@@ -2,7 +2,7 @@ spring:
   application:
     name: simi-be
   datasource:
-    url: jdbc:mysql://localhost:3306/simi_db
+    url: ${DB_URL:jdbc:mysql://localhost:3306/simi_db}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -55,5 +55,4 @@ cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME:docidan7t}
   api-key: ${CLOUDINARY_API_KEY}
   api-secret: ${CLOUDINARY_API_SECRET}
-
 
