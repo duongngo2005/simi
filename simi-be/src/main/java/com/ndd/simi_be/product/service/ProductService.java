@@ -182,12 +182,8 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
 
-        if (product.getProductStatus() == ProductStatus.RESERVED){
-            throw new BadRequestException("Sản phẩm đang được đặt, không thể bán tại POS");
-        }
-
-        if (product.getProductStatus() == ProductStatus.SOLD){
-            throw new BadRequestException("Sản phẩm đã được bán");
+        if (product.getProductStatus() != ProductStatus.AVAILABLE){
+            throw new BadRequestException("Sản phẩm hiện không khả dụng để bán tại POS");
         }
         return ProductMapper.toProductSummaryResponse(product);
     }

@@ -1,24 +1,36 @@
 package com.ndd.simi_be.order.dto.request;
 
 import com.ndd.simi_be.payment.enums.PaymentMethod;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreatePosOrderRequest {
-    @NotNull(message = "Chi tiết đơn hàng không được thiếu")
+    @NotEmpty(message = "Đơn POS phải có ít nhất một sản phẩm")
+    @Valid
     private List<OrderItemRequest> orderItemRequests;
 
     @NotBlank(message = "Bạn chưa nhập số điện thoại")
     private String recipientPhone;
     @NotBlank(message = "Bạn chưa nhập tên")
     private String recipientName;
+
+    @DecimalMin(value = "0", message = "Hệ thống chưa hỗ trợ giảm giá")
+    @DecimalMax(value = "0", message = "Hệ thống chưa hỗ trợ giảm giá")
     @Builder.Default
     private BigDecimal discount = BigDecimal.ZERO;
 

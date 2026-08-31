@@ -3,10 +3,8 @@ package com.ndd.simi_be.order.service;
 import com.ndd.simi_be.common.exception.BadRequestException;
 import com.ndd.simi_be.common.exception.ForbiddenException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
-import com.ndd.simi_be.consignment.entity.Consignment;
 import com.ndd.simi_be.consignment.entity.ConsignmentItem;
 import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
-import com.ndd.simi_be.consignment.enums.ConsignmentStatus;
 import com.ndd.simi_be.consignment.repository.ConsignmentItemRepository;
 import com.ndd.simi_be.email.dto.OrderConfirmationEmailData;
 import com.ndd.simi_be.location.entity.Province;
@@ -40,6 +38,7 @@ import com.ndd.simi_be.product.entity.ProductImage;
 import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.user.entity.User;
 import com.ndd.simi_be.user.repository.UserRepository;
+import com.ndd.simi_be.user.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -55,7 +54,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -70,10 +71,13 @@ public class OrderService {
     private final ApplicationEventPublisher eventPublisher;
     private final PaymentRepository paymentRepository;
     private final VnPayPaymentProvider vnPayPaymentProvider;
+    private final OrderReservationReleaseService reservationReleaseService;
 
 
     @Transactional
     public CreateOrderResponse createOrder(OrderRequest request, User customer, String ipAddress) {
+        validateOnlineCheckout(request);
+
         Province province = provinceRepository.findById(request.getProvince())
                 .orElseThrow(() -> new ResourceNotFoundException("Tỉnh/thành phố không hợp lệ"));
         Ward ward = wardRepository.findById(request.getWard())
@@ -90,7 +94,7 @@ public class OrderService {
                 .ward(ward.getFullName())
                 .province(province.getFullName())
                 .addressDetail(request.getAddressDetail())
-                .discount(request.getDiscount())
+                .discount(BigDecimal.ZERO)
                 .orderChannel(OrderChannel.ONLINE)
                 .orderStatus(request.getPaymentMethod() == PaymentMethod.COD
                         ? OrderStatus.PENDING
@@ -115,8 +119,7 @@ public class OrderService {
         BigDecimal shippingFee = calculateShippingFee(request.getProvince(), subtotalAmount);
         order.setShippingFee(shippingFee);
 
-        BigDecimal discount = request.getDiscount() != null ? request.getDiscount() : BigDecimal.ZERO;
-        BigDecimal finalAmount = subtotalAmount.multiply(BigDecimal.ONE.subtract(discount)).add(shippingFee);
+        BigDecimal finalAmount = subtotalAmount.add(shippingFee);
         order.setFinalAmount(finalAmount);
 
         String paymentUrl = null;
@@ -202,7 +205,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng"));
 
-        if (!order.getCustomer().getId().equals(customer.getId())){
+        if (order.getCustomer() == null || !order.getCustomer().getId().equals(customer.getId())){
             throw new ForbiddenException("Bạn không có quyền thao tác trên đơn hàng này");
         }
         if (order.getOrderStatus() != OrderStatus.PENDING_PAYMENT){
@@ -216,11 +219,14 @@ public class OrderService {
         }
 
         Payment activePending = paymentRepository.findByOrderId(orderId).stream()
+                .filter(p -> p.getPaymentMethod() == PaymentMethod.ONLINE)
                 .filter(p -> p.getPaymentStatus() == PaymentStatus.PENDING)
                 .findFirst()
                 .orElse(null);
 
-        if (activePending != null && now.isBefore(activePending.getExpiresAt())){
+        if (activePending != null
+                && activePending.getExpiresAt() != null
+                && now.isBefore(activePending.getExpiresAt())){
             String existingUrl = vnPayPaymentProvider.createPaymentUrl(
                     activePending, ipAddress, "Thanh toan don hang #" + orderId
             );
@@ -323,62 +329,44 @@ public class OrderService {
             CreatePosOrderRequest request,
             User acceptedBy
     ) {
-        if (request.getPaymentMethod() == PaymentMethod.COD) {
-            throw new BadRequestException("Không thể chọn phương thức COD khi mua trực tiếp");
-        }
+        validatePosCheckout(request);
 
         User customer = userRepository.findByPhoneNumber(request.getRecipientPhone()).orElse(null);
 
-        if (request.getPaymentMethod() == PaymentMethod.CASH) {
-            Order order = Order.builder()
-                    .customer(customer)
-                    .addressDetail(null)
-                    .ward(null)
-                    .province(null)
-                    .acceptedBy(acceptedBy)
-                    .recipientPhone(request.getRecipientPhone())
-                    .recipientName(request.getRecipientName())
-                    .shippingFee(BigDecimal.ZERO)
-                    .orderChannel(OrderChannel.IN_STORE)
-                    .discount(request.getDiscount())
-                    .build();
+        Order order = Order.builder()
+                .customer(customer)
+                .addressDetail(null)
+                .ward(null)
+                .province(null)
+                .acceptedBy(acceptedBy)
+                .recipientPhone(request.getRecipientPhone())
+                .recipientName(request.getRecipientName())
+                .shippingFee(BigDecimal.ZERO)
+                .orderChannel(OrderChannel.IN_STORE)
+                .orderStatus(OrderStatus.COMPLETED)
+                .discount(BigDecimal.ZERO)
+                .build();
 
-            order = orderRepository.save(order);
+        order = orderRepository.save(order);
 
-            List<OrderItem> orderItems = new ArrayList<>();
-            for (OrderItemRequest itemRequest : request.getOrderItemRequests()) {
-                OrderItem orderItem = orderItemService.createPosOrderItem(itemRequest, order);
-                orderItems.add(orderItem);
-            }
-            order.setOrderItems(orderItems);
-
-            BigDecimal subtotalAmount = orderItems.stream()
-                    .map(OrderItem::getUnitPrice)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-            order.setSubtotalAmount(subtotalAmount);
-
-            BigDecimal discount = request.getDiscount() != null ? request.getDiscount() : BigDecimal.ZERO;
-            BigDecimal finalAmount
-                    = subtotalAmount.multiply(BigDecimal.ONE.subtract(discount));
-            order.setFinalAmount(finalAmount);
-
-            Payment payment = paymentService.createPayment(order, PaymentMethod.CASH);
-            order.getPayments().add(payment);
-            order.setOrderStatus(OrderStatus.COMPLETED);
-            order.setCompletedAt(LocalDateTime.now());
-
-            for (OrderItem orderItem : orderItems) {
-                ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(orderItem.getProduct())
-                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng "));
-
-                consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.SOLD);
-                consignmentItemRepository.save(consignmentItem);
-            }
-
-            return OrderMapper.toOrderDetailResponse(orderRepository.save(order));
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (OrderItemRequest itemRequest : request.getOrderItemRequests()) {
+            OrderItem orderItem = orderItemService.createPosOrderItem(itemRequest, order);
+            orderItems.add(orderItem);
         }
+        order.setOrderItems(orderItems);
 
-        throw new BadRequestException("Chưa hỗ trợ thanh toán ngân hàng / ví điện tử");
+        BigDecimal subtotalAmount = orderItems.stream()
+                .map(OrderItem::getUnitPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        order.setSubtotalAmount(subtotalAmount);
+        order.setFinalAmount(subtotalAmount);
+
+        Payment payment = paymentService.createPayment(order, PaymentMethod.CASH);
+        order.getPayments().add(payment);
+        order.setCompletedAt(LocalDateTime.now());
+
+        return OrderMapper.toOrderDetailResponse(orderRepository.save(order));
     }
 
     @Transactional
@@ -398,47 +386,16 @@ public class OrderService {
             );
         }
 
+        if (status == OrderStatus.PACKING && !hasCodPayment(order) && !hasPaidOnlinePayment(order)) {
+            throw new BadRequestException("Đơn online chỉ được đóng gói sau khi thanh toán thành công");
+        }
+
         if (status == OrderStatus.COMPLETED) {
-            for (OrderItem item : order.getOrderItems()) {
-                Product product = item.getProduct();
-                product.setProductStatus(ProductStatus.SOLD);
-
-                ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(product)
-                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng tương ứng"));
-                consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.SOLD);
-
-                for (Payment payment : order.getPayments()) {
-                    if (payment.getPaymentStatus() == PaymentStatus.PENDING) {
-                        payment.setPaymentStatus(PaymentStatus.PAID);
-                        payment.setPaidAt(LocalDateTime.now());
-                    }
-                }
-            }
-
-            order.setCompletedAt(LocalDateTime.now());
+            completeOrder(order);
         }
 
         if (status == OrderStatus.CANCELLED) {
-            for (OrderItem item : order.getOrderItems()) {
-                Product product = item.getProduct();
-                ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(product)
-                        .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng tương ứng"));
-
-                Consignment consignment = consignmentItem.getConsignment();
-                if (consignment.getConsignmentStatus() == ConsignmentStatus.PENDING_SETTLEMENT) {
-                    product.setProductStatus(ProductStatus.EXPIRED);
-                    consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.EXPIRED);
-                } else {
-                    product.setProductStatus(ProductStatus.AVAILABLE);
-                    consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.ACTIVE);
-                }
-
-                for (Payment payment : order.getPayments()) {
-                    if (payment.getPaymentStatus() == PaymentStatus.PENDING) {
-                        payment.setPaymentStatus(PaymentStatus.CANCELLED);
-                    }
-                }
-            }
+            reservationReleaseService.release(order, LocalDateTime.now());
         }
 
         order.setOrderStatus(status);
@@ -476,10 +433,92 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderDetailResponse getOrderDetail(Long orderId) {
+    public OrderDetailResponse getOrderDetail(Long orderId, User currentUser) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy đơn hàng này"));
 
+        if (currentUser == null || (currentUser.getRole() == Role.CUSTOMER
+                && (order.getCustomer() == null || !order.getCustomer().getId().equals(currentUser.getId())))) {
+            throw new ForbiddenException("Bạn không có quyền xem đơn hàng này");
+        }
+
         return OrderMapper.toOrderDetailResponse(order);
+    }
+
+    private void validateOnlineCheckout(OrderRequest request) {
+        if (request.getPaymentMethod() != PaymentMethod.COD && request.getPaymentMethod() != PaymentMethod.ONLINE) {
+            throw new BadRequestException("Phương thức thanh toán không hợp lệ cho đơn online");
+        }
+
+        validateDistinctItems(request.getOrderItemRequests(), "Đơn hàng phải có ít nhất một sản phẩm");
+        validateNoDiscount(request.getDiscount());
+    }
+
+    private void validatePosCheckout(CreatePosOrderRequest request) {
+        if (request.getPaymentMethod() != PaymentMethod.CASH) {
+            throw new BadRequestException("POS hiện chỉ hỗ trợ thanh toán tiền mặt");
+        }
+
+        validateDistinctItems(request.getOrderItemRequests(), "Đơn POS phải có ít nhất một sản phẩm");
+        validateNoDiscount(request.getDiscount());
+    }
+
+    private void validateDistinctItems(List<OrderItemRequest> itemRequests, String emptyMessage) {
+        if (itemRequests == null || itemRequests.isEmpty()) {
+            throw new BadRequestException(emptyMessage);
+        }
+
+        Set<Long> productIds = new HashSet<>();
+        for (OrderItemRequest itemRequest : itemRequests) {
+            if (itemRequest == null || itemRequest.getProductId() == null) {
+                throw new BadRequestException("Sản phẩm không hợp lệ");
+            }
+            if (!productIds.add(itemRequest.getProductId())) {
+                throw new BadRequestException("Không thể đặt cùng một sản phẩm nhiều lần");
+            }
+        }
+
+    }
+
+    private void validateNoDiscount(BigDecimal discount) {
+        if (discount != null && discount.signum() != 0) {
+            throw new BadRequestException("Hệ thống chưa hỗ trợ giảm giá");
+        }
+    }
+
+    private void completeOrder(Order order) {
+        if (hasCodPayment(order)) {
+            for (Payment payment : order.getPayments()) {
+                if (payment.getPaymentMethod() == PaymentMethod.COD
+                        && payment.getPaymentStatus() == PaymentStatus.PENDING) {
+                    payment.setPaymentStatus(PaymentStatus.PAID);
+                    payment.setPaidAt(LocalDateTime.now());
+                }
+            }
+        } else if (!hasPaidOnlinePayment(order)) {
+            throw new BadRequestException("Đơn online chưa được thanh toán thành công");
+        }
+
+        for (OrderItem item : order.getOrderItems()) {
+            Product product = item.getProduct();
+            product.setProductStatus(ProductStatus.SOLD);
+
+            ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(product)
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng tương ứng"));
+            consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.SOLD);
+        }
+
+        order.setCompletedAt(LocalDateTime.now());
+    }
+
+    private boolean hasCodPayment(Order order) {
+        return order.getPayments().stream()
+                .anyMatch(payment -> payment.getPaymentMethod() == PaymentMethod.COD);
+    }
+
+    private boolean hasPaidOnlinePayment(Order order) {
+        return order.getPayments().stream()
+                .anyMatch(payment -> payment.getPaymentMethod() == PaymentMethod.ONLINE
+                        && payment.getPaymentStatus() == PaymentStatus.PAID);
     }
 }

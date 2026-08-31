@@ -32,6 +32,14 @@ public class OrderItemService {
             throw new BadRequestException("Sản phẩm hiện tại không khả dụng");
         }
 
+        ConsignmentItem consignmentItem
+                = consignmentItemRepository.findByProduct(product)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng"));
+
+        if (consignmentItem.getConsignmentItemStatus() != ConsignmentItemStatus.ACTIVE) {
+            throw new BadRequestException("Sản phẩm hiện tại không khả dụng");
+        }
+
         OrderItem orderItem = OrderItem.builder()
                 .product(product)
                 .order(order)
@@ -39,11 +47,6 @@ public class OrderItemService {
                 .build();
 
         product.setProductStatus(ProductStatus.RESERVED);
-
-        ConsignmentItem consignmentItem
-                = consignmentItemRepository.findByProduct(product)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng"));
-
         consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.RESERVED);
 
         return orderItemRepository.save(orderItem);
@@ -57,6 +60,12 @@ public class OrderItemService {
             throw new BadRequestException("Sản phẩm hiện tại không khả dụng");
         }
 
+        ConsignmentItem consignmentItem = consignmentItemRepository.findByProduct(product)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chi tiết lô hàng"));
+        if (consignmentItem.getConsignmentItemStatus() != ConsignmentItemStatus.ACTIVE) {
+            throw new BadRequestException("Sản phẩm hiện tại không khả dụng");
+        }
+
         OrderItem orderItem = OrderItem.builder()
                 .product(product)
                 .order(order)
@@ -64,6 +73,7 @@ public class OrderItemService {
                 .build();
 
         product.setProductStatus(ProductStatus.SOLD);
+        consignmentItem.setConsignmentItemStatus(ConsignmentItemStatus.SOLD);
 
         return orderItemRepository.save(orderItem);
     }

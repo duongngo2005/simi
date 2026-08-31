@@ -89,7 +89,7 @@ public class OrderController {
     @PostMapping("/pos")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<OrderDetailResponse>> createPosOrder(
-            @RequestBody CreatePosOrderRequest request,
+            @Valid @RequestBody CreatePosOrderRequest request,
             @AuthenticationPrincipal User acceptedBy
     ){
         ApiResponse<OrderDetailResponse> response = ApiResponse.<OrderDetailResponse>builder()
@@ -125,11 +125,12 @@ public class OrderController {
 
     @GetMapping("/details/{id}")
     public ResponseEntity<ApiResponse<OrderDetailResponse>> getOrderDetail(
-            @PathVariable("id") Long orderId
+            @PathVariable("id") Long orderId,
+            @AuthenticationPrincipal User user
     ){
         ApiResponse<OrderDetailResponse> response = ApiResponse.<OrderDetailResponse>builder()
                 .status(200)
-                .body(orderService.getOrderDetail(orderId))
+                .body(orderService.getOrderDetail(orderId, user))
                 .build();
 
         return ResponseEntity.ok(response);

@@ -1,11 +1,8 @@
 package com.ndd.simi_be.payment.service;
 
 import com.ndd.simi_be.common.exception.BadRequestException;
-import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
-import com.ndd.simi_be.consignment.repository.ConsignmentItemRepository;
 import com.ndd.simi_be.email.dto.OrderConfirmationEmailData;
 import com.ndd.simi_be.order.entity.Order;
-import com.ndd.simi_be.order.entity.OrderItem;
 import com.ndd.simi_be.order.enums.OrderStatus;
 import com.ndd.simi_be.order.event.OrderPaidEvent;
 import com.ndd.simi_be.order.repository.OrderRepository;
@@ -16,9 +13,6 @@ import com.ndd.simi_be.payment.enums.PaymentStatus;
 import com.ndd.simi_be.payment.enums.PaymentVerificationStatus;
 import com.ndd.simi_be.payment.provider.vnpay.VnPayPaymentProvider;
 import com.ndd.simi_be.payment.repository.PaymentRepository;
-import com.ndd.simi_be.product.entity.Product;
-import com.ndd.simi_be.product.entity.ProductImage;
-import com.ndd.simi_be.product.enums.ProductStatus;
 import com.ndd.simi_be.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +31,6 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
-    private final ConsignmentItemRepository consignmentItemRepository;
     private final VnPayPaymentProvider vnPayPaymentProvider;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -106,35 +99,26 @@ public class PaymentService {
 
         Order order = payment.getOrder();
 
+        boolean canAcceptPayment = payment.getPaymentMethod() == PaymentMethod.ONLINE
+                && payment.getPaymentStatus() == PaymentStatus.PENDING
+                && order.getOrderStatus() == OrderStatus.PENDING_PAYMENT
+                && (payment.getExpiresAt() == null || !LocalDateTime.now().isAfter(payment.getExpiresAt()));
+        if (!canAcceptPayment) {
+            log.warn("VNPay IPN: Payment #{} hoặc Order #{} không còn ở trạng thái có thể thanh toán",
+                    payment.getId(), order.getId());
+            response.put("RspCode", "02");
+            response.put("Message", "Order already confirmed or no longer payable");
+            return response;
+        }
+
         payment.setGatewayTransactionId(verifyResult.getGatewayTransactionNo());
         payment.setGatewayBankCode(verifyResult.getGatewayBankCode());
         payment.setGatewayResponseCode(verifyResult.getGatewayResponseCode());
 
         if (verifyResult.getVerificationStatus() == PaymentVerificationStatus.SUCCESS){
-            boolean isInactiveAttempt = payment.getPaymentStatus() == PaymentStatus.CANCELLED
-                    || payment.getPaymentStatus() == PaymentStatus.FAILED;
-            boolean isExpiredOrder = order.getOrderStatus() == OrderStatus.EXPIRED;
-
-            if (isExpiredOrder || isInactiveAttempt){
-                log.error("CRITICAL ANOMALY: SUCCESS từ VNPay cho Payment #{} (status={}) hoặc Order #{} (status={}). Amount={}, TxnRef={}",
-                        payment.getId(), payment.getPaymentStatus(), order.getId(), order.getOrderStatus(), payment.getAmount(), verifyResult.getGatewayTxnRef());
-                paymentRepository.save(payment);
-                response.put("RspCode", "00");
-                response.put("Message", "Confirm Success (Anomaly Logged)");
-                return response;
-            }
-
             payment.setPaymentStatus(PaymentStatus.PAID);
             payment.setPaidAt(LocalDateTime.now());
             order.setOrderStatus(OrderStatus.PACKING);
-
-            for (OrderItem item : order.getOrderItems()){
-                Product product = item.getProduct();
-                product.setProductStatus(ProductStatus.SOLD);
-
-                consignmentItemRepository.findByProduct(product)
-                        .ifPresent(ci -> ci.setConsignmentItemStatus(ConsignmentItemStatus.SOLD));
-            }
 
             User customer = order.getCustomer();
             if (customer != null && customer.getEmail() != null) {
@@ -153,10 +137,10 @@ public class PaymentService {
                         .finalAmount(order.getFinalAmount())
                         .items(order.getOrderItems().stream()
                                 .map(oi -> {
-                                    Product product = oi.getProduct();
+                                    var product = oi.getProduct();
                                     String thumbnailUrl = product.getProductImages().stream()
-                                            .filter(ProductImage::isThumbnail)
-                                            .map(ProductImage::getImageUrl)
+                                            .filter(image -> image.isThumbnail())
+                                            .map(image -> image.getImageUrl())
                                             .findFirst()
                                             .orElse(null);
                                     return OrderConfirmationEmailData.ItemData.builder()
