@@ -33,15 +33,6 @@ const Footer = () => {
 
             <Link to="/">Trang chủ</Link>
             <Link to="/products">Sản phẩm</Link>
-            <Link to="/about">Về Simi</Link>
-          </div>
-
-          <div className={styles.linkGroup}>
-            <h3>Hỗ trợ</h3>
-
-            <Link to="/consignment-policy">Chính sách ký gửi</Link>
-            <Link to="/shipping-policy">Giao hàng và thanh toán</Link>
-            <Link to="/contact">Liên hệ</Link>
           </div>
 
           <div className={styles.contactSection}>
@@ -55,11 +46,6 @@ const Footer = () => {
 
         <div className={styles.bottomSection}>
           <p>© {currentYear} Simi. All rights reserved.</p>
-
-          <div className={styles.bottomLinks}>
-            <Link to="/privacy-policy">Chính sách bảo mật</Link>
-            <Link to="/terms">Điều khoản sử dụng</Link>
-          </div>
         </div>
       </div>
     </footer>

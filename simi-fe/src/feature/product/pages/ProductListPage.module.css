@@ -1,0 +1,142 @@
+.page {
+  max-width: 1200px;
+  min-height: 70vh;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.header {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--color-btn-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.header p:last-child {
+  margin: 8px 0 0;
+  color: var(--color-text);
+}
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  background: #fffdf9;
+}
+
+.searchForm,
+.selectGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.searchForm input,
+.selectGroup select {
+  min-height: 38px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  padding: 0 10px;
+  background: #fff;
+  color: var(--color-text);
+  font: inherit;
+}
+
+.searchForm input {
+  min-width: 240px;
+}
+
+.searchForm button,
+.resetButton,
+.pagination button {
+  min-height: 38px;
+  border: 1px solid var(--color-btn-primary);
+  border-radius: 4px;
+  padding: 0 12px;
+  background: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resetButton {
+  background: transparent;
+  color: var(--color-heading);
+  border-color: var(--color-input-border);
+}
+
+.resultCount {
+  margin: 0 0 14px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.productGrid > * {
+  width: 100%;
+  min-width: 0;
+}
+
+.stateBox {
+  padding: 48px 20px;
+  border: 1px dashed var(--color-input-border);
+  border-radius: 6px;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 32px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (max-width: 820px) {
+  .filterBar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .searchForm,
+  .selectGroup {
+    flex-wrap: wrap;
+  }
+
+  .searchForm input {
+    min-width: 0;
+    flex: 1;
+  }
+}

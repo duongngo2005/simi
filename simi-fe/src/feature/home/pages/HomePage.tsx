@@ -105,9 +105,6 @@ export const HomePage = () => {
               <Link to="/products" className={styles.btnPrimary}>
                 Mua ngay
               </Link>
-              <Link to="/consignments" className={styles.btnSecondary}>
-                Ký gửi đồ
-              </Link>
             </div>
           </div>
         </div>

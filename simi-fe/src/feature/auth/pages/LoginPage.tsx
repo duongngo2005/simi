@@ -74,8 +74,6 @@ const LoginPage = () => {
         <div className={styles.formField}>
           <div className={styles.passwordHeader}>
             <label htmlFor="password">Mật khẩu</label>
-
-            <Link to="/forgot-password">Quên mật khẩu?</Link>
           </div>
 
           <input

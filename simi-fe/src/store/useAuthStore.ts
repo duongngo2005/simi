@@ -8,6 +8,7 @@ interface AuthState {
     isInitialized: boolean;
 
     setAuth: (user: UserResponse, accessToken: string) => void;
+    setUser: (user: UserResponse) => void;
     initialize: () => Promise<void>;
     clearAuth: () => void;
     isAuthenticated: () => boolean;
@@ -25,6 +26,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         localStorage.setItem('accessToken', token)
         set({ user: user, accessToken: token })
     },
+    setUser: (user) => set({ user }),
     initialize: async () => {
         const token = get().accessToken
 

@@ -33,9 +33,6 @@ const Header = () => {
           <NavLink to="/products" className={getNavLinkClass}>
             Sản phẩm
           </NavLink>
-          <NavLink to="/about" className={getNavLinkClass}>
-            Về Simi
-          </NavLink>
         </nav>
 
         <div className={styles.rightSection}>

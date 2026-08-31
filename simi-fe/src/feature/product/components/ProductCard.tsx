@@ -15,7 +15,7 @@ export const ProductCard = ({
     thumbnail ||
     "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500";
 
-  const isNewWithTag = productCondition === "NEW WITH TAG";
+  const isNewWithTag = productCondition === "NEW_TAG";
 
   const formatPrice = (price: number) => {
     return price.toLocaleString("vi-VN") + "đ";

@@ -2,7 +2,7 @@ import api from "../../../lib/http/apiClient";
 import type { ApiResponse, PageResponse } from "../../../types/common";
 import  { type ProductDetailResponse, type ProductImageResponse, type ProductSummaryResponse } from "../types/product.type";
 
-export const getProducts = async (params: {
+export interface ProductSearchParams {
   page?: number;
   size?: number;
   keyword?: string;
@@ -18,7 +18,9 @@ export const getProducts = async (params: {
   categorySlug?: string;
   gender?: "MEN" | "WOMEN" | "UNISEX";
   materials?: string[];
-}) => {
+}
+
+export const getProducts = async (params: ProductSearchParams) => {
   const response = await api.get<ApiResponse<PageResponse<ProductSummaryResponse>>>("/products", {
     params,
     paramsSerializer: (params) => {

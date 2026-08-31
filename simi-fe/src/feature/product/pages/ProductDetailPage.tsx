@@ -1,10 +1,12 @@
-import { useParams, Link, useNavigate } from "react-router";
+import { useParams, Link, useNavigate, useLocation } from "react-router";
 import { useState } from "react";
 import styles from "./ProductDetailPage.module.css";
 import { useProductDetail } from "../hooks/useProducts";
 import { CONDITION_COLOR, CONDITION_LABEL } from "../../../utils/condition";
 import { formatPrice } from "../../../utils/formatPrice";
 import { useAddToCart, useGetMyCart } from "../../cart/hook/useCart";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { getServerError } from "../../../utils/getMessageError";
 
 const GENDER_LABEL: Record<string, string> = {
   MEN: "Đồ Nam",
@@ -18,24 +20,40 @@ export const ProductDetailPage = () => {
   const { data: product, isLoading, isError } = useProductDetail(productId);
   const [activeImage, setActiveImage] = useState(0);
   const { mutateAsync: addToCart, isPending } = useAddToCart();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
 
-  const { data: myCart } = useGetMyCart();
+  const { data: myCart } = useGetMyCart(isAuthenticated);
 
   const isInCart = myCart?.cartItemResponses?.some(
     (item) => item.productSummaryResponse?.id === productId
   );
 
   const nav = useNavigate();
+  const location = useLocation();
 
   const handleBuyNow = () => {
+    if (!isAuthenticated) {
+      nav("/login", { state: { from: location.pathname } });
+      return;
+    }
+
+    const cartItem = myCart?.cartItemResponses?.find(
+      (item) => item.productSummaryResponse?.id === product?.id,
+    );
     nav("/checkout", {
       state: {
         productIds: [product?.id],
+        cartItemIds: cartItem ? [cartItem.id] : undefined,
       },
     });
   };
 
   const handleAddToCart = async (id: number) => {
+    if (!isAuthenticated) {
+      nav("/login", { state: { from: location.pathname } });
+      return;
+    }
+
     if (isInCart) {
       nav("/cart");
       return;
@@ -44,8 +62,8 @@ export const ProductDetailPage = () => {
     try {
       await addToCart(id);
       alert("Đã thêm sản phẩm vào giỏ hàng");
-    } catch (err: any) {
-      alert(err.response?.data?.message || "Lỗi thêm vào giỏ hàng");
+    } catch (error: unknown) {
+      alert(getServerError(error, "Lỗi thêm vào giỏ hàng"));
     }
   };
 
@@ -70,6 +88,7 @@ export const ProductDetailPage = () => {
   }
 
   const images = product.productImageResponses ?? [];
+  const isAvailable = product.productStatus === "AVAILABLE";
   const activeImageUrl =
     images[activeImage]?.imageUrl ??
     "https://via.placeholder.com/600x750?text=No+Image";
@@ -214,12 +233,12 @@ export const ProductDetailPage = () => {
           <div className={styles.actions}>
             <button
               onClick={() => handleAddToCart(product.id)}
-              disabled={isPending}
+              disabled={isPending || !isAvailable}
               className={styles.btnAddToCart}
             >
-              {isInCart ? "Đã có trong giỏ hàng" : "Thêm vào giỏ hàng"}
+              {!isAvailable ? "Sản phẩm không còn sẵn" : isInCart ? "Đã có trong giỏ hàng" : "Thêm vào giỏ hàng"}
             </button>
-            <button className={styles.btnBuyNow} onClick={handleBuyNow}>
+            <button className={styles.btnBuyNow} onClick={handleBuyNow} disabled={!isAvailable}>
               Mua ngay
             </button>
           </div>
@@ -231,7 +250,7 @@ export const ProductDetailPage = () => {
             </div>
             <div className={styles.guarantee}>
               <span className={styles.guaranteeIcon}>✓</span>
-              <span>Giao hàng toàn quốc, đổi trả trong 3 ngày</span>
+              <span>Giao hàng toàn quốc theo phí vận chuyển hiển thị khi thanh toán</span>
             </div>
             <div className={styles.guarantee}>
               <span className={styles.guaranteeIcon}>✓</span>

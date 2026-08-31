@@ -22,7 +22,7 @@ public class ProductMapper {
                         : product.getBrand().getId()
                 )
                 .description(product.getDescription())
-                .status(product.getProductStatus().name())
+                .productStatus(product.getProductStatus().name())
                 .productImageResponses(
                         product.getProductImages().stream().map(ProductImageMapper::toProductImageResponse).toList()
                 )
