@@ -48,6 +48,7 @@ export const MyInfo = () => {
     <div className={styles.wrapper}>
       <div className={styles.card}>
         <div className={styles.cardHeader}>
+          <p className={styles.eyebrow}>Thông tin đã đăng ký</p>
           <h2 className={styles.cardTitle}>Thông tin cá nhân</h2>
         </div>
 
@@ -97,6 +98,7 @@ export const MyInfo = () => {
       {user.role === "CUSTOMER" && (
         <form className={styles.card} onSubmit={handleBankInformationSubmit}>
           <div className={styles.cardHeader}>
+            <p className={styles.eyebrow}>Dùng khi quyết toán</p>
             <h2 className={styles.cardTitle}>Thông tin nhận tiền ký gửi</h2>
             <p className={styles.cardDescription}>
               Thông tin này được dùng khi Simi quyết toán tiền bán sản phẩm ký gửi.

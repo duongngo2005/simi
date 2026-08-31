@@ -142,7 +142,11 @@ export const CheckoutPage = () => {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.pageTitle}>Thanh toán đơn hàng ({products.length} sản phẩm)</h1>
+      <header className={styles.pageHeader}>
+        <p className={styles.eyebrow}>Bước cuối cùng</p>
+        <h1 className={styles.pageTitle}>Xác nhận đơn hàng <span>({products.length} sản phẩm)</span></h1>
+        <p>Điền địa chỉ nhận hàng, sau đó kiểm tra lại tổng tiền trước khi đặt đơn.</p>
+      </header>
 
       <form onSubmit={handleSubmit} className={styles.container}>
         <div className={styles.leftCol}>
@@ -150,10 +154,11 @@ export const CheckoutPage = () => {
             <h2 className={styles.cardTitle}>Thông tin nhận hàng</h2>
 
             <div className={styles.inputGroup}>
-              <label>Họ và tên</label>
+              <label htmlFor="recipientName">Họ và tên</label>
               <input
                 required
                 type="text"
+                id="recipientName"
                 name="fullName"
                 placeholder="Nhập đầy đủ họ và tên"
                 value={formData.fullName}
@@ -163,10 +168,11 @@ export const CheckoutPage = () => {
 
             <div className={styles.inputGrid}>
               <div className={styles.inputGroup}>
-                <label>Số điện thoại</label>
+                <label htmlFor="recipientPhone">Số điện thoại</label>
                 <input
                   required
                   type="tel"
+                  id="recipientPhone"
                   name="phone"
                   placeholder="Số điện thoại nhận hàng"
                   value={formData.phone}
@@ -177,8 +183,8 @@ export const CheckoutPage = () => {
 
             <div className={styles.inputGrid}>
               <div className={styles.inputGroup}>
-                <label>Tỉnh / Thành phố</label>
-                <select required value={formData.provinceCode} onChange={handleProvinceChange}>
+                <label htmlFor="province">Tỉnh / Thành phố</label>
+                <select id="province" required value={formData.provinceCode} onChange={handleProvinceChange}>
                   <option value="">
                     {loadingProvinces ? "Đang tải..." : "Chọn Tỉnh/Thành phố"}
                   </option>
@@ -189,8 +195,9 @@ export const CheckoutPage = () => {
               </div>
 
               <div className={styles.inputGroup}>
-                <label>Xã / Phường</label>
+                <label htmlFor="ward">Xã / Phường</label>
                 <select
+                  id="ward"
                   required
                   disabled={!formData.provinceCode || loadingWards}
                   value={formData.wardCode}
@@ -211,10 +218,11 @@ export const CheckoutPage = () => {
             </div>
 
             <div className={styles.inputGroup}>
-              <label>Địa chỉ chi tiết (Số nhà, tên đường)</label>
+              <label htmlFor="addressDetail">Địa chỉ chi tiết (Số nhà, tên đường)</label>
               <input
                 required
                 type="text"
+                id="addressDetail"
                 name="addressDetail"
                 placeholder="Ví dụ: 123 Đường Lê Lợi"
                 value={formData.addressDetail}
@@ -274,7 +282,7 @@ export const CheckoutPage = () => {
                     {thumb ? (
                       <img src={thumb} alt={product.name} className={styles.productImg} />
                     ) : (
-                      <div className={styles.noImg}>No Img</div>
+                      <div className={styles.noImg}>Ảnh đang cập nhật</div>
                     )}
                     <div className={styles.productInfo}>
                       <span className={styles.productName}>{product.name}</span>

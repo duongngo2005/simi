@@ -110,7 +110,6 @@ export const AiChatWidget = () => {
                                 >
                                     <p className={styles.bubbleText}>{msg.text}</p>
 
-                                    {/* Product Cards */}
                                     {msg.products && msg.products.length > 0 && (
                                         <div className={styles.productList}>
                                             {msg.products.map((p) => (
