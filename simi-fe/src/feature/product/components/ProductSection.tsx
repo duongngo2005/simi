@@ -19,7 +19,7 @@ export const ProductSection = ({
 
   const handleScroll = (direction: "left" | "right") => {
     if (trackRef.current) {
-      const scrollAmount = 560; // Cuộn qua 2 card sản phẩm
+      const scrollAmount = 560;
       trackRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -41,7 +41,7 @@ export const ProductSection = ({
         <button
           onClick={() => handleScroll("left")}
           className={`${styles.navBtn} ${styles.navBtnLeft}`}
-          aria-label="Previous"
+          aria-label="Xem sản phẩm trước"
         >
           ‹
         </button>
@@ -65,7 +65,7 @@ export const ProductSection = ({
         <button
           onClick={() => handleScroll("right")}
           className={`${styles.navBtn} ${styles.navBtnRight}`}
-          aria-label="Next"
+          aria-label="Xem thêm sản phẩm"
         >
           ›
         </button>

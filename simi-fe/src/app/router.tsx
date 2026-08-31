@@ -21,6 +21,7 @@ import { PaymentResultPage } from "../feature/order/pages/PaymentResultPage";
 import { OrderSuccessPage } from "../feature/order/pages/OrderSuccessPage";
 import { StaffDashboard } from "../feature/staff/dashboard/pages/StaffDashboard";
 import { StaffDispositionQueuePage } from "../feature/disposition/pages/StaffDispositionQueuePage";
+import { AboutPage } from "../feature/about/pages/AboutPage";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: "/products",
         element: <ProductListPage />,
+      },
+      {
+        path: "/about",
+        element: <AboutPage />,
       },
       {
         path: "/products/:id",

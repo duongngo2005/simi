@@ -1,0 +1,364 @@
+.page {
+  width: min(calc(100% - 48px), var(--content-max));
+  margin: 0 auto;
+  padding: var(--space-8) 0 var(--space-10);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.75fr);
+  align-items: center;
+  gap: clamp(var(--space-6), 7vw, var(--space-10));
+  min-height: 560px;
+  padding-bottom: var(--space-10);
+  border-bottom: 1px solid var(--color-fibre);
+}
+
+.heroCopy {
+  max-width: 680px;
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-label-red);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.sectionIntro h2,
+.passportCopy h2,
+.closing h2 {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.hero h1 {
+  max-width: 720px;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+}
+
+.lead {
+  max-width: 590px;
+  margin: var(--space-5) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-base);
+  line-height: 1.75;
+}
+
+.primaryLink,
+.secondaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.primaryLink {
+  margin-top: var(--space-5);
+  color: #ffffff;
+  background: var(--color-label-red);
+  border: 1px solid var(--color-label-red);
+}
+
+.primaryLink:hover {
+  background: var(--color-label-red-hover);
+  border-color: var(--color-label-red-hover);
+  transform: translateY(-1px);
+}
+
+.heroVisual {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-fibre);
+  box-shadow: var(--shadow-soft);
+}
+
+.heroImageFrame {
+  height: 500px;
+  flex: 0 0 500px;
+  overflow: hidden;
+  background: var(--color-fibre-light);
+}
+
+.heroImageFrame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.storySection,
+.passportSection,
+.journeySection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(var(--space-6), 9vw, var(--space-10));
+  padding: var(--space-10) 0;
+  border-bottom: 1px solid var(--color-fibre);
+}
+
+.sectionIntro h2,
+.passportCopy h2,
+.closing h2 {
+  font-size: clamp(2rem, 4vw, 3.3rem);
+}
+
+.storyCopy > p,
+.passportCopy > p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-base);
+  line-height: 1.8;
+}
+
+.principleList {
+  margin-top: var(--space-6);
+  border-top: 1px solid var(--color-fibre);
+}
+
+.principleList article {
+  display: grid;
+  grid-template-columns: minmax(145px, 0.7fr) minmax(0, 1.3fr);
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-fibre-light);
+}
+
+.principleList span,
+.passportHeading span,
+.journeyList li > span {
+  color: var(--color-label-red);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.principleList p {
+  margin: 0;
+  color: var(--color-charcoal);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+.passportSection {
+  align-items: center;
+}
+
+.passportCopy > p {
+  margin-top: var(--space-5);
+}
+
+.passportCard {
+  min-height: 330px;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-ink);
+  box-shadow: 8px 8px 0 var(--color-fibre-light);
+}
+
+.passportHeading {
+  padding-bottom: var(--space-4);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-fibre);
+}
+
+.passportHeading strong {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 2.3rem;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+
+.passportName {
+  margin: var(--space-5) 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.passportData {
+  margin: auto 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--color-fibre);
+}
+
+.passportData div {
+  min-width: 0;
+  padding: var(--space-3) var(--space-2) 0 0;
+}
+
+.passportData div + div {
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--color-fibre-light);
+}
+
+.passportData dt {
+  color: var(--color-muted);
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.passportData dd {
+  margin: var(--space-1) 0 0;
+  overflow-wrap: anywhere;
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.journeyList {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  border-top: 1px solid var(--color-fibre);
+}
+
+.journeyList li {
+  min-height: 185px;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-fibre);
+}
+
+.journeyList li:nth-child(odd) {
+  border-right: 1px solid var(--color-fibre);
+}
+
+.journeyList h3 {
+  margin: var(--space-5) 0 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 500;
+}
+
+.journeyList p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+.closing {
+  max-width: 820px;
+  padding: var(--space-10) 0 var(--space-4);
+}
+
+.closingActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.closingActions .primaryLink {
+  margin-top: var(--space-5);
+}
+
+.secondaryLink {
+  margin-top: var(--space-5);
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid var(--color-fibre);
+}
+
+.secondaryLink:hover {
+  border-color: var(--color-ink);
+  background: var(--color-surface-raised);
+}
+
+@media (max-width: 800px) {
+  .hero,
+  .storySection,
+  .passportSection,
+  .journeySection {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: 0;
+  }
+
+  .heroImageFrame {
+    height: 460px;
+    flex-basis: 460px;
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    width: min(calc(100% - 32px), var(--content-max));
+    padding-top: var(--space-6);
+  }
+
+  .hero,
+  .storySection,
+  .passportSection,
+  .journeySection,
+  .closing {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  .heroImageFrame {
+    height: 420px;
+    flex-basis: 420px;
+  }
+
+  .principleList article,
+  .journeyList {
+    grid-template-columns: 1fr;
+  }
+
+  .principleList article {
+    gap: var(--space-2);
+  }
+
+  .journeyList li:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .passportData {
+    grid-template-columns: 1fr;
+  }
+
+  .passportData div,
+  .passportData div + div {
+    padding: var(--space-3) 0 0;
+    border-left: 0;
+  }
+
+  .passportData div + div {
+    border-top: 1px solid var(--color-fibre-light);
+  }
+}

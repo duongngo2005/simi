@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import styles from "./ProductCard.module.css";
 import type { ProductSummaryResponse } from "../types/product.type";
+import { CONDITION_LABEL } from "../../../utils/condition";
 
 export const ProductCard = ({
   id,
@@ -11,10 +12,6 @@ export const ProductCard = ({
   productCondition,
   thumbnail,
 }: ProductSummaryResponse) => {
-  const thumbnailImage =
-    thumbnail ||
-    "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500";
-
   const isNewWithTag = productCondition === "NEW_TAG";
 
   const formatPrice = (price: number) => {
@@ -24,12 +21,16 @@ export const ProductCard = ({
   return (
     <Link to={`/products/${id}`} className={styles.card}>
       <div className={styles.cardImageContainer}>
-        <img
-          src={thumbnailImage}
-          alt={name}
-          className={styles.cardImage}
-          loading="lazy"
-        />
+        {thumbnail ? (
+          <img
+            src={thumbnail}
+            alt={name}
+            className={styles.cardImage}
+            loading="lazy"
+          />
+        ) : (
+          <span className={styles.imagePlaceholder}>Ảnh đang cập nhật</span>
+        )}
 
         {productCondition && (
           <span
@@ -37,7 +38,7 @@ export const ProductCard = ({
               isNewWithTag ? styles.badgeTag : ""
             }`}
           >
-            {productCondition}
+            {CONDITION_LABEL[productCondition] ?? productCondition}
           </span>
         )}
       </div>
@@ -50,6 +51,11 @@ export const ProductCard = ({
         <h3 className={styles.cardName}>{name}</h3>
 
         <p className={styles.cardPrice}>{formatPrice(currentPrice)}</p>
+
+        <div className={styles.passportStrip}>
+          <span>Mã Simi #{String(id).padStart(3, "0")}</span>
+          <span>Đã kiểm định</span>
+        </div>
       </div>
     </Link>
   );

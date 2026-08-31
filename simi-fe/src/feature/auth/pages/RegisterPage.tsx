@@ -11,7 +11,7 @@ const registerSchema = z.object({
   fullName: z.string().min(1, "Tên đầy đủ không được để trống"),
   email: z.string().trim().min(1, "Email không được để trống")
            .pipe(z.email("Email không đúng định dạng")),
-  phoneNumber: z.string()               // ← THÊM MỚI
+  phoneNumber: z.string()
     .min(10, "Số điện thoại tối thiểu 10 số")
     .max(11, "Số điện thoại tối đa 11 số")
     .regex(/^[0-9]+$/, "Số điện thoại chỉ được chứa chữ số"),
@@ -52,15 +52,11 @@ const RegisterPage = () => {
   return (
     <div className={styles.registerPage}>
       <header className={styles.header}>
-        <h1>Đăng ký</h1>
-
-        <p className={styles.description}>
-          Tạo tài khoản để bắt đầu mua sắm và ký gửi cùng Simi
-        </p>
+        <h1>Tạo tài khoản</h1>
       </header>
 
       {serverError && (
-        <div className={styles.errorBanner}>{serverError}</div>
+        <div className={styles.errorBanner} role="alert">{serverError}</div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -149,22 +145,10 @@ const RegisterPage = () => {
           )}
         </div>
 
-        <label className={styles.policy}>
-          <input type="checkbox" />
-
-            <span>
-            Bằng việc đăng ký, bạn đồng ý với quy định sử dụng của Simi.
-            </span>
-        </label>
-
         <Button disabled={isPending} type="submit" variant="primary" fullWidth>
           Đăng ký
         </Button>
       </form>
-
-      <div className={styles.divider}>
-        <span>hoặc</span>
-      </div>
 
       <div className={styles.loginSection}>
         <span>Đã có tài khoản?</span>

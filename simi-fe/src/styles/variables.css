@@ -2,50 +2,76 @@
 @import '@fontsource/be-vietnam-pro/500.css';
 @import '@fontsource/be-vietnam-pro/600.css';
 @import '@fontsource/be-vietnam-pro/700.css';
+@import '@fontsource/fraunces/500.css';
+@import '@fontsource/fraunces/600.css';
 
 :root {
-    /* Cơ bản */
-    --font-sans: 'Be Vietnam Pro', system-ui, sans-serif;
-    --color-background: #F4EFE6;
+  /* Simi archive-tag palette: a cool paper surface, indigo ink and a price label red. */
+  --color-paper: #f0f1ec;
+  --color-surface: #fafbf8;
+  --color-surface-raised: #ffffff;
+  --color-ink: #18333a;
+  --color-charcoal: #292e2c;
+  --color-muted: #697570;
+  --color-label-red: #e45232;
+  --color-label-red-hover: #c83f2c;
+  --color-verified: #53725b;
+  --color-fibre: #c9cdc6;
+  --color-fibre-light: #e3e6df;
 
-    /* Chữ */
-    --color-heading: #4A352D; 
-    --color-text: #6f4e40;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Be Vietnam Pro', system-ui, sans-serif;
 
-    /* Button */
-    --color-btn-primary: #B98B6F;
-    --color-btn-primary-text: #fff;
-    --color-btn-primary-hover: #986a4e;
-    --color-btn-secondary: #f1f5f9;
-    --color-btn-secondary-text:#4A352D;
-    --color-btn-secondary-hover: #eceef1;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-2xl: clamp(2.25rem, 5vw, 4.75rem);
 
-    /* input */
-    --color-input: #fbf8f3;
-    --color-input-border: #d6c7bc;
-    --color-input-border-focus: #fffdf9;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4.5rem;
 
-    /* viền */
-    --color-divider: #a18f85;
-    
-     /* Success: Phù hợp trạng thái ACTIVE, Hoàn thành */
-    --color-success: #4F772D;          /* Xanh lá úa/rêu trầm hợp với tone nâu */
-    --color-success-bg: #F0F4EC;
-    --color-success-border: #C2D5A8;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --content-max: 1200px;
+  --shadow-soft: 0 18px 48px rgba(24, 51, 58, 0.08);
+  --shadow-lift: 0 16px 26px rgba(24, 51, 58, 0.14);
+  --transition-fast: 160ms ease;
 
-    /* Warning: Phù hợp trạng thái DRAFT, Đang chờ duyệt */
-    --color-warning: #D97706;          /* Vàng cam ấm áp */
-    --color-warning-bg: #FEF3C7;
-    --color-warning-border: #FCD34D;
+  /* Semantic aliases keep existing feature CSS visually consistent during the staged refactor. */
+  --color-background: var(--color-paper);
+  --color-heading: var(--color-ink);
+  --color-text: var(--color-charcoal);
+  --color-btn-primary: var(--color-label-red);
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-hover: var(--color-label-red-hover);
+  --color-btn-secondary: var(--color-surface-raised);
+  --color-btn-secondary-text: var(--color-ink);
+  --color-btn-secondary-hover: var(--color-fibre-light);
+  --color-input: var(--color-surface);
+  --color-input-border: var(--color-fibre);
+  --color-input-border-focus: var(--color-ink);
+  --color-divider: var(--color-muted);
 
-    /* Danger: Phù hợp trạng thái EXPIRED, Đã huỷ */
-    --color-danger: #BC3908;           /* Đỏ đất/Terracotta */
-    --color-danger-bg: #FDF2F0;
-    --color-danger-border: #F5C6BA;
-    --color-danger-text: #9F3D2A;
-
-    /* Info: Phù hợp các thông tin hướng dẫn, thông báo phụ */
-    --color-info: #2E5B88;             /* Xanh dương xám cổ điển */
-    --color-info-bg: #F0F4F8;
-    --color-info-border: #BCD0E3;
+  --color-success: var(--color-verified);
+  --color-success-bg: #eef4ed;
+  --color-success-border: #bed0c0;
+  --color-warning: #9a6517;
+  --color-warning-bg: #fff5d9;
+  --color-warning-border: #e9ce83;
+  --color-danger: #b9372a;
+  --color-danger-bg: #fff1ee;
+  --color-danger-border: #efb8af;
+  --color-danger-text: #9f3027;
+  --color-info: #2f6673;
+  --color-info-bg: #eef7f7;
+  --color-info-border: #b7d5d7;
 }
