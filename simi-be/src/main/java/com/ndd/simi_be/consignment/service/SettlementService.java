@@ -3,6 +3,7 @@ package com.ndd.simi_be.consignment.service;
 import com.ndd.simi_be.cloudinary.CloudinaryResponse;
 import com.ndd.simi_be.cloudinary.CloudinaryService;
 import com.ndd.simi_be.common.exception.BadRequestException;
+import com.ndd.simi_be.common.exception.ForbiddenException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.dto.response.SettlementPreviewResponse;
@@ -26,6 +27,7 @@ import com.ndd.simi_be.order.repository.OrderItemRepository;
 import com.ndd.simi_be.payment.enums.PaymentMethod;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.user.entity.User;
+import com.ndd.simi_be.user.enums.Role;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -90,7 +92,10 @@ public class SettlementService {
 
         SettlementCalc settlementCalc = calcSettlement(consignment);
         if (!settlementCalc.isCanSettle()){
-            throw new BadRequestException("Chưa đủ điều kiện để kết toán");
+            if (!settlementCalc.getReserveItems().isEmpty()) {
+                throw new BadRequestException("Không thể kết toán khi còn sản phẩm đang được giữ chỗ");
+            }
+            throw new BadRequestException("Khách hàng chưa cập nhật đầy đủ thông tin tài khoản ngân hàng");
         }
 
         CloudinaryResponse cloudinaryResponse = cloudinaryService.uploadImage(proofImage);
@@ -121,7 +126,7 @@ public class SettlementService {
                     .consignmentItem(item)
                     .itemDispositionType(ItemDispositionType.RETURN)
                     .pickupDeadline(LocalDateTime.now().plusDays(7))
-                    .processedBy(processedBy)
+                    .processedBy(null)
                     .processedAt(null)
                     .build();
             itemDispositionRepository.save(itemDisposition);
@@ -129,6 +134,7 @@ public class SettlementService {
 
         consignment.setConsignmentStatus(ConsignmentStatus.SETTLED);
         consignment.setSettledAt(LocalDateTime.now());
+        closeConsignmentIfReady(consignment);
         return SettlementMapper.toSettlementResponse(settlementRepository.save(settlement));
     }
 
@@ -216,9 +222,14 @@ public class SettlementService {
     }
 
     @Transactional(readOnly = true)
-    public SettlementResponse getSettlement(Long consignmentId){
+    public SettlementResponse getSettlement(Long consignmentId, User user){
         Settlement settlement = settlementRepository.findByConsignmentId(consignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu quyết toán"));
+
+        if (user.getRole() == Role.CUSTOMER
+                && !settlement.getConsignment().getConsignor().getId().equals(user.getId())) {
+            throw new ForbiddenException("Bạn không có quyền xem phiếu quyết toán này");
+        }
         return SettlementMapper.toSettlementResponse(settlement);
     }
 
@@ -226,5 +237,21 @@ public class SettlementService {
     public List<SettlementResponse> getMySettlements(User consignor){
         List<Settlement> settlements = settlementRepository.findByConsignment_ConsignorOrderBySettledAtDesc(consignor);
         return settlements.stream().map(SettlementMapper::toSettlementResponse).toList();
+    }
+
+    @Transactional
+    public void closeConsignmentIfReady(Consignment consignment) {
+        if (consignment.getConsignmentStatus() != ConsignmentStatus.SETTLED) {
+            return;
+        }
+
+        boolean hasUnfinishedDispositions = itemDispositionRepository
+                .existsByConsignmentItem_Consignment_IdAndItemDispositionStatusNot(
+                        consignment.getId(), ItemDispositionStatus.COMPLETED
+                );
+        if (!hasUnfinishedDispositions) {
+            consignment.setConsignmentStatus(ConsignmentStatus.CLOSED);
+            consignment.setClosedAt(LocalDateTime.now());
+        }
     }
 }

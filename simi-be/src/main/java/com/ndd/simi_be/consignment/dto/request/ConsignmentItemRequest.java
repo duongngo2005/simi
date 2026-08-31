@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ public class ConsignmentItemRequest {
     private BigDecimal commissionRate = new BigDecimal("0.30");
 
     @Valid
-    @NotNull
+    @NotEmpty(message = "Lịch giá không được để trống")
     private List<PriceScheduleRequest> priceScheduleRequests;
 
     @Valid

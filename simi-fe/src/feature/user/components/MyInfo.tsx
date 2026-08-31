@@ -1,4 +1,6 @@
+import { useState, type FormEvent } from "react";
 import { useAuthStore } from "../../../store/useAuthStore";
+import { userApi } from "../api/userApi";
 import styles from "./MyInfo.module.css";
 
 const ROLE_LABEL: Record<string, string> = {
@@ -13,9 +15,34 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export const MyInfo = () => {
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
+  const [bankName, setBankName] = useState(user?.bankName ?? "");
+  const [accountNumber, setAccountNumber] = useState(user?.accountNumber ?? "");
+  const [accountHolder, setAccountHolder] = useState(user?.accountHolder ?? "");
+  const [isSaving, setIsSaving] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   if (!user) return null;
+
+  const handleBankInformationSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFeedback(null);
+    setIsSaving(true);
+
+    try {
+      const response = await userApi.updateBankInformation({
+        bankName,
+        accountNumber,
+        accountHolder,
+      });
+      setUser(response.body);
+      setFeedback({ type: "success", message: "Đã cập nhật thông tin nhận tiền." });
+    } catch {
+      setFeedback({ type: "error", message: "Không thể cập nhật. Vui lòng kiểm tra lại thông tin." });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -66,6 +93,64 @@ export const MyInfo = () => {
           </div>
         </div>
       </div>
+
+      {user.role === "CUSTOMER" && (
+        <form className={styles.card} onSubmit={handleBankInformationSubmit}>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.cardTitle}>Thông tin nhận tiền ký gửi</h2>
+            <p className={styles.cardDescription}>
+              Thông tin này được dùng khi Simi quyết toán tiền bán sản phẩm ký gửi.
+            </p>
+          </div>
+
+          <div className={styles.infoGrid}>
+            <label className={styles.infoItem}>
+              <span className={styles.infoLabel}>Ngân hàng</span>
+              <input
+                className={styles.input}
+                value={bankName}
+                onChange={(event) => setBankName(event.target.value)}
+                maxLength={100}
+                required
+              />
+            </label>
+
+            <label className={styles.infoItem}>
+              <span className={styles.infoLabel}>Số tài khoản</span>
+              <input
+                className={styles.input}
+                value={accountNumber}
+                onChange={(event) => setAccountNumber(event.target.value)}
+                maxLength={50}
+                required
+              />
+            </label>
+
+            <label className={styles.infoItem}>
+              <span className={styles.infoLabel}>Chủ tài khoản</span>
+              <input
+                className={styles.input}
+                value={accountHolder}
+                onChange={(event) => setAccountHolder(event.target.value)}
+                maxLength={100}
+                required
+              />
+            </label>
+          </div>
+
+          {feedback && (
+            <p className={feedback.type === "success" ? styles.feedbackSuccess : styles.feedbackError}>
+              {feedback.message}
+            </p>
+          )}
+
+          <div>
+            <button className={styles.btnPrimary} type="submit" disabled={isSaving}>
+              {isSaving ? "Đang lưu..." : "Lưu thông tin nhận tiền"}
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

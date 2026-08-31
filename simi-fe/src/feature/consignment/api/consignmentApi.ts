@@ -22,7 +22,7 @@ export const consignmentApi = {
   },
 
   getMySettlements: async () => {
-    const response = await api.get<ApiResponse<MySettlementResponse[]>>("/settlements/my");
+    const response = await api.get<ApiResponse<MySettlementResponse[]>>("/settlements/my-settlements");
     return response.data;
   },
 

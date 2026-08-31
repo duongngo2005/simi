@@ -25,13 +25,18 @@ public class ConsignmentExpiryService {
         );
 
         for (Consignment expiredConsignment: expiredConsignments){
-            expiredConsignment.setConsignmentStatus(ConsignmentStatus.PENDING_SETTLEMENT);
             List<ConsignmentItem> consignmentItems = expiredConsignment.getConsignmentItems();
             for (ConsignmentItem item: consignmentItems){
                 if (item.getConsignmentItemStatus() == ConsignmentItemStatus.ACTIVE){
                     item.setConsignmentItemStatus(ConsignmentItemStatus.EXPIRED);
                     item.getProduct().setProductStatus(ProductStatus.EXPIRED);
                 }
+            }
+
+            boolean hasReservedItem = consignmentItems.stream()
+                    .anyMatch(item -> item.getConsignmentItemStatus() == ConsignmentItemStatus.RESERVED);
+            if (!hasReservedItem) {
+                expiredConsignment.setConsignmentStatus(ConsignmentStatus.PENDING_SETTLEMENT);
             }
         }
     }
