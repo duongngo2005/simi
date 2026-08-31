@@ -32,9 +32,10 @@ export const OrderSuccessPage = () => {
           </div>
         </div>
 
-        <h1 className={styles.title}>Đặt hàng thành công!</h1>
+        <p className={styles.eyebrow}>Đơn hàng đã được ghi nhận</p>
+        <h1 className={styles.title}>Đặt hàng thành công</h1>
         <p className={styles.subtitle}>
-          Cảm ơn bạn đã mua sắm tại <strong>Simi</strong>. Đơn hàng của bạn đã được ghi nhận và đang chờ nhân viên xác nhận đóng gói.
+          Bạn có thể xem trạng thái đơn hàng bất cứ lúc nào trong tài khoản Simi.
         </p>
 
         <div className={styles.orderIdBox}>
@@ -47,24 +48,24 @@ export const OrderSuccessPage = () => {
           <div className={styles.step}>
             <span className={styles.stepNumber}>1</span>
             <div className={styles.stepText}>
-              <strong>Xác nhận qua email</strong>
-              <span>Hóa đơn và thông tin chi tiết đơn hàng đã được gửi tới email của bạn.</span>
+              <strong>Đơn hàng được ghi nhận</strong>
+              <span>Thông tin đơn hàng được lưu trong mục đơn hàng của bạn.</span>
             </div>
           </div>
 
           <div className={styles.step}>
             <span className={styles.stepNumber}>2</span>
             <div className={styles.stepText}>
-              <strong>Chuẩn bị & Đóng gói</strong>
-              <span>Nhân viên Simi sẽ kiểm tra tình trạng đồ và đóng gói cẩn thận.</span>
+              <strong>Chuẩn bị và đóng gói</strong>
+              <span>Nhân viên cập nhật trạng thái khi đơn được xử lý.</span>
             </div>
           </div>
 
           <div className={styles.step}>
             <span className={styles.stepNumber}>3</span>
             <div className={styles.stepText}>
-              <strong>Giao hàng tận nơi</strong>
-              <span>Đơn vị vận chuyển sẽ giao hàng trong vòng 2 - 4 ngày làm việc.</span>
+              <strong>Giao hàng</strong>
+              <span>Bạn theo dõi các thay đổi tiếp theo trong thông tin đơn hàng.</span>
             </div>
           </div>
         </div>

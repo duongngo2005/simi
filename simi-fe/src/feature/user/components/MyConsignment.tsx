@@ -32,7 +32,10 @@ export const MyConsignment = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Ký gửi của tôi ({filteredConsignments.length})</h2>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.title}>Ký gửi của tôi</h2>
+        <p className={styles.count}>{filteredConsignments.length} lô phù hợp</p>
+      </div>
 
       <div className={styles.filterTabs}>
         {TABS.map((tab) => (
@@ -62,9 +65,9 @@ export const MyConsignment = () => {
             >
               <div className={styles.cardHeader}>
                 <div className={styles.headerLeft}>
-                  <span className={styles.batchId}>Lô ký gửi #{item.id}</span>
+                  <span className={styles.batchId}>LÔ #{String(item.id).padStart(4, "0")}</span>
                   <span className={styles.dateInfo}>
-                    Ngày gửi: {new Date(item.startDate).toLocaleDateString("vi-VN")}
+                    Tiếp nhận {new Date(item.startDate).toLocaleDateString("vi-VN")}
                   </span>
                 </div>
                 <span className={`${styles.statusBadge} ${styles[`status${item.status}`]}`}>
@@ -74,8 +77,8 @@ export const MyConsignment = () => {
 
               <div className={styles.cardBody}>
                 <div className={styles.metaRow}>
-                  <span>Tổng sản phẩm: <strong>{item.totalItem} món</strong></span>
-                  <span>Đã bán: <strong>{item.soldItem} món</strong></span>
+                  <span>Tổng số <strong>{item.totalItem} món</strong></span>
+                  <span>Đã bán <strong>{item.soldItem} món</strong></span>
                 </div>
                 {item.note && <div className={styles.noteText}>Ghi chú: {item.note}</div>}
               </div>

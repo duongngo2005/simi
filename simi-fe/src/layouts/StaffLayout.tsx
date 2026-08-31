@@ -40,7 +40,6 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}></span>
             Tổng quan
           </NavLink>
 
@@ -50,7 +49,6 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}></span>
             Bán hàng
           </NavLink>
 
@@ -60,7 +58,6 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}></span>
             Quản lý đơn hàng
           </NavLink>
 
@@ -70,7 +67,6 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}></span>
             Quản lý ký gửi
           </NavLink>
 
@@ -80,7 +76,6 @@ export const StaffLayout = () => {
               `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
             }
           >
-            <span className={styles.navIcon}></span>
             Trả hàng
           </NavLink>
 
@@ -88,7 +83,6 @@ export const StaffLayout = () => {
 
         <div className={styles.footerSection}>
           <button onClick={handleLogout} className={styles.btnLogout}>
-            <span className={styles.navIcon}></span>
             Đăng xuất
           </button>
         </div>

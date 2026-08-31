@@ -637,3 +637,26 @@
     flex: 1;
   }
 }
+
+.container { gap: var(--space-5); }
+.topBar { padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-fibre); }
+.eyebrow { margin: 0 0 var(--space-2); color: var(--color-label-red); font-size: .66rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.pageTitle { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 500; line-height: 1.02; }
+.subtitle { color: var(--color-muted); font-size: var(--text-sm); opacity: 1; }
+.btnSecondary, .btnPrimary { border-radius: 0; padding: .7rem .9rem; font-size: .76rem; }
+.btnSecondary { border-color: var(--color-fibre); background: var(--color-surface-raised); color: var(--color-ink); }
+.primaryGrid { gap: var(--space-3); }
+.primaryCard { min-height: 126px; border-radius: 0; border-color: var(--color-fibre); border-left: 3px solid var(--color-ink); box-shadow: none; }
+.primaryCard:hover { border-color: var(--color-fibre); border-left-color: var(--color-label-red); box-shadow: var(--shadow-soft); }
+.primaryCardTitle, .primarySubtext { color: var(--color-muted); }
+.primaryAmount { color: var(--color-ink); font-family: var(--font-display); font-weight: 600; }
+.panel { border-radius: 0; border-color: var(--color-fibre); background: var(--color-surface-raised); }
+.panelHeader { border-bottom-color: var(--color-fibre-light); }
+.panelTitle { color: var(--color-ink); font-family: var(--font-display); font-size: 1.3rem; font-weight: 500; }
+.panelSubtitle { color: var(--color-muted); opacity: 1; }
+.rangeTabs { border-radius: 0; background: var(--color-surface); }
+.rangeBtn { border-radius: 0; color: var(--color-muted); }
+.rangeBtnActive { color: var(--color-ink); box-shadow: inset 0 -2px 0 var(--color-label-red); }
+.barFill { border-radius: 0; background: var(--color-label-red); }
+.secondaryCard { border-radius: 0; border-color: var(--color-fibre); }
+.secondaryCard:hover { border-color: var(--color-fibre); background: var(--color-surface); }

@@ -35,7 +35,7 @@ export const ConsignmentItemList = ({
       setDeletingId(consignmentItemId)
       await deleteConsignmentItem({consignmentItemId, consignmentId});
       alert("Xóa thành công")
-    }catch(error){
+    }catch{
       alert("Xóa thất bại");
       setDeletingId(null)
     }finally{

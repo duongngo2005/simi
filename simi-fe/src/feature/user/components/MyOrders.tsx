@@ -1,8 +1,7 @@
-// src/feature/user/components/MyOrders.tsx
 import { useState } from "react";
 import styles from "./MyOrders.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
-import { useGetMyOrders, useRetryPayment } from "../../order/hooks/useOrder"; // 👈 Thêm useRetryPayment
+import { useGetMyOrders, useRetryPayment } from "../../order/hooks/useOrder";
 import type { OrderFilterRequest } from "../../order/types/order.type";
 import { OrderDetailModal } from "./OrderDetailModal";
 
@@ -73,7 +72,10 @@ export const MyOrders = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Đơn hàng của tôi ({pageData?.totalElements || 0})</h2>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.title}>Đơn hàng của tôi</h2>
+        <p className={styles.count}>{pageData?.totalElements || 0} đơn hàng</p>
+      </div>
 
       <div className={styles.filterTabs}>
         {TABS.map((tab) => (
@@ -103,7 +105,7 @@ export const MyOrders = () => {
             >
               <div className={styles.cardHeader}>
                 <div className={styles.headerLeft}>
-                  <span className={styles.orderId}>Đơn hàng #{order.id}</span>
+                  <span className={styles.orderId}>ĐƠN #{String(order.id).padStart(6, "0")}</span>
                   <span className={styles.orderDate}>
                     {new Date(order.createdDate).toLocaleDateString("vi-VN")}
                   </span>
@@ -117,7 +119,7 @@ export const MyOrders = () => {
                 {order.firstItemThumbnail ? (
                   <img src={order.firstItemThumbnail} alt={order.firstItemName} className={styles.thumbnail} />
                 ) : (
-                  <div className={styles.noThumbnail}>No Img</div>
+                  <div className={styles.noThumbnail}>Ảnh đang cập nhật</div>
                 )}
                 <div className={styles.itemInfo}>
                   <span className={styles.itemName}>{order.firstItemName || "Sản phẩm"}</span>
@@ -139,7 +141,7 @@ export const MyOrders = () => {
                 )}
 
                 <div className={styles.totalWrapper}>
-                  <span className={styles.totalLabel}>Tổng tiền:</span>
+                  <span className={styles.totalLabel}>Tổng thanh toán</span>
                   <strong className={styles.totalAmount}>{formatPrice(order.finalAmount)}</strong>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { Link } from "react-router";
 import {
   useNewestProducts,
   useNewTagProducts,
@@ -6,171 +6,86 @@ import {
   useFootWearSection,
 } from "../../product/hooks/useProducts";
 import { ProductSection } from "../../product/components/ProductSection";
+import { CONDITION_LABEL } from "../../../utils/condition";
+import { formatPrice } from "../../../utils/formatPrice";
 import styles from "./HomePage.module.css";
-import { Link } from "react-router";
-
-const FEEDBACKS = [
-  {
-    id: 1,
-    name: "Nguyễn Lan Anh",
-    role: "Người mua hàng",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-    content:
-      "Đồ ký gửi ở đây siêu mới, mình mua được chiếc Blazer Mango nguyên tag với giá chưa tới một nửa giá gốc.",
-  },
-  {
-    id: 2,
-    name: "Trần Minh Đức",
-    role: "Người ký gửi",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-    content:
-      "Quy trình ký gửi rất nhanh gọn, minh bạch. Gửi đồ 2 tuần đã thấy bán xong và nhận tiền đối soát.",
-  },
-  {
-    id: 3,
-    name: "Lê Hoàng Yến",
-    role: "Người mua hàng",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150",
-    content:
-      "Đồ đóng gói rất xinh, sạch sẽ và thơm tho. Sẽ ủng hộ Simi dài dài!",
-  },
-  {
-    id: 4,
-    name: "Phạm Hoàng Nam",
-    role: "Người ký gửi",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150",
-    content:
-      "Tủ đồ chật cứng cuối cùng cũng được giải quyết. Vừa dọn nhà lại vừa có thêm một khoản thu nhập nhỏ.",
-  },
-  {
-    id: 5,
-    name: "Đỗ Thu Thảo",
-    role: "Người mua hàng",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150",
-    content:
-      "Săn được đôi sneaker Nike chính hãng tại đây giá cực hời, độ mới cao. Dịch vụ chăm sóc khách hàng tốt.",
-  },
-  {
-    id: 6,
-    name: "Vũ Quốc Khánh",
-    role: "Người mua hàng",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150",
-    content:
-      "Các sản phẩm của thương hiệu lớn đều được kiểm định rất kỹ. Cảm giác mua sắm cực kỳ an tâm.",
-  },
-];
 
 export const HomePage = () => {
-  const { data: newestProducts = [], isLoading: newestLoading } =
-    useNewestProducts();
-  const { data: newTagProducts = [], isLoading: newTagLoading } =
-    useNewTagProducts();
-  const { data: footwearProducts = [], isLoading: footwearLoading } =
-    useFootWearSection();
-  const { data: accessoriesProducts = [], isLoading: accessoriesLoading } =
-    useAccessoriesSection();
-
-  const feedbackRef = useRef<HTMLDivElement>(null);
-
-  const scrollFeedback = (direction: "left" | "right") => {
-    if (feedbackRef.current) {
-      const scrollAmount = 340;
-      feedbackRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  const { data: newestProducts = [], isLoading: newestLoading } = useNewestProducts();
+  const { data: newTagProducts = [], isLoading: newTagLoading } = useNewTagProducts();
+  const { data: footwearProducts = [], isLoading: footwearLoading } = useFootWearSection();
+  const { data: accessoriesProducts = [], isLoading: accessoriesLoading } = useAccessoriesSection();
 
   if (newestLoading || newTagLoading || accessoriesLoading || footwearLoading) {
     return <div className={styles.loading}>Đang tải trang chủ...</div>;
   }
 
+  const featuredProduct = newestProducts[0];
+
   return (
     <div className={styles.home}>
       <section className={styles.hero}>
-        <div className={styles.heroOverlay}>
-          <div className={styles.heroContent}>
-            <span className={styles.heroSubtitle}>
-              Thời trang bền vững & Ký gửi độc bản
-            </span>
-            <h1 className={styles.heroTitle}>
-              FASHION WITH <br />A SECOND LIFE
-            </h1>
-            <p className={styles.heroDesc}>
-              Dọn gọn tủ đồ, chia sẻ phong cách và tìm kiếm những món đồ độc bản
-              được tuyển chọn kỹ lưỡng từ Simi.
-            </p>
-            <div className={styles.heroActions}>
-              <Link to="/products" className={styles.btnPrimary}>
-                Mua ngay
-              </Link>
-            </div>
+        <div className={styles.heroContent}>
+          <p className={styles.heroKicker}>Simi · đồ ký gửi đã được chọn lại</p>
+          <h1 className={styles.heroTitle}>Món đồ đẹp, tiếp tục được mặc.</h1>
+          <p className={styles.heroDesc}>
+            Khám phá những món đồ đang có sẵn với tình trạng, giá bán và thông tin rõ ràng trước khi bạn chọn mua.
+          </p>
+          <div className={styles.heroActions}>
+            <Link to="/products" className={styles.btnPrimary}>
+              Xem sản phẩm đang có sẵn
+            </Link>
           </div>
         </div>
+
+        {featuredProduct ? (
+          <Link to={`/products/${featuredProduct.id}`} className={styles.heroPassport}>
+            <div className={styles.heroImageFrame}>
+              {featuredProduct.thumbnail ? (
+                <img src={featuredProduct.thumbnail} alt={featuredProduct.name} />
+              ) : (
+                <span>Ảnh sản phẩm đang được cập nhật</span>
+              )}
+            </div>
+            <div className={styles.heroPassportMeta}>
+              <span>MÃ SIMI #{String(featuredProduct.id).padStart(3, "0")}</span>
+              <span>{CONDITION_LABEL[featuredProduct.productCondition ?? ""] ?? "Đang cập nhật"}</span>
+            </div>
+            <h2>{featuredProduct.name}</h2>
+            <p>{formatPrice(featuredProduct.currentPrice)}</p>
+          </Link>
+        ) : (
+          <div className={styles.heroEmpty}>
+            <span>MÃ SIMI</span>
+            <p>Sản phẩm mới sẽ xuất hiện tại đây sau khi được kích hoạt.</p>
+          </div>
+        )}
       </section>
 
       <div className={styles.mainContainer}>
-        <ProductSection
-          title="Mới lên kệ"
-          products={newestProducts}
-          viewAllPath="/products?sort=newest"
-        />
+        <ProductSection title="Mới lên kệ" products={newestProducts} viewAllPath="/products?sort=newest" />
+        <ProductSection title="Hàng nguyên Tag" products={newTagProducts} viewAllPath="/products?condition=NEW" />
+        <ProductSection title="Phụ kiện thời trang" products={accessoriesProducts} viewAllPath="/products?category=accessories" />
+        <ProductSection title="Giày dép" products={footwearProducts} viewAllPath="/products?category=shoes" />
 
-        <ProductSection
-          title="Hàng nguyên Tag"
-          products={newTagProducts}
-          viewAllPath="/products?condition=NEW"
-        />
-
-        <ProductSection
-          title="Phụ kiện thời trang"
-          products={accessoriesProducts}
-          viewAllPath="/products?category=accessories"
-        />
-
-        <ProductSection
-          title="Giày dép"
-          products={footwearProducts}
-          viewAllPath="/products?category=shoes"
-        />
-
-        <section className={`${styles.section} ${styles.sectionAlt}`}>
-          <h2 className={styles.sectionTitle}>Đánh giá từ khách hàng</h2>
-          <div className={styles.carouselWrapper}>
-            <button
-              onClick={() => scrollFeedback("left")}
-              className={`${styles.navBtn} ${styles.navBtnLeft}`}
-            >
-              ‹
-            </button>
-
-            <div ref={feedbackRef} className={styles.carouselTrack}>
-              {FEEDBACKS.map((fb) => (
-                <div key={fb.id} className={styles.feedbackCard}>
-                  <div className={styles.feedbackHeader}>
-                    <img
-                      src={fb.avatar}
-                      alt={fb.name}
-                      className={fb.avatar ? styles.feedbackAvatar : ""}
-                    />
-                    <div className={styles.userInfo}>
-                      <span className={styles.userName}>{fb.name}</span>
-                      <span className={styles.userRole}>{fb.role}</span>
-                    </div>
-                  </div>
-                  <div className={styles.rating}>★★★★★</div>
-                  <p className={styles.feedbackContent}>"{fb.content}"</p>
-                </div>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scrollFeedback("right")}
-              className={`${styles.navBtn} ${styles.navBtnRight}`}
-            >
-              ›
-            </button>
+        <section className={styles.principles} aria-labelledby="simi-principles-title">
+          <div className={styles.principlesHeading}>
+            <p className={styles.sectionKicker}>Tiêu chuẩn Simi</p>
+            <h2 id="simi-principles-title">Thông tin để bạn quyết định dễ hơn.</h2>
+          </div>
+          <div className={styles.principleGrid}>
+            <article>
+              <span>ĐÃ KIỂM ĐỊNH</span>
+              <p>Tình trạng món đồ được hiển thị trực tiếp trên từng sản phẩm.</p>
+            </article>
+            <article>
+              <span>GIÁ HIỆN TẠI</span>
+              <p>Giá bạn thấy là giá dùng để tạo đơn hàng tại thời điểm mua.</p>
+            </article>
+            <article>
+              <span>CHỈ HÀNG CÓ SẴN</span>
+              <p>Danh sách chỉ hiển thị sản phẩm đang có thể đặt mua.</p>
+            </article>
           </div>
         </section>
       </div>

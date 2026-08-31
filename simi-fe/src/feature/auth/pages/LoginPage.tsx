@@ -42,15 +42,11 @@ const LoginPage = () => {
   return (
     <div className={styles.loginPage}>
       <header className={styles.header}>
-        <h1>Đăng nhập</h1>
-
-        <p className={styles.description}>
-          Chào mừng bạn quay lại với Simi
-        </p>
+        <h1>Chào mừng trở lại</h1>
       </header>
 
       {serverError && (
-        <div className={styles.errorBanner}>{serverError}</div>
+        <div className={styles.errorBanner} role="alert">{serverError}</div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className={styles.form}>
@@ -90,19 +86,10 @@ const LoginPage = () => {
           )}
         </div>
 
-        <label className={styles.remember}>
-          <input type="checkbox" name="remember" />
-          <span>Ghi nhớ đăng nhập</span>
-        </label>
-
         <Button disabled={isPending} type="submit" variant="primary" fullWidth>
           Đăng nhập
         </Button>
       </form>
-
-      <div className={styles.divider}>
-        <span>hoặc</span>
-      </div>
 
       <div className={styles.registerSection}>
         <span>Chưa có tài khoản?</span>

@@ -33,13 +33,14 @@ const Footer = () => {
 
             <Link to="/">Trang chủ</Link>
             <Link to="/products">Sản phẩm</Link>
+            <Link to="/about">Về Simi</Link>
           </div>
 
           <div className={styles.contactSection}>
             <h3>Liên hệ</h3>
 
-            <p>Email: support@simi.vn</p>
-            <p>Điện thoại: 0900 000 000</p>
+            <p>Email: thanhlykyguisimmi@gmail.com</p>
+            <p>Điện thoại: 0858 001 524</p>
             <p>TP. Hồ Chí Minh, Việt Nam</p>
           </div>
         </div>

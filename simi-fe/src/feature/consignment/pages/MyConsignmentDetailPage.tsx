@@ -75,10 +75,13 @@ export const MyConsignmentDetailPage = () => {
     <div className={styles.page}>
       <div className={styles.topBar}>
         <button className={styles.btnBack} onClick={() => navigate(-1)}>
-          Quay lại
+          ← Quay lại danh sách
         </button>
         <div className={styles.titleGroup}>
-          <h1 className={styles.pageTitle}>Lô ký gửi #{consignment.id}</h1>
+          <div>
+            <p className={styles.eyebrow}>Hộ chiếu ký gửi</p>
+            <h1 className={styles.pageTitle}>Lô #{String(consignment.id).padStart(4, "0")}</h1>
+          </div>
           <span className={`${styles.statusBadge} ${styles[`status${consignment.status}`]}`}>
             {STATUS_LABEL[consignment.status] || consignment.status}
           </span>
@@ -154,7 +157,7 @@ export const MyConsignmentDetailPage = () => {
                 {thumb ? (
                   <img src={thumb} alt={product?.name} className={styles.itemThumb} />
                 ) : (
-                  <div className={styles.itemNoThumb}>Ảnh</div>
+                  <div className={styles.itemNoThumb}>Ảnh đang cập nhật</div>
                 )}
 
                 <div className={styles.itemInfo}>

@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { useAuthStore } from "../../../store/useAuthStore";
+import styles from "./AuthProvider.module.css";
 
 interface AuthProviderProps{
     children: ReactNode
@@ -17,8 +18,9 @@ export default function AuthProvider ({
 
     if(!initialized){
         return(
-            <div >
-                <span>Loading...</span>
+            <div className={styles.loadingShell} role="status" aria-live="polite">
+                <span className={styles.loadingMark} aria-hidden="true" />
+                <span>Đang khôi phục phiên đăng nhập…</span>
             </div>
         )
     }

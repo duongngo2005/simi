@@ -83,7 +83,6 @@
   color: var(--color-danger);
 }
 
-/* Ô Tìm kiếm ID */
 .searchForm {
   display: flex;
   gap: 10px;
@@ -150,7 +149,6 @@
   font-weight: 600;
 }
 
-/* Danh sách sản phẩm */
 .emptyCart {
   padding: 32px 16px;
   text-align: center;
@@ -266,7 +264,6 @@
   background-color: var(--color-danger-bg);
 }
 
-/* Form Nhập bên phải */
 .formGroup {
   display: flex;
   flex-direction: column;
@@ -312,7 +309,6 @@
   color: var(--color-heading);
 }
 
-/* Bảng tóm tắt tiền */
 .billBox {
   background-color: #fbf8f3;
   border: 1px solid #f0eae1;
@@ -367,3 +363,20 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.container { gap: var(--space-5); }
+.header { padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-fibre); }
+.eyebrow { margin: 0 0 var(--space-2); color: var(--color-label-red); font-size: .66rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.pageTitle { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 500; line-height: 1.02; }
+.subtitle { color: var(--color-muted); font-size: var(--text-sm); opacity: 1; }
+.posGrid { gap: var(--space-5); }
+.card { border-radius: 0; border-color: var(--color-fibre); background: var(--color-surface-raised); box-shadow: 0 8px 24px rgba(24, 51, 58, .04); }
+.cardTitle { color: var(--color-ink); font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; }
+.inputBox, .formGroup input, .cashOnly { border-radius: 0; border-color: var(--color-fibre); background: var(--color-surface); }
+.inputBox input, .formGroup input { color: var(--color-ink); }
+.btnAdd { border-radius: 0; background: var(--color-ink); }
+.btnAdd:hover:not(:disabled) { background: var(--color-charcoal); }
+.emptyCart, .cartItem, .billBox { border-radius: 0; border-color: var(--color-fibre); background: var(--color-surface); }
+.itemPrice, .totalAmount { color: var(--color-ink); font-family: var(--font-display); }
+.btnCheckout { border-radius: 0; background: var(--color-label-red); }
+.btnCheckout:hover:not(:disabled) { background: var(--color-label-red-hover); }

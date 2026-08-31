@@ -5,6 +5,14 @@ import type { ConsignmentFilterRequest } from "../types/staffConsignment.type";
 import { CreateConsignmentModal } from "../components/CreateConsignmentModal";
 import { useNavigate } from "react-router";
 
+const STATUS_LABEL: Record<string, string> = {
+  DRAFT: "Nháp",
+  ACTIVE: "Đang ký gửi",
+  PENDING_SETTLEMENT: "Chờ quyết toán",
+  SETTLED: "Đã quyết toán",
+  CLOSED: "Đã đóng",
+};
+
 export const StaffConsignmentPage = () => {
 
   const [filters, setFilters] = useState<ConsignmentFilterRequest>({
@@ -37,7 +45,10 @@ export const StaffConsignmentPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Quản lý ký gửi</h1>
+        <div>
+          <p className={styles.eyebrow}>Vận hành ký gửi</p>
+          <h1 className={styles.title}>Quản lý ký gửi</h1>
+        </div>
         <button onClick={() => setIsOpenModal(true)} className={styles.btnCreate}>Tạo lô ký gửi</button>
       </div>
 
@@ -53,6 +64,7 @@ export const StaffConsignmentPage = () => {
               <th>Tổng sản phẩm</th>
               <th>Đã bán</th>
               <th>Trạng thái</th>
+              <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +98,7 @@ export const StaffConsignmentPage = () => {
                         styles[`status_${item.status}`]
                       }`}
                     >
-                      {item.status}
+                      {STATUS_LABEL[item.status] ?? item.status}
                     </span>
                   </td>
                   <td>

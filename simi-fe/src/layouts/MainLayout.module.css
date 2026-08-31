@@ -1,12 +1,17 @@
 .layout {
   min-height: 100vh;
-
   display: flex;
   flex-direction: column;
-
-  background-color: var(--color-background);
+  background: var(--color-background);
 }
 
 .main {
   flex: 1;
+  min-width: 0;
+}
+
+.main h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
 }

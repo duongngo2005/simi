@@ -89,13 +89,13 @@ export const ProductDetailPage = () => {
 
   const images = product.productImageResponses ?? [];
   const isAvailable = product.productStatus === "AVAILABLE";
-  const activeImageUrl =
-    images[activeImage]?.imageUrl ??
-    "https://via.placeholder.com/600x750?text=No+Image";
+  const activeImageUrl = images[activeImage]?.imageUrl;
+  const listedDate = product.createdDate && !Number.isNaN(Date.parse(product.createdDate))
+    ? new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(product.createdDate))
+    : null;
 
   return (
     <div className={styles.page}>
-      {/* Breadcrumb */}
       <nav className={styles.breadcrumb}>
         <Link to="/">Trang chủ</Link>
         <span>/</span>
@@ -105,16 +105,17 @@ export const ProductDetailPage = () => {
       </nav>
 
       <div className={styles.container}>
-        {/* ── CỘT TRÁI: ẢNH ── */}
         <div className={styles.gallery}>
-          {/* Ảnh chính */}
           <div className={styles.mainImageWrapper}>
-            <img
-              src={activeImageUrl}
-              alt={product.name}
-              className={styles.mainImage}
-            />
-            {/* Badge tình trạng */}
+            {activeImageUrl ? (
+              <img
+                src={activeImageUrl}
+                alt={product.name}
+                className={styles.mainImage}
+              />
+            ) : (
+              <div className={styles.imagePlaceholder}>Ảnh sản phẩm đang được cập nhật</div>
+            )}
             <span
               className={styles.conditionBadge}
               style={{
@@ -125,18 +126,18 @@ export const ProductDetailPage = () => {
             </span>
           </div>
 
-          {/* Thumbnail strip */}
           {images.length > 1 && (
             <div className={styles.thumbnailStrip}>
               {images.map((img, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   className={`${styles.thumbnail} ${
                     idx === activeImage ? styles.thumbnailActive : ""
                   }`}
                   onClick={() => setActiveImage(idx)}
                 >
-                  <img src={img.imageUrl} alt={`Ảnh ${idx + 1}`} />
+                  <img src={img.imageUrl} alt={`${product.name} — ảnh ${idx + 1}`} />
                 </button>
               ))}
             </div>
@@ -144,7 +145,6 @@ export const ProductDetailPage = () => {
         </div>
 
         <div className={styles.info}>
-          {/* Brand + Category */}
           <div className={styles.metaRow}>
             {product.brand && (
               <span className={styles.brand}>{product.brand}</span>
@@ -154,18 +154,38 @@ export const ProductDetailPage = () => {
             )}
           </div>
 
-          {/* Tên sản phẩm */}
           <h1 className={styles.productName}>{product.name}</h1>
 
-          {/* Giá */}
           <div className={styles.priceSection}>
             <span className={styles.price}>
               {formatPrice(product.currentPrice)}
             </span>
           </div>
 
-          {/* Divider */}
           <hr className={styles.divider} />
+
+          <section className={styles.passportStrip} aria-label="Hộ chiếu món đồ">
+            <div className={styles.passportHeading}>
+              <span>Hộ chiếu món đồ</span>
+              <strong>MÃ SIMI #{String(product.id).padStart(4, "0")}</strong>
+            </div>
+            <div className={styles.passportFields}>
+              <div>
+                <span>Tình trạng</span>
+                <strong>{CONDITION_LABEL[product.productCondition]}</strong>
+              </div>
+              <div>
+                <span>Lên kệ</span>
+                <strong>{listedDate ?? "Đang cập nhật"}</strong>
+              </div>
+              <div>
+                <span>Khả dụng</span>
+                <strong className={isAvailable ? styles.available : styles.unavailable}>
+                  {isAvailable ? "Sẵn sàng mua" : "Không còn sẵn"}
+                </strong>
+              </div>
+            </div>
+          </section>
 
           <div className={styles.detailGrid}>
             {product.size && (
@@ -181,7 +201,6 @@ export const ProductDetailPage = () => {
               </div>
             )}
 
-            {/* Giới tính */}
             {product.gender && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Giới tính</span>
@@ -191,7 +210,6 @@ export const ProductDetailPage = () => {
               </div>
             )}
 
-            {/* Chất liệu */}
             {product.material && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Chất liệu</span>

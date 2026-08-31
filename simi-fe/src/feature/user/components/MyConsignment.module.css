@@ -1,145 +1,26 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--color-heading, #4A352D);
-}
-
-.filterTabs {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
-.tabBtn {
-  padding: 6px 12px;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text, #6f4e40);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.tabActive {
-  background-color: var(--color-input, #fbf8f3);
-  border-color: var(--color-input-border, #d6c7bc);
-  color: var(--color-heading, #4A352D);
-}
-
-.stateBox,
-.emptyBox {
-  padding: 32px 16px;
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--color-text, #6f4e40);
-  background-color: #ffffff;
-  border: 1px solid var(--color-input-border, #d6c7bc);
-  border-radius: 4px;
-}
-
-.consignmentList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.consignmentCard {
-  background-color: #ffffff;
-  border: 1px solid var(--color-input-border, #d6c7bc);
-  border-radius: 4px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.headerLeft {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.batchId {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--color-heading, #4A352D);
-}
-
-.dateInfo {
-  font-size: 0.78rem;
-  color: var(--color-text, #6f4e40);
-  opacity: 0.8;
-}
-
-.cardBody {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.metaRow {
-  display: flex;
-  gap: 16px;
-  font-size: 0.82rem;
-  color: var(--color-text, #6f4e40);
-}
-
-.metaRow strong {
-  color: var(--color-heading, #4A352D);
-}
-
-.noteText {
-  font-size: 0.78rem;
-  color: var(--color-text, #6f4e40);
-  opacity: 0.8;
-}
-
-.statusBadge {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-  border: 1px solid transparent;
-}
-
-.statusDRAFT {
-  color: var(--color-text, #6f4e40);
-  background-color: var(--color-input, #fbf8f3);
-  border-color: var(--color-input-border, #d6c7bc);
-}
-
-.statusACTIVE {
-  color: var(--color-info, #2E5B88);
-  background-color: var(--color-input, #fbf8f3);
-  border-color: var(--color-input-border, #d6c7bc);
-}
-
-.statusPENDING_SETTLEMENT {
-  color: var(--color-warning-text, #8C5E14);
-  background-color: var(--color-warning-bg, #FFFBF0);
-  border-color: var(--color-warning-border, #F5E6BA);
-}
-
-.statusSETTLED,
-.statusCLOSED {
-  color: var(--color-success-text, #2D6A4F);
-  background-color: var(--color-success-bg, #F0FDF4);
-  border-color: var(--color-success-border, #B9E6C9);
-}
+.container { display: flex; flex-direction: column; gap: var(--space-4); }
+.sectionHeader { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: var(--space-1) var(--space-4); }
+.title { margin: 0; color: var(--color-ink); font-family: var(--font-display); font-size: 1.65rem; font-weight: 500; }
+.count { margin: 0; color: var(--color-muted); font-size: var(--text-sm); white-space: nowrap; }
+.filterTabs { display: flex; gap: .3rem; overflow-x: auto; padding: .25rem 0; border-bottom: 1px solid var(--color-fibre); scrollbar-width: thin; }
+.tabBtn { flex: 0 0 auto; padding: .55rem .7rem; border: 0; border-bottom: 2px solid transparent; color: var(--color-muted); background: transparent; font-size: .76rem; font-weight: 700; cursor: pointer; transition: color var(--transition-fast), border-color var(--transition-fast); }
+.tabBtn:hover { color: var(--color-ink); }
+.tabActive { border-bottom-color: var(--color-label-red); color: var(--color-ink); }
+.stateBox, .emptyBox { padding: var(--space-8) var(--space-4); color: var(--color-muted); background: var(--color-surface-raised); border: 1px dashed var(--color-fibre); text-align: center; font-size: var(--text-sm); }
+.consignmentList { display: flex; flex-direction: column; gap: var(--space-3); }
+.consignmentCard { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-5); border: 1px solid var(--color-fibre); border-left: 3px solid var(--color-ink); background: var(--color-surface-raised); cursor: pointer; transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast); }
+.consignmentCard:hover { border-left-color: var(--color-label-red); box-shadow: var(--shadow-soft); transform: translateY(-1px); }
+.cardHeader { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+.headerLeft { display: flex; align-items: baseline; gap: var(--space-3); }
+.batchId { color: var(--color-ink); font-size: .75rem; font-weight: 800; letter-spacing: .07em; }
+.dateInfo { color: var(--color-muted); font-size: .72rem; }
+.cardBody { display: flex; flex-direction: column; gap: var(--space-2); }
+.metaRow { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); color: var(--color-muted); font-size: var(--text-sm); }
+.metaRow strong { color: var(--color-ink); }
+.noteText { padding-left: var(--space-3); border-left: 2px solid var(--color-fibre); color: var(--color-muted); font-size: .76rem; font-style: italic; }
+.statusBadge { flex: 0 0 auto; padding: .27rem .48rem; border: 1px solid currentColor; font-size: .64rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.statusDRAFT { color: var(--color-muted); background: var(--color-surface); }
+.statusACTIVE { color: var(--color-info); background: var(--color-info-bg); }
+.statusPENDING_SETTLEMENT { color: var(--color-warning); background: var(--color-warning-bg); }
+.statusSETTLED, .statusCLOSED { color: var(--color-success); background: var(--color-success-bg); }
+@media (max-width: 560px) { .consignmentCard { padding: var(--space-4); } .cardHeader, .headerLeft { align-items: flex-start; flex-direction: column; gap: .25rem; } }

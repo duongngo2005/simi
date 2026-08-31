@@ -91,9 +91,7 @@ export const ProductListPage = () => {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <p className={styles.eyebrow}>Simi shop</p>
         <h1>Sản phẩm đang có sẵn</h1>
-        <p>Chỉ hiển thị các sản phẩm đang có thể mua.</p>
       </header>
 
       <section className={styles.filterBar} aria-label="Lọc sản phẩm">

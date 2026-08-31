@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useGetMyCart, useRemoveItem } from "../hook/useCart";
 import styles from "./CartPage.module.css";
-import { Navigate, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { formatPrice } from "../../../utils/formatPrice";
 import { useAuthStore } from "../../../store/useAuthStore";
+import { CONDITION_LABEL } from "../../../utils/condition";
 
 export const CartPage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
@@ -78,10 +79,15 @@ export const CartPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Giỏ hàng của tôi ({myCart.totalItem || items.length})</h1>
+      <header className={styles.pageHeader}>
+        <h1 className={styles.title}>Giỏ hàng <span>({myCart.totalItem || items.length})</span></h1>
+      </header>
 
       {items.length === 0 ? (
-        <div className={styles.emptyBox}>Giỏ hàng của bạn đang trống</div>
+        <div className={styles.emptyBox}>
+          <p>Giỏ hàng của bạn đang trống.</p>
+          <Link to="/products">Xem sản phẩm đang có sẵn</Link>
+        </div>
       ) : (
         <div className={styles.contentLayout}>
           <div className={styles.tableWrapper}>
@@ -128,18 +134,18 @@ export const CartPage = () => {
                         {product?.thumbnail ? (
                           <img src={product.thumbnail} alt={product.name} className={styles.thumbnail} />
                         ) : (
-                          <div className={styles.noThumbnail}>No Img</div>
+                          <div className={styles.noThumbnail}>Ảnh đang cập nhật</div>
                         )}
                         <div className={styles.productMeta}>
                           <span className={styles.productName}>{product?.name || "Sản phẩm"}</span>
                           {!isAvailable && (
-                            <span className={styles.soldBadge}>Đã được bán</span>
+                            <span className={styles.soldBadge}>Không còn khả dụng</span>
                           )}
                         </div>
                       </td>
                       <td>{product?.brandName || "—"}</td>
                       <td>{product?.size || "—"}</td>
-                      <td>{product?.productCondition || "—"}</td>
+                      <td>{product?.productCondition ? CONDITION_LABEL[product.productCondition] ?? product.productCondition : "—"}</td>
                       <td className={styles.priceCell}>{formatPrice(price)}</td>
                     </tr>
                   );
@@ -168,11 +174,11 @@ export const CartPage = () => {
               </button>
               {selectedItems.length > 0 ? (
                 <button className={styles.checkoutBtn} onClick={handleCheckout}>
-                  Thanh toán
+                  Tiếp tục thanh toán
                 </button>
               ) : (
                 <button disabled className={styles.disabledBtn}>
-                  Thanh toán
+                  Chọn sản phẩm để thanh toán
                 </button>
               )}
             </div>

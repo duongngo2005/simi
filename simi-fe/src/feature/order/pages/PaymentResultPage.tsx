@@ -11,7 +11,6 @@ export const PaymentResultPage = () => {
 
   const isSuccess = responseCode === "00";
 
-  // Trích xuất mã đơn hàng thực tế từ vnp_OrderInfo (ví dụ: "Thanh toan don hang #45")
   const orderIdMatch = orderInfo?.match(/#(\d+)/);
   const orderId = orderIdMatch ? orderIdMatch[1] : null;
 
@@ -61,7 +60,7 @@ export const PaymentResultPage = () => {
 
         <p className={styles.subtitle}>
           {isSuccess
-            ? "Cảm ơn bạn đã mua sắm tại Simi. Đơn hàng của bạn đã được thanh toán thành công và đang được chuẩn bị giao."
+            ? "Khoản thanh toán đã được ghi nhận. Nhân viên Simi sẽ cập nhật trạng thái xử lý đơn hàng trong tài khoản của bạn."
             : "Giao dịch thanh toán qua VNPay chưa hoàn tất hoặc đã bị hủy. Đơn hàng vẫn đang ở trạng thái chờ thanh toán."}
         </p>
 

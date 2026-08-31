@@ -42,7 +42,10 @@ export const OrderDetailModal = ({ orderId, onClose }: OrderDetailModalProps) =>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <div className={styles.titleWrapper}>
-            <h3 className={styles.title}>Chi tiết đơn hàng #{orderId}</h3>
+            <div>
+              <p className={styles.eyebrow}>Phiếu đơn hàng</p>
+              <h3 className={styles.title}>Đơn #{String(orderId).padStart(6, "0")}</h3>
+            </div>
             {order && (
               <span className={`${styles.statusBadge} ${styles[`status${order.orderStatus}`]}`}>
                 {STATUS_LABEL[order.orderStatus] || order.orderStatus}
@@ -90,7 +93,7 @@ export const OrderDetailModal = ({ orderId, onClose }: OrderDetailModalProps) =>
                     {item.thumbnail ? (
                       <img src={item.thumbnail} alt={item.name} className={styles.thumbnail} />
                     ) : (
-                      <div className={styles.noThumbnail}>No Img</div>
+                      <div className={styles.noThumbnail}>Ảnh đang cập nhật</div>
                     )}
                     <div className={styles.itemMeta}>
                       <span className={styles.itemName}>{item.name}</span>

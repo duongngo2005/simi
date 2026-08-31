@@ -4,8 +4,16 @@ import { useAuthStore } from "../../../store/useAuthStore";
 import api from "../../../lib/http/apiClient";
 import styles from "./ProfilePage.module.css";
 import { MyInfo } from "../components/MyInfo";
-import { MyOrders } from "../components/MyOrders"; // Import component Đơn hàng của bạn
+import { MyOrders } from "../components/MyOrders";
 import { MyConsignment } from "../components/MyConsignment";
+
+type ProfileTab = "info" | "orders" | "consignments";
+
+type ProfileSectionCopy = {
+  title: string;
+  eyebrow?: string;
+  description?: string;
+};
 
 const ROLE_LABEL: Record<string, string> = {
   ADMIN: "Quản trị viên",
@@ -13,21 +21,28 @@ const ROLE_LABEL: Record<string, string> = {
   CUSTOMER: "Khách hàng",
 };
 
+const SECTION_COPY: Record<ProfileTab, ProfileSectionCopy> = {
+  info: {
+    title: "Tài khoản của bạn",
+  },
+  orders: {
+    title: "Đơn hàng của bạn",
+  },
+  consignments: {
+    title: "Những lô hàng của bạn",
+  },
+};
+
 export const ProfilePage = () => {
   const { user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
 
-  // State quản lý tab đang được chọn
-  const [activeTab, setActiveTab] = useState<"info" | "orders" | "consignments">("info");
+  const [activeTab, setActiveTab] = useState<ProfileTab>("info");
 
   const handleLogout = async () => {
-    try {
-      await api.post("/auth/logout");
-    } catch {
-    } finally {
-      clearAuth();
-      navigate("/login");
-    }
+    await api.post("/auth/logout").catch(() => undefined);
+    clearAuth();
+    navigate("/login");
   };
 
   if (!user) {
@@ -42,6 +57,7 @@ export const ProfilePage = () => {
   }
 
   const avatarFallback = user.fullName?.charAt(0).toUpperCase() ?? "U";
+  const sectionCopy = SECTION_COPY[activeTab];
 
   return (
     <div className={styles.page}>
@@ -62,7 +78,6 @@ export const ProfilePage = () => {
             </span>
           </div>
 
-          {/* Thay thẻ <Link> bằng <button> chuyển tab */}
           <nav className={styles.sidebarNav}>
             <button
               onClick={() => setActiveTab("info")}
@@ -90,9 +105,18 @@ export const ProfilePage = () => {
         </div>
 
         <div className={styles.mainContent}>
+          <div className={styles.contentIntro}>
+            {sectionCopy.eyebrow && (
+              <p className={styles.eyebrow}>{sectionCopy.eyebrow}</p>
+            )}
+            <h1 className={styles.pageTitle}>{sectionCopy.title}</h1>
+            {sectionCopy.description && (
+              <p className={styles.pageDescription}>{sectionCopy.description}</p>
+            )}
+          </div>
           {activeTab === "info" && <MyInfo />}
           {activeTab === "orders" && <MyOrders />}
-          {activeTab === "consignments" && <MyConsignment/>}
+          {activeTab === "consignments" && <MyConsignment />}
         </div>
       </div>
     </div>
