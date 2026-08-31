@@ -120,9 +120,6 @@ export function StaffDispositionQueuePage() {
         <div>
           <p className={styles.eyebrow}>Hàng sau ký gửi</p>
           <h1 className={styles.pageTitle}>Xử lý trả hàng & Quyên góp</h1>
-          <p className={styles.subtitle}>
-            Quản lý các món hàng ký gửi không bán được cần hoàn trả hoặc bàn giao từ thiện.
-          </p>
         </div>
       </header>
 

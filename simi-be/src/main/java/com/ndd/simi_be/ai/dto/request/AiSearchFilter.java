@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AiSearchFilter {
+    private String categoryPhrase;
     @Builder.Default
     private List<Gender> genders = new ArrayList<>();
     @Builder.Default
@@ -28,17 +29,11 @@ public class AiSearchFilter {
 
 
     @Builder.Default
-    private List<String> itemKeywords = new ArrayList<>();
-    @Builder.Default
     private List<String> materials = new ArrayList<>();
     @Builder.Default
-    private List<String> occasions = new ArrayList<>();
+    private List<String> semanticTerms = new ArrayList<>();
     @Builder.Default
-    private List<String> styles = new ArrayList<>();
-    @Builder.Default
-    private List<String> feelings = new ArrayList<>();
-    @Builder.Default
-    private List<String> fits = new ArrayList<>();
+    private List<AiSearchPreference> preferences = new ArrayList<>();
 
 
     @Builder.Default
