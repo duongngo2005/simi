@@ -40,7 +40,12 @@ const RegisterPage = () => {
   })
 
   const onSubmit = (data: RegisterFormData) => {
-    const {confirm, ...payload} = data
+    const payload = {
+      fullName: data.fullName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+    };
     register(payload)
   }
 
@@ -147,10 +152,9 @@ const RegisterPage = () => {
         <label className={styles.policy}>
           <input type="checkbox" />
 
-          <span>
-            Tôi đồng ý với{" "}
-            <Link to="/terms">điều khoản sử dụng</Link>
-          </span>
+            <span>
+            Bằng việc đăng ký, bạn đồng ý với quy định sử dụng của Simi.
+            </span>
         </label>
 
         <Button disabled={isPending} type="submit" variant="primary" fullWidth>

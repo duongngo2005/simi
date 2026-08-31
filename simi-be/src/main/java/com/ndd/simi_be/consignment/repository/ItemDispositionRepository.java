@@ -16,6 +16,11 @@ public interface ItemDispositionRepository
 
     List<ItemDisposition> findByConsignmentItem_Consignment_Id(Long consignmentId);
 
+    boolean existsByConsignmentItem_Consignment_IdAndItemDispositionStatusNot(
+            Long consignmentId,
+            ItemDispositionStatus status
+    );
+
     @Query("""
         SELECT COUNT(d)
         FROM ItemDisposition d

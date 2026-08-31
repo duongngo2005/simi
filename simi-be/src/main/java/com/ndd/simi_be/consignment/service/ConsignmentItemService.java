@@ -48,8 +48,8 @@ public class ConsignmentItemService {
         Consignment consignment = consignmentRepository.findById(consignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
 
-        if (consignment.getConsignmentStatus() == ConsignmentStatus.ACTIVE){
-            throw new BadRequestException("Không thể thêm chi tiết lô hàng vào lô hàng đã Active");
+        if (consignment.getConsignmentStatus() != ConsignmentStatus.DRAFT){
+            throw new BadRequestException("Chỉ có thể thêm chi tiết vào lô hàng DRAFT");
         }
 
         Product product = productService.createProduct(
@@ -90,6 +90,8 @@ public class ConsignmentItemService {
             throw new BadRequestException("Chi tiết lô hàng không thuộc về lô hàng");
         }
 
+        requireDraftConsignmentItem(consignment, item);
+
         item.setConsignmentItemStatus(ConsignmentItemStatus.CANCELLED);
         item.getProduct().setProductStatus(ProductStatus.CANCELLED);
         item.getPriceSchedules().stream()
@@ -113,9 +115,7 @@ public class ConsignmentItemService {
             throw new BadRequestException("Chi tiết lô hàng không thuộc về lô hàng");
         }
 
-        if (item.getConsignmentItemStatus() != ConsignmentItemStatus.DRAFT){
-            throw new BadRequestException("Chỉ có thể xóa chi tiết đơn hàng DRAFT");
-        }
+        requireDraftConsignmentItem(consignment, item);
 
         priceScheduleService.hardDeletePriceSchedules(item.getPriceSchedules());
 
@@ -161,9 +161,7 @@ public class ConsignmentItemService {
             throw new BadRequestException("Chi tiết lô hàng không thuộc về lô hàng");
         }
 
-        if (item.getConsignmentItemStatus() != ConsignmentItemStatus.DRAFT){
-            throw new BadRequestException("Chỉ có thể cập nhật chi tiết lô hàng ở trạng thái DRAFT");
-        }
+        requireDraftConsignmentItem(consignment, item);
 
         item.setCommissionRate(request.getCommissionRate());
 
@@ -180,5 +178,14 @@ public class ConsignmentItemService {
         item.setPriceSchedules(newSchedules);
 
         return ConsignmentItemMapper.toConsignmentItemResponse(item);
+    }
+
+    private void requireDraftConsignmentItem(Consignment consignment, ConsignmentItem item) {
+        if (consignment.getConsignmentStatus() != ConsignmentStatus.DRAFT) {
+            throw new BadRequestException("Chỉ có thể thao tác chi tiết khi lô hàng ở trạng thái DRAFT");
+        }
+        if (item.getConsignmentItemStatus() != ConsignmentItemStatus.DRAFT) {
+            throw new BadRequestException("Chỉ có thể thao tác chi tiết ở trạng thái DRAFT");
+        }
     }
 }

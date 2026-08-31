@@ -16,7 +16,6 @@ export const StaffPOSPage = () => {
   const [cartItems, setCartItems] = useState<ProductSummaryResponse[]>([]);
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerName, setCustomerName] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"CASH" | "VNPAY">("CASH");
 
   // ── THÊM SẢN PHẨM VÀO GIỎ ──
   const handleAddProductById = async (e: React.SyntheticEvent) => {
@@ -71,8 +70,7 @@ export const StaffPOSPage = () => {
         orderItemRequests: cartItems.map((item) => ({ productId: item.id })),
         recipientPhone: customerPhone.trim(),
         recipientName: customerName.trim() || "Khách mua tại quầy",
-        discount: 0,
-        paymentMethod: paymentMethod,
+        paymentMethod: "CASH",
       });
 
       alert(
@@ -80,7 +78,7 @@ export const StaffPOSPage = () => {
         `- Khách hàng: ${customerName.trim() || "Khách mua tại quầy"} (${customerPhone.trim()})\n` +
         `- Số lượng: ${cartItems.length} sản phẩm\n` +
         `- Tổng tiền: ${formatPrice(totalAmount)}\n` +
-        `- Phương thức: ${paymentMethod === "CASH" ? "Tiền mặt" : "VNPAY / Chuyển khoản"}`
+        `- Phương thức: Tiền mặt`
       );
 
       // Reset form sau khi thanh toán thành công
@@ -227,22 +225,7 @@ export const StaffPOSPage = () => {
 
             <div className={styles.formGroup}>
               <label>Phương thức thanh toán</label>
-              <div className={styles.paymentSelector}>
-                <button
-                  type="button"
-                  className={`${styles.payBtn} ${paymentMethod === "CASH" ? styles.payActive : ""}`}
-                  onClick={() => setPaymentMethod("CASH")}
-                >
-                  Tiền mặt
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.payBtn} ${paymentMethod === "VNPAY" ? styles.payActive : ""}`}
-                  onClick={() => setPaymentMethod("VNPAY")}
-                >
-                  VNPAY / Chuyển khoản
-                </button>
-              </div>
+              <div className={styles.cashOnly}>Tiền mặt</div>
             </div>
 
             {/* Bảng tóm tắt tiền */}

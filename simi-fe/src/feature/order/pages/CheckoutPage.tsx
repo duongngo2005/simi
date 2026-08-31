@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router";
+import { useLocation, useNavigate, Link, Navigate } from "react-router";
 import styles from "./CheckoutPage.module.css";
 import type { OrderRequest } from "../types/order.type";
 import { useProvinces, useWards } from "../hooks/useLocation";
@@ -9,11 +9,14 @@ import { useShippingFee, useCreateOrder } from "../hooks/useOrder";
 import { CONDITION_LABEL } from "../../../utils/condition";
 import { cartApi } from "../../cart/api/cartApi";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { getServerError } from "../../../utils/getMessageError";
 
 export const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
 
   const { productIds = [], cartItemIds } = (location.state as {
     productIds?: number[];
@@ -28,24 +31,20 @@ export const CheckoutPage = () => {
   const [formData, setFormData] = useState<{
     fullName: string;
     phone: string;
-    email: string;
     provinceCode: string;
     provinceName: string;
     wardCode: string;
     wardName: string;
     addressDetail: string;
-    note: string;
     paymentMethod: "COD" | "ONLINE";
   }>({
     fullName: "",
     phone: "",
-    email: "",
     provinceCode: "",
     provinceName: "",
     wardCode: "",
     wardName: "",
     addressDetail: "",
-    note: "",
     paymentMethod: "COD",
   });
 
@@ -59,6 +58,10 @@ export const CheckoutPage = () => {
       navigate("/cart", { replace: true });
     }
   }, [productIds, navigate]);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
   if (loadingProducts || productIds.length === 0) {
     return <div className={styles.stateWrapper}><p>Đang tải đơn hàng...</p></div>;
@@ -121,7 +124,7 @@ export const CheckoutPage = () => {
           await Promise.all(cartItemIds.map((id) => cartApi.removeItem(id)));
           queryClient.invalidateQueries({ queryKey: ["my-cart"] });
         } catch {
-          
+          alert("Đơn hàng đã được tạo, nhưng giỏ hàng chưa cập nhật. Vui lòng tải lại trang giỏ hàng.");
         }
       }
 
@@ -132,9 +135,8 @@ export const CheckoutPage = () => {
           state: {orderId: res.body?.orderDetail?.id}
         })
       }
-    } catch (error: any) {
-        const msg = error?.response?.data?.message || "Đặt hàng thất bại. Vui lòng thử lại.";
-        alert(msg);
+    } catch (error: unknown) {
+        alert(getServerError(error, "Đặt hàng thất bại. Vui lòng thử lại."));
     }
   };
 
@@ -168,17 +170,6 @@ export const CheckoutPage = () => {
                   name="phone"
                   placeholder="Số điện thoại nhận hàng"
                   value={formData.phone}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className={styles.inputGroup}>
-                <label>Email (Nhận hóa đơn)</label>
-                <input
-                  required
-                  type="email"
-                  name="email"
-                  placeholder="email@example.com"
-                  value={formData.email}
                   onChange={handleInputChange}
                 />
               </div>
@@ -231,16 +222,6 @@ export const CheckoutPage = () => {
               />
             </div>
 
-            <div className={styles.inputGroup}>
-              <label>Ghi chú (Tùy chọn)</label>
-              <textarea
-                name="note"
-                rows={3}
-                placeholder="Ghi chú về thời gian giao hàng..."
-                value={formData.note}
-                onChange={handleInputChange}
-              />
-            </div>
           </div>
 
           <div className={styles.card}>

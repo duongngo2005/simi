@@ -90,7 +90,7 @@ public class VnPayPaymentProvider implements PaymentGatewayProvider {
 
         StringBuilder hashData = new StringBuilder();
         for (Map.Entry<String, String> entry : filteredParams.entrySet()){
-            if (entry.getValue() != null || !entry.getValue().isEmpty()){
+            if (entry.getValue() != null && !entry.getValue().isEmpty()){
                 if (!hashData.isEmpty()){
                     hashData.append('&');
                 }

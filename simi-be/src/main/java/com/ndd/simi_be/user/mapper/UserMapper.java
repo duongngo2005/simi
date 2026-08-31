@@ -14,6 +14,9 @@ public class UserMapper {
                 .avatarUrl(user.getAvatarUrl())
                 .address(user.getAddress())
                 .phoneNumber(user.getPhoneNumber())
+                .bankName(user.getBankName())
+                .accountNumber(user.getAccountNumber())
+                .accountHolder(user.getAccountHolder())
                 .build();
     }
 }

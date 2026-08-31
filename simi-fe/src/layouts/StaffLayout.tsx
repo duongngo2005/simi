@@ -84,15 +84,6 @@ export const StaffLayout = () => {
             Trả hàng
           </NavLink>
 
-          <NavLink
-            to="/staff/products"
-            className={({ isActive }) =>
-              `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
-            }
-          >
-            <span className={styles.navIcon}></span>
-            Quản lý sản phẩm
-          </NavLink>
         </nav>
 
         <div className={styles.footerSection}>

@@ -18,9 +18,9 @@ public enum OrderStatus {
 
     static {
         TRANSITIONS.put(PENDING, EnumSet.of(PACKING, CANCELLED));
-        TRANSITIONS.put(PENDING_PAYMENT, EnumSet.of(PACKING, EXPIRED, CANCELLED));
-        TRANSITIONS.put(PACKING, EnumSet.of(SHIPPING, CANCELLED));
-        TRANSITIONS.put(SHIPPING, EnumSet.of(COMPLETED, CANCELLED));
+        TRANSITIONS.put(PENDING_PAYMENT, EnumSet.of(EXPIRED, CANCELLED));
+        TRANSITIONS.put(PACKING, EnumSet.of(SHIPPING));
+        TRANSITIONS.put(SHIPPING, EnumSet.of(COMPLETED));
         TRANSITIONS.put(EXPIRED, EnumSet.noneOf(OrderStatus.class));
         TRANSITIONS.put(COMPLETED, EnumSet.noneOf(OrderStatus.class));
         TRANSITIONS.put(CANCELLED, EnumSet.noneOf(OrderStatus.class));

@@ -38,6 +38,15 @@ public class PriceScheduleService {
             throw new BadRequestException("Lịch giá không được để trống");
         }
 
+        for (PriceScheduleRequest schedule : schedules) {
+            if (schedule.getEffectiveAfterDays() < 0) {
+                throw new BadRequestException("Số ngày áp dụng không được âm");
+            }
+            if (schedule.getPrice() == null || schedule.getPrice().signum() <= 0) {
+                throw new BadRequestException("Giá tiền phải lớn hơn 0");
+            }
+        }
+
         List<PriceScheduleRequest> sortedRequest = schedules.stream()
                 .sorted(Comparator.comparingInt(PriceScheduleRequest::getEffectiveAfterDays))
                 .toList();

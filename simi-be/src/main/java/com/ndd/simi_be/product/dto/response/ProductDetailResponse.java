@@ -24,7 +24,7 @@ public class ProductDetailResponse {
     private String color;
     private String description;
     private String productCondition;
-    private String status;
+    private String productStatus;
     private List<ProductImageResponse> productImageResponses;
     private LocalDateTime createdDate;
     private String thumbnail;

@@ -11,6 +11,7 @@ import com.ndd.simi_be.consignment.dto.response.ConsignmentFullDetailResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentItemResponse;
 import com.ndd.simi_be.consignment.dto.response.ConsignmentResponse;
 import com.ndd.simi_be.consignment.entity.Consignment;
+import com.ndd.simi_be.consignment.entity.ConsignmentItem;
 import com.ndd.simi_be.consignment.entity.PriceSchedule;
 import com.ndd.simi_be.consignment.enums.ConsignmentItemStatus;
 import com.ndd.simi_be.consignment.enums.ConsignmentStatus;
@@ -85,29 +86,36 @@ public class ConsignmentService {
         Consignment consignment = consignmentRepository.findById(consignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
 
-        if (consignment.getConsignmentItems().isEmpty()){
-            throw new BadRequestException("Không thể kích hoạt lô hàng rỗng");
-        }
-
         if (consignment.getConsignmentStatus() != ConsignmentStatus.DRAFT){
             throw new BadRequestException("Lô hàng đã được active");
         }
 
-        consignment.getConsignmentItems().stream()
-                .filter(item -> item.getConsignmentItemStatus() ==  ConsignmentItemStatus.DRAFT)
-                .forEach(item -> {
+        List<ConsignmentItem> draftItems = consignment.getConsignmentItems().stream()
+                .filter(item -> item.getConsignmentItemStatus() == ConsignmentItemStatus.DRAFT)
+                .toList();
+
+        if (draftItems.isEmpty()){
+            throw new BadRequestException("Không thể kích hoạt lô hàng không có chi tiết DRAFT");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        draftItems.forEach(item -> {
                     item.setConsignmentItemStatus(ConsignmentItemStatus.ACTIVE);
-                    item.setActivatedAt(LocalDateTime.now());
-                    PriceSchedule nowSchedule = item.getPriceSchedules().getFirst();
+                    item.setActivatedAt(now);
+                    PriceSchedule nowSchedule = item.getPriceSchedules().stream()
+                            .filter(schedule -> schedule.getEffectiveAfterDays() == 0)
+                            .findFirst()
+                            .orElseThrow(() -> new BadRequestException("Chi tiết ký gửi thiếu mốc giá ngày 0"));
                     item.getProduct().setProductStatus(ProductStatus.AVAILABLE);
                     item.getProduct().setCurrentPrice(nowSchedule.getPrice());
-                    nowSchedule.setAppliedAt(LocalDateTime.now());
+                    nowSchedule.setAppliedAt(now);
                     nowSchedule.setPriceScheduleStatus(PriceScheduleStatus.APPLIED);
                 });
 
         consignment.setConsignmentStatus(ConsignmentStatus.ACTIVE);
-        consignment.setStartDate(LocalDateTime.now());
-        consignment.setExpiryDate(LocalDateTime.now().plusDays(60));
+        consignment.setStartDate(now);
+        consignment.setExpiryDate(now.plusDays(60));
 
         return ConsignmentMapper.toConsignmentResponse(consignment);
     }
@@ -151,6 +159,7 @@ public class ConsignmentService {
         ).toList();
     }
 
+    @Transactional(readOnly = true)
     public ConsignmentFullDetailResponse getConsignmentFullDetail(Long consignmentId, User user) {
         Consignment consignment = consignmentRepository.findById(consignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô ký gửi"));

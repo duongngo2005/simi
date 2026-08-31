@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import { useAuthStore } from "../../../store/useAuthStore"
 import type {LoginRequest, RegisterRequest } from "../../../types/auth"
 import { authApi } from "../apis/auth.api"
@@ -7,6 +7,10 @@ import { useMutation } from "@tanstack/react-query"
 export const useLogin = () => {
     const setAuth = useAuthStore((s) => s.setAuth)
     const navigate = useNavigate()
+    const location = useLocation()
+    const from = typeof (location.state as { from?: unknown } | null)?.from === "string"
+        ? (location.state as { from: string }).from
+        : "/"
 
     return useMutation({
         mutationFn: (data: LoginRequest) => authApi.login(data),
@@ -14,7 +18,7 @@ export const useLogin = () => {
             const {accessToken, userResponse} = res.data.body
             if (!accessToken) return;
             setAuth(userResponse, accessToken)
-            navigate("/")
+            navigate(from, { replace: true })
         }
     })
 }

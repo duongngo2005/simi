@@ -26,6 +26,12 @@
   color: var(--color-heading, #4A352D);
 }
 
+.cardDescription {
+  margin: 6px 0 0;
+  font-size: 0.82rem;
+  color: var(--color-text, #6f4e40);
+}
+
 .infoGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -49,6 +55,51 @@
   font-size: 0.88rem;
   color: var(--color-text, #6f4e40);
   font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 10px;
+  border: 1px solid var(--color-input-border, #d6c7bc);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--color-text, #6f4e40);
+  font: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary, #8b5e3c);
+}
+
+.btnPrimary {
+  border: 0;
+  border-radius: 4px;
+  padding: 9px 14px;
+  background: var(--color-primary, #8b5e3c);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnPrimary:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.feedbackSuccess,
+.feedbackError {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.feedbackSuccess {
+  color: var(--color-success-text, #2D6A4F);
+}
+
+.feedbackError {
+  color: var(--color-danger-text, #9F3D2A);
 }
 
 .empty {

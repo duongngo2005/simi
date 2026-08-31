@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,15 +27,31 @@ public class PriceMarkdownService {
                         PriceScheduleStatus.PENDING, ConsignmentItemStatus.ACTIVE
         );
 
-        for (PriceSchedule schedule : priceSchedules){
-            LocalDateTime effectiveAt = schedule.getConsignmentItem()
-                    .getActivatedAt()
-                    .plusDays(schedule.getEffectiveAfterDays());
-            if (effectiveAt.isBefore(LocalDateTime.now())){
-                schedule.setPriceScheduleStatus(PriceScheduleStatus.APPLIED);
-                schedule.setAppliedAt(LocalDateTime.now());
-                schedule.getConsignmentItem().getProduct().setCurrentPrice(schedule.getPrice());
+        LocalDateTime now = LocalDateTime.now();
+        Map<Long, List<PriceSchedule>> schedulesByItem = priceSchedules.stream()
+                .collect(Collectors.groupingBy(schedule -> schedule.getConsignmentItem().getId()));
+
+        for (List<PriceSchedule> itemSchedules : schedulesByItem.values()) {
+            List<PriceSchedule> eligibleSchedules = itemSchedules.stream()
+                    .filter(schedule -> schedule.getConsignmentItem().getActivatedAt() != null)
+                    .filter(schedule -> !schedule.getConsignmentItem().getActivatedAt()
+                            .plusDays(schedule.getEffectiveAfterDays()).isAfter(now))
+                    .toList();
+
+            if (eligibleSchedules.isEmpty()) {
+                continue;
             }
+
+            PriceSchedule latestEligibleSchedule = eligibleSchedules.stream()
+                    .max(Comparator.comparingInt(PriceSchedule::getEffectiveAfterDays))
+                    .orElseThrow();
+
+            for (PriceSchedule schedule : eligibleSchedules) {
+                schedule.setPriceScheduleStatus(PriceScheduleStatus.APPLIED);
+                schedule.setAppliedAt(now);
+            }
+            latestEligibleSchedule.getConsignmentItem().getProduct()
+                    .setCurrentPrice(latestEligibleSchedule.getPrice());
         }
     }
 }

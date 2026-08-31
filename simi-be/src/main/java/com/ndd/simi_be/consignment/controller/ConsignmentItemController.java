@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ public class ConsignmentItemController {
     private final ConsignmentItemService consignmentItemService;
 
     @PostMapping("/{id}/items")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<ConsignmentItemResponse>> createConsignmentItem(
             @Valid @RequestPart("data") ConsignmentItemRequest request,
             @RequestPart(value = "thumbnail") MultipartFile thumbnail,
@@ -42,6 +44,7 @@ public class ConsignmentItemController {
     }
 
     @GetMapping("/{id}/details")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<ConsignmentFullDetailResponse>> getAllItemsByConsignmentId(
             @PathVariable("id") Long consignmentId
     ){
@@ -53,6 +56,7 @@ public class ConsignmentItemController {
     }
 
     @DeleteMapping("/{consignmentId}/items/{consignmentItemId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<Void> hardDeleteConsignmentItem(
             @PathVariable Long consignmentId,
             @PathVariable Long consignmentItemId
@@ -62,6 +66,7 @@ public class ConsignmentItemController {
     }
 
     @PostMapping("/{consignmentId}/items/{consignmentItemId}/cancel")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<ConsignmentItemResponse>> softDeleteConsignmentItem(
             @PathVariable Long consignmentId,
             @PathVariable Long consignmentItemId
@@ -76,6 +81,7 @@ public class ConsignmentItemController {
     }
 
     @GetMapping("/items/{consignmentItemId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<ConsignmentItemResponse>> getConsignmentItemById(
             @PathVariable("consignmentItemId") Long consignmentItemId
     ){
@@ -89,6 +95,7 @@ public class ConsignmentItemController {
     }
 
     @PatchMapping("/{consignmentId}/items/{consignmentItemId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<ConsignmentItemResponse>> updateConsignmentItem(
             @Valid @RequestPart("data") UpdateConsignmentItemRequest request,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,

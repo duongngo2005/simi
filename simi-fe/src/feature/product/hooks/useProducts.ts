@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getProductDetail, getProducts, getThumbnail } from "../api/productApis"
+import { getProductDetail, getProducts, getThumbnail, type ProductSearchParams } from "../api/productApis"
 
 export const useNewestProducts = () => {
     return useQuery({
@@ -13,7 +13,7 @@ export const useNewestProducts = () => {
             }),
             select: (response) => response.body?.content || []
     })
-} 
+}
 
 export const useNewTagProducts = () => {
     return useQuery({
@@ -80,4 +80,11 @@ export const useProductsByIds = (productIds: number[]) => {
         enabled: productIds.length > 0,
     })
 }
-  
+
+export const useProductSearch = (filters: ProductSearchParams) => {
+    return useQuery({
+        queryKey: ["products", filters],
+        queryFn: () => getProducts(filters),
+        select: (response) => response.body,
+    })
+}

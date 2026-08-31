@@ -10,4 +10,7 @@ export interface UserResponse{
     avatarUrl: string | null;
     address: string | null;
     phoneNumber: string | null;
+    bankName: string | null;
+    accountNumber: string | null;
+    accountHolder: string | null;
 }

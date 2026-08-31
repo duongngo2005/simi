@@ -54,10 +54,11 @@ public class SettlementController {
 
     @GetMapping("/consignment/{consignmentId}")
     public ResponseEntity<ApiResponse<SettlementResponse>> getSettlement(
-            @PathVariable("consignmentId") Long consignmentId
+            @PathVariable("consignmentId") Long consignmentId,
+            @AuthenticationPrincipal User user
     ){
         ApiResponse<SettlementResponse> response = ApiResponse.<SettlementResponse>builder()
-                .body(settlementService.getSettlement(consignmentId))
+                .body(settlementService.getSettlement(consignmentId, user))
                 .status(200)
                 .build();
 

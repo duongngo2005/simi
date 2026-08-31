@@ -1,6 +1,7 @@
 package com.ndd.simi_be.consignment.service;
 
 import com.ndd.simi_be.common.exception.BadRequestException;
+import com.ndd.simi_be.common.exception.ForbiddenException;
 import com.ndd.simi_be.common.exception.ResourceNotFoundException;
 import com.ndd.simi_be.consignment.dto.request.ItemDispositionFilterRequest;
 import com.ndd.simi_be.consignment.dto.response.ItemDispositionResponse;
@@ -31,6 +32,7 @@ import java.util.Objects;
 public class ItemDispositionService {
     private final ItemDispositionRepository itemDispositionRepository;
     private final ConsignmentRepository consignmentRepository;
+    private final SettlementService settlementService;
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
@@ -40,7 +42,7 @@ public class ItemDispositionService {
         Consignment consignment = consignmentRepository.findById(consignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
 
-        if (consignment.getConsignmentStatus() != ConsignmentStatus.SETTLED) {
+        if (!isSettledOrClosed(consignment)) {
             throw new BadRequestException("Lô hàng chưa được kết toán");
         }
 
@@ -94,10 +96,10 @@ public class ItemDispositionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lô hàng"));
 
         if (!Objects.equals(consignment.getConsignor().getId(), user.getId())) {
-            throw new BadRequestException("Bạn không sở hữu lô ký gửi này");
+            throw new ForbiddenException("Bạn không sở hữu lô ký gửi này");
         }
 
-        if (consignment.getConsignmentStatus() != ConsignmentStatus.SETTLED) {
+        if (!isSettledOrClosed(consignment)) {
             throw new BadRequestException("Lô hàng chưa được kết toán");
         }
 
@@ -144,6 +146,7 @@ public class ItemDispositionService {
             item.getConsignmentItem()
                     .setConsignmentItemStatus(ConsignmentItemStatus.RETURNED);
         }
+        closeAffectedConsignments(items);
     }
 
     @Transactional
@@ -167,6 +170,7 @@ public class ItemDispositionService {
             item.getConsignmentItem()
                     .setConsignmentItemStatus(ConsignmentItemStatus.DONATED);
         }
+        closeAffectedConsignments(items);
     }
 
     private List<ItemDisposition> getItems(List<Long> itemDispositionIds) {
@@ -181,5 +185,17 @@ public class ItemDispositionService {
         }
 
         return items;
+    }
+
+    private boolean isSettledOrClosed(Consignment consignment) {
+        return consignment.getConsignmentStatus() == ConsignmentStatus.SETTLED
+                || consignment.getConsignmentStatus() == ConsignmentStatus.CLOSED;
+    }
+
+    private void closeAffectedConsignments(List<ItemDisposition> items) {
+        items.stream()
+                .map(item -> item.getConsignmentItem().getConsignment())
+                .distinct()
+                .forEach(settlementService::closeConsignmentIfReady);
     }
 }

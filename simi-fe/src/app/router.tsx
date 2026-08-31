@@ -5,6 +5,7 @@ import RegisterPage from "../feature/auth/pages/RegisterPage";
 import { MainLayout } from "../layouts/MainLayout";
 import { HomePage } from "../feature/home/pages/HomePage";
 import { ProductDetailPage } from "../feature/product/pages/ProductDetailPage";
+import { ProductListPage } from "../feature/product/pages/ProductListPage";
 import { CheckoutPage } from "../feature/order/pages/CheckoutPage";
 import { ProfilePage } from "../feature/user/pages/ProfilePage";
 import { StaffLayout } from "../layouts/StaffLayout";
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/products",
+        element: <ProductListPage />,
       },
       {
         path: "/products/:id",

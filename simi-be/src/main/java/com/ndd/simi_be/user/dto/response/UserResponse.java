@@ -15,4 +15,7 @@ public class UserResponse {
     private String avatarUrl;
     private String address;
     private String phoneNumber;
+    private String bankName;
+    private String accountNumber;
+    private String accountHolder;
 }

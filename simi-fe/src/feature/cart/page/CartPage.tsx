@@ -1,26 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useGetMyCart, useRemoveItem } from "../hook/useCart";
 import styles from "./CartPage.module.css";
-import {useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { formatPrice } from "../../../utils/formatPrice";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 export const CartPage = () => {
-  const { data: myCart, isLoading: cartLoading, isError } = useGetMyCart();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
+  const { data: myCart, isLoading: cartLoading, isError } = useGetMyCart(isAuthenticated);
   const { mutateAsync: removeItem, isPending } = useRemoveItem();
   const navigate = useNavigate();
 
   const items = myCart?.cartItemResponses || [];
 
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (items.length > 0) {
-      const availableIds = items
-        .filter((item) => (item.productSummaryResponse?.productStatus || "AVAILABLE") === "AVAILABLE")
-        .map((item) => item.id);
-      setSelectedIds(availableIds);
-    }
-  }, [myCart]);
 
   const handleToggleSelect = (id: number) => {
     setSelectedIds((prev) =>
@@ -31,7 +24,7 @@ export const CartPage = () => {
   const handleRemoveSelected = async () => {
     try {
       await Promise.all(selectedIds.map((id) => removeItem(id)));
-    } catch (error) {
+    } catch {
       alert("Xóa bị lỗi");
     }
   };
@@ -40,14 +33,17 @@ export const CartPage = () => {
     const availableItems = items.filter(
       (item) => (item.productSummaryResponse?.productStatus || "AVAILABLE") === "AVAILABLE"
     );
-    if (selectedIds.length === availableItems.length) {
+    if (selectedItems.length === availableItems.length) {
       setSelectedIds([]);
     } else {
       setSelectedIds(availableItems.map((item) => item.id));
     }
   };
 
-  const selectedItems = items.filter((item) => selectedIds.includes(item.id));
+  const selectedItems = items.filter(
+    (item) => selectedIds.includes(item.id)
+      && (item.productSummaryResponse?.productStatus || "AVAILABLE") === "AVAILABLE",
+  );
   const totalPrice = selectedItems.reduce((acc, item) => {
     const price = item.productSummaryResponse?.currentPrice || item.currentPrice || 0;
     return acc + price;
@@ -58,7 +54,8 @@ export const CartPage = () => {
 
     navigate("/checkout", {
       state: {
-        productIds: selectedItems.map((item) => item.productSummaryResponse.id)
+        productIds: selectedItems.map((item) => item.productSummaryResponse.id),
+        cartItemIds: selectedItems.map((item) => item.id),
       }
     })
   }
@@ -66,6 +63,10 @@ export const CartPage = () => {
   const availableCount = items.filter(
     (item) => (item.productSummaryResponse?.productStatus || "AVAILABLE") === "AVAILABLE"
   ).length;
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
   if (cartLoading) {
     return <div className={styles.stateBox}>Đang tải giỏ hàng...</div>;
@@ -90,7 +91,7 @@ export const CartPage = () => {
                   <th className={styles.checkTh}>
                     <input
                       type="checkbox"
-                      checked={availableCount > 0 && selectedIds.length === availableCount}
+                      checked={availableCount > 0 && selectedItems.length === availableCount}
                       onChange={handleToggleSelectAll}
                       disabled={availableCount === 0}
                     />
@@ -108,7 +109,7 @@ export const CartPage = () => {
                   const price = product?.currentPrice || item.currentPrice || 0;
                   const status = product?.productStatus || "AVAILABLE";
                   const isAvailable = status === "AVAILABLE";
-                  const isChecked = selectedIds.includes(item.id);
+                  const isChecked = isAvailable && selectedIds.includes(item.id);
 
                   return (
                     <tr
