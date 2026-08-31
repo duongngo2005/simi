@@ -491,6 +491,7 @@ export const ConsignmentItemForm = ({
           <input
             name="tagInput"
             type="text"
+            placeholder="Ví dụ: form gọn, công sở, dễ phối đồ"
             value={itemForm.tagInput}
             onChange={handleChange}
             className={styles.input}

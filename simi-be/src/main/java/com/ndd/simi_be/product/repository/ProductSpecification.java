@@ -1,7 +1,6 @@
 package com.ndd.simi_be.product.repository;
 
 import com.ndd.simi_be.brand.entity.Brand;
-import com.ndd.simi_be.category.entity.Category;
 import com.ndd.simi_be.product.entity.Product;
 import com.ndd.simi_be.product.enums.Gender;
 import com.ndd.simi_be.product.enums.ProductCondition;
@@ -178,40 +177,6 @@ public class ProductSpecification {
         };
     }
 
-    public static Specification<Product> hasAiKeywords(List<String> keywords){
-        return ((root, query, cb) -> {
-            if (keywords == null || keywords.isEmpty()){
-                return cb.conjunction();
-            }
-
-            if (query != null){
-                query.distinct(true);
-            }
-
-            Join<Product, Tag> tagJoin = root.join("tags", JoinType.LEFT);
-            List<Predicate> keywordPredicates = new ArrayList<>();
-
-            for (String kw : keywords){
-                if (kw == null || kw.isBlank()) continue;;
-
-                String pattern = "%" + kw.toLowerCase().trim() + "%";
-
-                Predicate matchInName = cb.like(cb.lower(root.get("name")), pattern);
-                Predicate matchInDesc = cb.like(cb.lower(root.get("description")), pattern);
-                Predicate matchInCate = cb.like(cb.lower(root.get("category").get("name")), pattern);
-                Predicate matchInTag = cb.like(cb.lower(tagJoin.get("name")), pattern);
-
-                keywordPredicates.add(cb.or(matchInCate, matchInDesc, matchInName, matchInTag));
-            }
-
-            if (keywordPredicates.isEmpty()){
-                return cb.conjunction();
-            }
-
-            return cb.or(keywordPredicates.toArray(new Predicate[0]));
-        });
-    }
-
     public static Specification<Product> hasGenders(List<Gender> genders) {
         return (root, query, cb) -> {
             if (genders == null || genders.isEmpty()) return cb.conjunction();
@@ -253,24 +218,6 @@ public class ProductSpecification {
         };
     }
 
-    public static Specification<Product> hasItemKeywords(List<String> itemKeywords) {
-        return (root, query, cb) -> {
-            if (itemKeywords == null || itemKeywords.isEmpty()) return cb.conjunction();
-            if (query != null) query.distinct(true);
-            Join<Product, Category> cateJoin = root.join("category", JoinType.LEFT);
-            List<Predicate> predicates = itemKeywords.stream()
-                    .filter(k -> k != null && !k.isBlank())
-                    .map(k -> {
-                        String pattern = "%" + k.toLowerCase().trim() + "%";
-                        return cb.or(
-                                cb.like(cb.lower(root.get("name")), pattern),
-                                cb.like(cb.lower(cateJoin.get("name")), pattern)
-                        );
-                    }).toList();
-            return predicates.isEmpty() ? cb.conjunction() : cb.or(predicates.toArray(new Predicate[0]));
-        };
-    }
-
     public static Specification<Product> hasExcludedKeywords(List<String> excludedKeywords) {
         return (root, query, cb) -> {
             if (excludedKeywords == null || excludedKeywords.isEmpty()) {
@@ -286,11 +233,13 @@ public class ProductSpecification {
 
                 String pattern = "%" + keyword.toLowerCase().trim() + "%";
 
-                Expression<String> description = cb.coalesce(root.<String>get("description"), "");
+                Expression<String> categoryName = root.get("category").get("name");
+                Expression<String> material = cb.coalesce(root.<String>get("material"), "");
 
-                Predicate matchProductText = cb.or(
+                Predicate matchProductIdentity = cb.or(
                         cb.like(cb.lower(root.<String>get("name")), pattern),
-                        cb.like(cb.lower(description), pattern)
+                        cb.like(cb.lower(categoryName), pattern),
+                        cb.like(cb.lower(material), pattern)
                 );
 
                 Subquery<Long> matchingTagQuery = query.subquery(Long.class);
@@ -303,7 +252,7 @@ public class ProductSpecification {
 
                 allowPredicates.add(
                         cb.and(
-                                cb.not(matchProductText),
+                                cb.not(matchProductIdentity),
                                 cb.not(cb.exists(matchingTagQuery))
                         )
                 );
