@@ -76,7 +76,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
         </div>
       )}
 
-      {/* --- Thông tin tài khoản --- */}
       <div className={styles.card}>
         <div className={styles.cardHeader}>Thông tin tài khoản nhận tiền</div>
         <div className={styles.bankGrid}>
@@ -109,7 +108,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
         </div>
       </div>
 
-      {/* --- Tổng kết tài chính --- */}
       <div className={styles.card}>
         <div className={styles.cardHeader}>Tổng kết tài chính</div>
         <div className={styles.summaryGrid}>
@@ -134,7 +132,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
         </div>
       </div>
 
-      {/* --- Bảng sản phẩm đã bán --- */}
       <div className={styles.tableSection}>
         <h3 className={styles.sectionTitle}>
           Sản phẩm đã bán ({preview.soldItemCount ?? soldItems.length})
@@ -169,7 +166,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
         </div>
       </div>
 
-      {/* --- Bảng sản phẩm đang trong đơn (chỉ hiện khi có) --- */}
       {reserveItems.length > 0 && (
         <div className={styles.tableSection}>
           <h3 className={styles.sectionTitleWarn}>
@@ -198,7 +194,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
         </div>
       )}
 
-      {/* --- Bảng sản phẩm trả lại --- */}
       <div className={styles.tableSection}>
         <h3 className={styles.sectionTitle}>
           Sản phẩm trả lại cho khách ({returnItems.length})
@@ -231,7 +226,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
         </div>
       </div>
 
-      {/* --- Nút mở modal --- */}
       <div className={styles.footerAction}>
         <button
           className={styles.btnSettle}
@@ -242,7 +236,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
         </button>
       </div>
 
-      {/* ════════ MODAL ════════ */}
       {showModal && (
         <div className={styles.modalOverlay} onClick={handleCloseModal}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -252,7 +245,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
             </div>
 
             <div className={styles.modalBody}>
-              {/* Thông tin chuyển khoản */}
               <div className={styles.transferInfo}>
                 <div className={styles.transferRow}>
                   <span className={styles.transferLabel}>Ngân hàng</span>
@@ -274,7 +266,6 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
                 </div>
               </div>
 
-              {/* Upload biên lai */}
               <div className={styles.uploadSection}>
                 <label className={styles.uploadLabel}>
                   Ảnh biên lai chuyển khoản <span className={styles.required}>*</span>

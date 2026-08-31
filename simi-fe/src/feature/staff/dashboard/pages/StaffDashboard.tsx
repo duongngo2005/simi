@@ -213,6 +213,7 @@ export function StaffDashboard() {
     <div className={styles.container}>
       <header className={styles.topBar}>
         <div>
+          <p className={styles.eyebrow}>Bàn điều hành Simi</p>
           <h1 className={styles.pageTitle}>Tổng quan vận hành</h1>
           <p className={styles.subtitle}>
             Cập nhật lúc {new Date(data.generatedAt).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })} ·{" "}

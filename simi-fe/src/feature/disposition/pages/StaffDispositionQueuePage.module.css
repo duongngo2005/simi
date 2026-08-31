@@ -458,3 +458,26 @@
 .btnModalSubmit:hover:not(:disabled) {
   background-color: var(--color-btn-primary-hover);
 }
+
+.container { gap: var(--space-5); }
+.topBar { padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-fibre); }
+.eyebrow { margin: 0 0 var(--space-2); color: var(--color-label-red); font-size: .66rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.pageTitle { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 500; line-height: 1.02; }
+.subtitle { color: var(--color-muted); font-size: var(--text-sm); opacity: 1; }
+.tabsBar { overflow-x: auto; gap: 0; border-bottom-color: var(--color-fibre); }
+.tabBtn { border-radius: 0; color: var(--color-muted); }
+.tabBtn:hover { background: var(--color-surface); color: var(--color-ink); }
+.tabBtnActive { border-color: transparent; border-bottom: 2px solid var(--color-label-red); color: var(--color-ink); background: transparent; margin-bottom: 0; }
+.filterCard, .tableCard { border-radius: 0; border-color: var(--color-fibre); box-shadow: 0 8px 24px rgba(24, 51, 58, .04); }
+.searchInput { border-radius: 0; border-color: var(--color-fibre); background: var(--color-surface); }
+.btnSearch, .btnConfirmReturn, .btnModalSubmit { border-radius: 0; background: var(--color-label-red); border-color: var(--color-label-red); }
+.btnClear, .btnCancelSelection, .btnPage, .btnModalCancel { border-radius: 0; border-color: var(--color-fibre); }
+.batchBar { border-radius: 0; border-color: var(--color-fibre); border-left-color: var(--color-label-red); background: var(--color-surface); }
+.table th { background: var(--color-surface); color: var(--color-muted); border-bottom-color: var(--color-fibre); }
+.table td { color: var(--color-ink); border-bottom-color: var(--color-fibre-light); }
+.table tbody tr:hover { background: var(--color-surface); }
+.rowSelected { background: #fff7f4; }
+.typeBadge, .completedBadge { border-radius: 0; }
+.btnRowAction { border-radius: 0; border-color: var(--color-fibre); color: var(--color-ink); }
+.btnRowAction:hover { background: var(--color-ink); border-color: var(--color-ink); }
+.modal { border-radius: 0; border-color: var(--color-fibre); box-shadow: 0 30px 80px rgba(24, 51, 58, .28); }

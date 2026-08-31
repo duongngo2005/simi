@@ -4,14 +4,13 @@ interface ProductStatusChartProps {
   distribution?: Record<string, number>;
 }
 
-// Bảng màu trạng thái trực quan, tách biệt rõ ràng và dịu mắt
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  AVAILABLE: { label: "Đang bày bán", color: "#4F772D" }, // Xanh lá rêu
-  SOLD: { label: "Đã bán", color: "#2E5B88" },           // Xanh dương trầm
-  RESERVED: { label: "Giữ chỗ", color: "#D97706" },       // Vàng cam ấm
-  EXPIRED: { label: "Hết hạn", color: "#BC3908" },        // Đỏ đất
-  DRAFT: { label: "Nháp", color: "#8C7365" },             // Nâu nhạt
-  CANCELLED: { label: "Đã hủy", color: "#9CA3AF" },       // Xám trung tính
+  AVAILABLE: { label: "Đang bày bán", color: "#4F772D" },
+  SOLD: { label: "Đã bán", color: "#2E5B88" },
+  RESERVED: { label: "Giữ chỗ", color: "#D97706" },
+  EXPIRED: { label: "Hết hạn", color: "#BC3908" },
+  DRAFT: { label: "Nháp", color: "#8C7365" },
+  CANCELLED: { label: "Đã hủy", color: "#9CA3AF" },
 };
 
 export const ProductStatusChart = ({ distribution = {} }: ProductStatusChartProps) => {
@@ -27,7 +26,6 @@ export const ProductStatusChart = ({ distribution = {} }: ProductStatusChartProp
         <span className={styles.totalBadge}>Tổng: {total}</span>
       </div>
 
-      {/* Thanh chia tỷ lệ màu */}
       <div className={styles.segmentedBar}>
         {Object.entries(distribution).map(([status, count]) => {
           if (count === 0 || total === 0) return null;
@@ -45,7 +43,6 @@ export const ProductStatusChart = ({ distribution = {} }: ProductStatusChartProp
         })}
       </div>
 
-      {/* Danh sách 2 cột như cũ */}
       <div className={styles.listGrid}>
         {Object.entries(STATUS_CONFIG).map(([status, conf]) => {
           const count = distribution[status] || 0;

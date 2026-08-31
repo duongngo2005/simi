@@ -5,6 +5,13 @@ interface ActiveConsignmentItemListProps {
   items: ConsignmentItemResponse[];
 }
 
+const STATUS_LABEL: Record<string, string> = {
+  ACTIVE: "Đang bán",
+  RESERVED: "Đang giữ chỗ",
+  SOLD: "Đã bán",
+  EXPIRED: "Hết hạn",
+};
+
 export const ActiveConsignmentItemList = ({ items }: ActiveConsignmentItemListProps) => {
   const formatPrice = (price?: number) => {
     if (price === undefined || price === null) return "—";
@@ -38,7 +45,7 @@ export const ActiveConsignmentItemList = ({ items }: ActiveConsignmentItemListPr
                   {product?.thumbnail ? (
                     <img src={product.thumbnail} alt={product.name} className={styles.thumbnail} />
                   ) : (
-                    <div className={styles.noThumbnail}>No Img</div>
+                    <div className={styles.noThumbnail}>Ảnh đang cập nhật</div>
                   )}
 
                   <div className={styles.productDetails}>
@@ -52,7 +59,7 @@ export const ActiveConsignmentItemList = ({ items }: ActiveConsignmentItemListPr
                 </div>
 
                 <span className={`${styles.statusBadge} ${styles[`status_${item.status}`]}`}>
-                  {item.status}
+                  {STATUS_LABEL[item.status] ?? item.status}
                 </span>
               </div>
 

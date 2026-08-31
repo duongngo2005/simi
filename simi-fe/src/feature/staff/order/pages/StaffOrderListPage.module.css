@@ -25,7 +25,6 @@
   margin: 3px 0 0 0;
 }
 
-/* ── BỘ LỌC ── */
 .filterCard {
   background-color: #ffffff;
   border: 1px solid var(--color-input-border);
@@ -151,7 +150,6 @@
   background-color: #f5eee4;
 }
 
-/* ── BẢNG DỮ LIỆU ── */
 .tableCard {
   background-color: #ffffff;
   border: 1px solid var(--color-input-border);
@@ -263,7 +261,6 @@
   color: var(--color-heading);
 }
 
-/* Dropdown trạng thái trong bảng */
 .statusSelect {
   height: 28px;
   padding: 0 6px;
@@ -283,7 +280,6 @@
   cursor: not-allowed;
 }
 
-/* Màu sắc từng trạng thái */
 .status_PENDING {
   background-color: var(--color-warning-bg);
   border-color: var(--color-warning-border);
@@ -321,7 +317,6 @@
   color: #64748b;
 }
 
-/* ── PHÂN TRANG ── */
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -372,3 +367,22 @@
   color: var(--color-danger);
   font-weight: 600;
 }
+
+.container { gap: var(--space-5); }
+.topBar { padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-fibre); }
+.eyebrow { margin: 0 0 var(--space-2); color: var(--color-label-red); font-size: .66rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.pageTitle { color: var(--color-ink); font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 500; line-height: 1.02; }
+.subtitle { color: var(--color-muted); font-size: var(--text-sm); opacity: 1; }
+.filterCard, .tableCard { border-radius: 0; border-color: var(--color-fibre); box-shadow: 0 8px 24px rgba(24, 51, 58, .04); }
+.filterHeader { border-bottom-color: var(--color-fibre-light); }
+.filterTitle { color: var(--color-ink); font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; }
+.btnReset, .pageBtn { border-radius: 0; border-color: var(--color-fibre); color: var(--color-ink); }
+.btnReset:hover:not(:disabled), .pageBtn:hover:not(:disabled) { background: var(--color-surface); }
+.inputGroup label { color: var(--color-muted); letter-spacing: .08em; }
+.inputGroup input, .inputGroup select, .statusSelect { border-radius: 0; border-color: var(--color-fibre); background: var(--color-surface); color: var(--color-ink); }
+.table th { background: var(--color-surface); color: var(--color-muted); border-bottom-color: var(--color-fibre); }
+.table td { border-bottom-color: var(--color-fibre-light); color: var(--color-ink); }
+.table tbody tr:hover { background: var(--color-surface); }
+.noThumbnail { border-radius: 0; background: var(--color-surface); }
+.orderId, .amountCell { color: var(--color-ink); }
+.pagination { border-top-color: var(--color-fibre); }

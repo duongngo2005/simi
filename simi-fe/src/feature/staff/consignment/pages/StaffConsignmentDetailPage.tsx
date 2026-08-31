@@ -1,4 +1,3 @@
-/* ── 1. StaffConsignmentDetailPage.tsx ── */
 import { useParams, useNavigate } from "react-router";
 import { useActiveConsignment, useConsignmentFullDetail } from "../hooks/useConsignments";
 import { ConsignmentItemForm } from "../components/ConsignmentItemForm";
@@ -10,6 +9,14 @@ import type { ConsignmentItemResponse } from "../types/staffConsignment.type";
 import { ActiveConsignmentItemList } from "../components/ActiveConsignmentItemList";
 import { PendingSettlementConsignmentView } from "../components/PendingSettlementConsignmentView";
 import { SettledConsignmentView } from "../components/SettledConsignmentView";
+
+const STATUS_LABEL: Record<string, string> = {
+  DRAFT: "Nháp",
+  ACTIVE: "Đang ký gửi",
+  PENDING_SETTLEMENT: "Chờ quyết toán",
+  SETTLED: "Đã quyết toán",
+  CLOSED: "Đã đóng",
+};
 
 export const StaffConsignmentDetailPage = () => {
   const { id } = useParams();
@@ -28,7 +35,7 @@ export const StaffConsignmentDetailPage = () => {
   const [editingItem, setEditingItem] = useState<ConsignmentItemResponse | null>(null);
 
   if (isLoading) {
-    return <div className={styles.stateBox}>Loading...</div>;
+    return <div className={styles.stateBox}>Đang tải lô ký gửi…</div>;
   }
 
   if (isError || !consignment) {
@@ -39,22 +46,34 @@ export const StaffConsignmentDetailPage = () => {
     try {
       await activeConsignment(consignmentId);
       alert("Kích hoạt lô hàng thành công");
-    } catch (error) {
+    } catch {
       alert("Lỗi kích hoạt lô hàng");
     }
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.topBar}>
-        <button className={styles.btnBack} onClick={() => nav("/staff/consignments")}>
-          Quay lại
+      <header className={styles.pageHeader}>
+        <button
+          type="button"
+          className={styles.backLink}
+          onClick={() => nav("/staff/consignments")}
+        >
+          <span aria-hidden="true">←</span>
+          Quay lại danh sách ký gửi
         </button>
-        <h1 className={styles.title}>Lô ký gửi #{id}</h1>
-        <span className={`${styles.statusBadge} ${styles[`status_${consignment.status}`]}`}>
-          {consignment.status}
-        </span>
-      </div>
+
+        <div className={styles.titleRow}>
+          <div>
+            <h1 className={styles.title}>
+              Lô ký gửi <span className={styles.lotId}>#{String(consignment.id).padStart(4, "0")}</span>
+            </h1>
+          </div>
+          <span className={`${styles.statusBadge} ${styles[`status_${consignment.status}`]}`}>
+            {STATUS_LABEL[consignment.status] ?? consignment.status}
+          </span>
+        </div>
+      </header>
 
       {consignment.status === "DRAFT" ? (
         <div className={styles.contentGrid}>

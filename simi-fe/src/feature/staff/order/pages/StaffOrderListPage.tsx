@@ -76,17 +76,13 @@ export const StaffOrderListPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* TIÊU ĐỀ TRANG */}
       <div className={styles.topBar}>
         <div>
+          <p className={styles.eyebrow}>Vận hành đơn hàng</p>
           <h1 className={styles.pageTitle}>Quản lý đơn hàng</h1>
-          <p className={styles.subtitle}>
-            Theo dõi, xử lý và cập nhật tiến độ giao nhận đơn hàng
-          </p>
         </div>
       </div>
 
-      {/* BỘ LỌC TÌM KIẾM */}
       <div className={styles.filterCard}>
         <div className={styles.filterHeader}>
           <span className={styles.filterTitle}>Bộ lọc tìm kiếm</span>
@@ -100,7 +96,6 @@ export const StaffOrderListPage = () => {
         </div>
 
         <div className={styles.filterGrid}>
-          {/* Ô Tìm kiếm từ khóa (chiếm 2 cột) */}
           <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
             <label>Từ khóa</label>
             <input
@@ -112,7 +107,6 @@ export const StaffOrderListPage = () => {
             />
           </div>
 
-          {/* Lọc Kênh bán (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Kênh bán</label>
             <select
@@ -126,7 +120,6 @@ export const StaffOrderListPage = () => {
             </select>
           </div>
 
-          {/* Lọc Trạng thái (Đầy đủ 7 trạng thái) */}
           <div className={styles.inputGroup}>
             <label>Trạng thái</label>
             <select
@@ -145,7 +138,6 @@ export const StaffOrderListPage = () => {
             </select>
           </div>
 
-          {/* Từ ngày (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Từ ngày</label>
             <input
@@ -156,7 +148,6 @@ export const StaffOrderListPage = () => {
             />
           </div>
 
-          {/* Đến ngày (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Đến ngày</label>
             <input
@@ -167,7 +158,6 @@ export const StaffOrderListPage = () => {
             />
           </div>
 
-          {/* Sắp xếp theo (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Sắp xếp</label>
             <select
@@ -181,7 +171,6 @@ export const StaffOrderListPage = () => {
             </select>
           </div>
 
-          {/* Thứ tự hiển thị (1 cột) */}
           <div className={styles.inputGroup}>
             <label>Thứ tự</label>
             <button
@@ -195,7 +184,6 @@ export const StaffOrderListPage = () => {
         </div>
       </div>
 
-      {/* BẢNG DỮ LIỆU ĐƠN HÀNG */}
       <div className={styles.tableCard}>
         {isLoading ? (
           <div className={styles.centerText}>Đang tải dữ liệu đơn hàng...</div>
@@ -220,12 +208,10 @@ export const StaffOrderListPage = () => {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id}>
-                    {/* Mã đơn */}
                     <td>
                       <span className={styles.orderId}>#{order.id}</span>
                     </td>
 
-                    {/* Ngày tạo */}
                     <td className={styles.dateCell}>
                       {new Date(order.createdDate).toLocaleDateString("vi-VN", {
                         hour: "2-digit",
@@ -236,7 +222,6 @@ export const StaffOrderListPage = () => {
                       })}
                     </td>
 
-                    {/* Thông tin sản phẩm */}
                     <td>
                       <div className={styles.productCell}>
                         {order.firstItemThumbnail ? (
@@ -246,7 +231,7 @@ export const StaffOrderListPage = () => {
                             className={styles.thumbnail}
                           />
                         ) : (
-                          <div className={styles.noThumbnail}>Chưa có ảnh</div>
+                          <div className={styles.noThumbnail}>Ảnh đang cập nhật</div>
                         )}
                         <div className={styles.productMeta}>
                           <span className={styles.productName}>
@@ -261,12 +246,10 @@ export const StaffOrderListPage = () => {
                       </div>
                     </td>
 
-                    {/* Tổng tiền */}
                     <td className={styles.amountCell}>
                       {formatPrice(order.finalAmount || 0)}
                     </td>
 
-                    {/* Dropdown chỉnh sửa trạng thái trực tiếp */}
                     <td style={{ textAlign: "center" }}>
                       <select
                         className={`${styles.statusSelect} ${styles[`status_${order.orderStatus}`]}`}
@@ -295,7 +278,6 @@ export const StaffOrderListPage = () => {
           </div>
         )}
 
-        {/* PHÂN TRANG */}
         <div className={styles.pagination}>
           <button
             type="button"

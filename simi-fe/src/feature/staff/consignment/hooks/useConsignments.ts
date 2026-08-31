@@ -67,7 +67,7 @@ export const useActiveConsignment = () => {
         onSuccess: (_, consignmentId) => {
             queryClient.invalidateQueries({
                 queryKey: ['consignments', consignmentId, 'details']
-            }),
+            });
             queryClient.invalidateQueries({
                 queryKey: ['consignment', 'staff']
             })

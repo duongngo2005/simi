@@ -6,18 +6,15 @@ import { getServerError } from "../../../../utils/getMessageError";
 import { formatPrice } from "../../../../utils/formatPrice";
 
 export const StaffPOSPage = () => {
-  // ── HOOKS ──
   const getProductMutation = useProductForPos();
   const createPosOrder = useCreatePosOrder();
 
-  // ── STATE ──
   const [inputProductId, setInputProductId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [cartItems, setCartItems] = useState<ProductSummaryResponse[]>([]);
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerName, setCustomerName] = useState("");
 
-  // ── THÊM SẢN PHẨM VÀO GIỎ ──
   const handleAddProductById = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setErrorMessage("");
@@ -25,7 +22,6 @@ export const StaffPOSPage = () => {
     const productId = Number(inputProductId.trim());
     if (!productId) return;
 
-    // Kiểm tra sản phẩm đã có trong giỏ chưa
     if (cartItems.some((item) => item.id === productId)) {
       setErrorMessage(`Sản phẩm #${productId} đã có sẵn trong danh sách.`);
       return;
@@ -48,15 +44,12 @@ export const StaffPOSPage = () => {
     }
   };
 
-  // ── XÓA SẢN PHẨM KHỎI GIỎ ──
   const handleRemoveItem = (id: number) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // ── TÍNH TỔNG TIỀN ──
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.currentPrice || 0), 0);
 
-  // ── XÁC NHẬN THANH TOÁN ──
   const handleCheckout = async () => {
     if (cartItems.length === 0) {
       return alert("Danh sách thanh toán đang trống. Vui lòng nhập mã sản phẩm.");
@@ -81,7 +74,6 @@ export const StaffPOSPage = () => {
         `- Phương thức: Tiền mặt`
       );
 
-      // Reset form sau khi thanh toán thành công
       setCartItems([]);
       setCustomerPhone("");
       setCustomerName("");
@@ -94,24 +86,18 @@ export const StaffPOSPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* HEADER */}
       <div className={styles.header}>
         <div>
-          <h1 className={styles.pageTitle}>Bán hàng tại quầy (POS)</h1>
-          <p className={styles.subtitle}>
-            Nhập mã sản phẩm để tạo đơn và thanh toán trực tiếp cho khách tại cửa hàng
-          </p>
+          <p className={styles.eyebrow}>Điểm bán tại cửa hàng</p>
+          <h1 className={styles.pageTitle}>Bán hàng tại quầy</h1>
         </div>
       </div>
 
       <div className={styles.posGrid}>
-        {/* CỘT TRÁI: NHẬP MÃ SẢN PHẨM & DANH SÁCH HÀNG CHỌN */}
         <div className={styles.leftColumn}>
-          {/* Ô Tìm kiếm ID */}
           <div className={styles.card}>
             <form onSubmit={handleAddProductById} className={styles.searchForm}>
               <div className={styles.inputBox}>
-                <span className={styles.inputPrefix}>Mã SP:</span>
                 <input
                   type="number"
                   placeholder="Nhập mã ID sản phẩm..."
@@ -130,11 +116,9 @@ export const StaffPOSPage = () => {
               </button>
             </form>
 
-            {/* Thông báo lỗi */}
             {errorMessage && <div className={styles.alertError}>{errorMessage}</div>}
           </div>
 
-          {/* Danh sách sản phẩm trong giỏ */}
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <h3 className={styles.cardTitle}>
@@ -154,9 +138,6 @@ export const StaffPOSPage = () => {
             {cartItems.length === 0 ? (
               <div className={styles.emptyCart}>
                 <p className={styles.emptyText}>Chưa có sản phẩm nào được chọn.</p>
-                <span className={styles.emptySub}>
-                  Nhập mã ID sản phẩm ở ô phía trên để bắt đầu tạo đơn hàng.
-                </span>
               </div>
             ) : (
               <div className={styles.cartList}>
@@ -167,7 +148,7 @@ export const StaffPOSPage = () => {
                     {item.thumbnail ? (
                       <img src={item.thumbnail} alt={item.name} className={styles.itemThumb} />
                     ) : (
-                      <div className={styles.noThumb}>Chưa có ảnh</div>
+                      <div className={styles.noThumb}>Ảnh đang cập nhật</div>
                     )}
 
                     <div className={styles.itemInfo}>
@@ -198,7 +179,6 @@ export const StaffPOSPage = () => {
           </div>
         </div>
 
-        {/* CỘT PHẢI: THÔNG TIN KHÁCH & THANH TOÁN */}
         <div className={styles.rightColumn}>
           <div className={styles.card}>
             <h3 className={styles.cardTitle}>Thông tin thanh toán</h3>
@@ -228,15 +208,10 @@ export const StaffPOSPage = () => {
               <div className={styles.cashOnly}>Tiền mặt</div>
             </div>
 
-            {/* Bảng tóm tắt tiền */}
             <div className={styles.billBox}>
               <div className={styles.billRow}>
                 <span>Số lượng:</span>
                 <span>{cartItems.length} món</span>
-              </div>
-              <div className={styles.billRow}>
-                <span>Phí quầy:</span>
-                <span>0đ</span>
               </div>
               <div className={`${styles.billRow} ${styles.totalRow}`}>
                 <span>Tổng tiền:</span>

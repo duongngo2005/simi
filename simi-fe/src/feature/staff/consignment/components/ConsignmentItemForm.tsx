@@ -203,7 +203,7 @@ export const ConsignmentItemForm = ({
       }
 
       resetForm();
-    } catch (error) {
+    } catch {
       alert("Thêm sản phẩm thất bại");
     }
   };
@@ -365,7 +365,6 @@ export const ConsignmentItemForm = ({
           </div>
         </div>
 
-        {/* Giới tính & Chất liệu */}
         <div className={styles.row}>
           <div className={styles.field}>
             <label htmlFor="gender" className={styles.label}>
