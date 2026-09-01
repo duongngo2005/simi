@@ -26,6 +26,81 @@ interface Props {
   onCancelEdit?: () => void;
 }
 
+type ItemForm = {
+  name: string;
+  categoryId: string;
+  brandId: string;
+  size: string;
+  color: string;
+  productCondition: string;
+  gender: string;
+  material: string;
+  description: string;
+  commissionRate: number;
+  tagInput: string;
+};
+
+type PriceScheduleForm = {
+  effectiveAfterDays: number;
+  price: string;
+};
+
+type ExistingImage = {
+  id: number;
+  imageUrl: string;
+};
+
+const emptyItemForm = (): ItemForm => ({
+  name: "",
+  categoryId: "",
+  brandId: "",
+  size: "",
+  color: "",
+  productCondition: "",
+  gender: "UNISEX",
+  material: "",
+  description: "",
+  commissionRate: 0.3,
+  tagInput: "",
+});
+
+const initialItemForm = (editingItem?: ConsignmentItemResponse | null): ItemForm => {
+  if (!editingItem) return emptyItemForm();
+
+  const product = editingItem.productDetailResponse;
+
+  return {
+    name: product.name || "",
+    categoryId: String(product.category || ""),
+    brandId: product.brand ? String(product.brand) : "",
+    size: product.size || "",
+    color: product.color || "",
+    productCondition: product.productCondition || "",
+    gender: product.gender || "UNISEX",
+    material: product.material || "",
+    description: product.description || "",
+    commissionRate: editingItem.commissionRate,
+    tagInput: product.tagResponses?.map((tag) => tag.name).join(", ") || "",
+  };
+};
+
+const initialPriceSchedules = (
+  editingItem?: ConsignmentItemResponse | null
+): PriceScheduleForm[] =>
+  editingItem
+    ? editingItem.priceScheduleResponses.map((schedule) => ({
+        effectiveAfterDays: schedule.effectiveAfterDays,
+        price: String(schedule.price),
+      }))
+    : [{ effectiveAfterDays: 0, price: "" }];
+
+const initialExistingImages = (
+  editingItem?: ConsignmentItemResponse | null
+): ExistingImage[] =>
+  editingItem?.productDetailResponse.productImageResponses
+    ?.filter((image) => !image.thumbnail)
+    .map((image) => ({ id: image.id, imageUrl: image.imageUrl })) || [];
+
 export const ConsignmentItemForm = ({
   consignmentId,
   editingItem,
@@ -36,23 +111,9 @@ export const ConsignmentItemForm = ({
   );
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
 
-  const [itemForm, setItemForm] = useState({
-    name: "",
-    categoryId: "",
-    brandId: "",
-    size: "",
-    color: "",
-    productCondition: "",
-    gender: "UNISEX",
-    material: "",
-    description: "",
-    commissionRate: 0.3,
-    tagInput: "",
-  });
+  const [itemForm, setItemForm] = useState(() => initialItemForm(editingItem));
 
-  const [priceSchedules, setPriceSchedules] = useState([
-    { effectiveAfterDays: 0, price: "" },
-  ]);
+  const [priceSchedules, setPriceSchedules] = useState(() => initialPriceSchedules(editingItem));
 
   const handleAddSchedule = () => {
     const lastSchedule = priceSchedules[priceSchedules.length - 1];
@@ -103,9 +164,15 @@ export const ConsignmentItemForm = ({
   };
 
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>(
+    () => editingItem?.productDetailResponse.thumbnail || ""
+  );
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<ExistingImage[]>(
+    () => initialExistingImages(editingItem)
+  );
+  const [deleteImageIds, setDeleteImageIds] = useState<number[]>([]);
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -209,20 +276,8 @@ export const ConsignmentItemForm = ({
   };
 
   const resetForm = () => {
-    setItemForm({
-      name: "",
-      categoryId: "",
-      brandId: "",
-      size: "",
-      color: "",
-      productCondition: "",
-      gender: "UNISEX",
-      material: "",
-      description: "",
-      commissionRate: 0.3,
-      tagInput: "",
-    });
-    setPriceSchedules([{ effectiveAfterDays: 0, price: "" }]);
+    setItemForm(emptyItemForm());
+    setPriceSchedules(initialPriceSchedules());
     setThumbnailFile(null);
     setThumbnailPreview("");
     setImageFiles([]);
@@ -230,52 +285,6 @@ export const ConsignmentItemForm = ({
     setExistingImages([]);
     setDeleteImageIds([]);
   };
-
-  const [existingImages, setExistingImages] = useState<
-    { id: number; imageUrl: string }[]
-  >([]);
-
-  const [deleteImageIds, setDeleteImageIds] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (!editingItem) return;
-
-    const product = editingItem.productDetailResponse;
-
-    setItemForm({
-      name: product.name || "",
-      categoryId: String(product.category || ""),
-      brandId: product.brand ? String(product.brand) : "",
-      size: product.size || "",
-      color: product.color || "",
-      productCondition: product.productCondition || "",
-      gender: product.gender || "UNISEX",
-      material: product.material || "",
-      description: product.description || "",
-      commissionRate: editingItem.commissionRate,
-      tagInput: product.tagNames?.join(", ") || "",
-    });
-
-    setPriceSchedules(
-      editingItem.priceScheduleResponses.map((s) => ({
-        effectiveAfterDays: s.effectiveAfterDays,
-        price: String(s.price),
-      }))
-    );
-
-    setThumbnailPreview(product.thumbnail || "");
-    setThumbnailFile(null);
-
-    const otherImages =
-      product.productImageResponses
-        ?.filter((img) => !img.thumbnail)
-        .map((img) => ({ id: img.id, imageUrl: img.imageUrl })) || [];
-    setExistingImages(otherImages);
-
-    setImageFiles([]);
-    setImagePreviews([]);
-    setDeleteImageIds([]);
-  }, [editingItem]);
 
   const handleRemoveExistingImage = (imgId: number) => {
     setExistingImages((prev) => prev.filter((img) => img.id !== imgId));

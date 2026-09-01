@@ -1,6 +1,7 @@
 import styles from "./OrderDetailModal.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
 import { useGetOrderDetails, useRetryPayment } from "../../order/hooks/useOrder";
+import { getServerError } from "../../../utils/getMessageError";
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: "Chờ xác nhận",
@@ -27,13 +28,10 @@ export const OrderDetailModal = ({ orderId, onClose }: OrderDetailModalProps) =>
     try {
       const res = await retryPayment(orderId);
       if (res.body?.paymentUrl) {
-        window.location.href = res.body.paymentUrl;
+        window.location.assign(res.body.paymentUrl);
       }
-    } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Không thể thanh toán. Đơn hàng có thể đã hết thời gian giữ chỗ.";
-      alert(msg);
+    } catch (error) {
+      alert(getServerError(error, "Không thể thanh toán. Đơn hàng có thể đã hết thời gian giữ chỗ."));
     }
   };
 

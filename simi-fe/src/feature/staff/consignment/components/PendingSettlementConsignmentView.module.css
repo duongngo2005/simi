@@ -181,46 +181,9 @@
   color: #6b7280;
 }
 
-.actionForm {
-  display: flex;
-  align-items: flex-end;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.fileLabel {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text, #374151);
-}
-
 .fileInput {
   font-size: 0.8rem;
   color: var(--color-text, #374151);
-}
-
-.btnSubmit {
-  padding: 8px 16px;
-  background-color: var(--color-btn-primary, #6b21a8);
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.btnSubmit:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-.btnSubmit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .footerAction {
