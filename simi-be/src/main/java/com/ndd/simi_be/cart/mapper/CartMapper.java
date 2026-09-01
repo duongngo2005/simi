@@ -4,11 +4,7 @@ import com.ndd.simi_be.cart.dto.CartItemResponse;
 import com.ndd.simi_be.cart.dto.CartResponse;
 import com.ndd.simi_be.cart.entity.Cart;
 import com.ndd.simi_be.cart.entity.CartItem;
-import com.ndd.simi_be.product.entity.ProductImage;
-import com.ndd.simi_be.product.mapper.ProductImageMapper;
 import com.ndd.simi_be.product.mapper.ProductMapper;
-
-import java.util.Objects;
 
 public class CartMapper {
     public static CartResponse toCartResponse(Cart cart){

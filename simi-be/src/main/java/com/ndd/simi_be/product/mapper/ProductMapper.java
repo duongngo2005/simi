@@ -21,6 +21,11 @@ public class ProductMapper {
                         ? null
                         : product.getBrand().getId()
                 )
+                .brandName(
+                        product.getBrand() == null
+                        ? null
+                        : product.getBrand().getName()
+                )
                 .description(product.getDescription())
                 .productStatus(product.getProductStatus().name())
                 .productImageResponses(

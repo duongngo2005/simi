@@ -4,6 +4,7 @@ import { formatPrice } from "../../../utils/formatPrice";
 import { useGetMyOrders, useRetryPayment } from "../../order/hooks/useOrder";
 import type { OrderFilterRequest } from "../../order/types/order.type";
 import { OrderDetailModal } from "./OrderDetailModal";
+import { getServerError } from "../../../utils/getMessageError";
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: "Chờ xác nhận",
@@ -58,15 +59,12 @@ export const MyOrders = () => {
     try {
       const res = await retryPayment(orderId);
       if (res.body?.paymentUrl) {
-        window.location.href = res.body.paymentUrl;
+        window.location.assign(res.body.paymentUrl);
       } else {
         alert("Không tìm thấy đường dẫn thanh toán.");
       }
-    } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Không thể thanh toán lại. Đơn hàng có thể đã hết thời gian giữ chỗ.";
-      alert(msg);
+    } catch (error) {
+      alert(getServerError(error, "Không thể thanh toán lại. Đơn hàng có thể đã hết thời gian giữ chỗ."));
     }
   };
 

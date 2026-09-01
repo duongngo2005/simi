@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useCreateSettlement, usePreviewSettlement } from "../../settlement/hook/useStaffSettlement";
 import styles from "./PendingSettlementConsignmentView.module.css";
 import type { ConsignmentItemResponse } from "../types/staffConsignment.type";
+import { getServerError } from "../../../../utils/getMessageError";
 
 interface Props {
   consignmentId: number;
@@ -46,8 +47,8 @@ export const PendingSettlementConsignmentView = ({ consignmentId }: Props) => {
       await createSettlement({ consignmentId, file: proofFile });
       alert("Quyết toán lô hàng thành công");
       setShowModal(false);
-    } catch (err: any) {
-      alert(err.response?.data?.message || "Lỗi khi thực hiện quyết toán");
+    } catch (error) {
+      alert(getServerError(error, "Lỗi khi thực hiện quyết toán"));
     }
   };
 

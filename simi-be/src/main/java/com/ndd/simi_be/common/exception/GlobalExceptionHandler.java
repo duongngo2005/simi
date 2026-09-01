@@ -1,6 +1,7 @@
 package com.ndd.simi_be.common.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(
@@ -101,9 +103,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUnexpectedException(
             Exception ex, HttpServletRequest request
     ){
+        log.error("Unexpected error for {}", request.getRequestURI(), ex);
         ErrorResponse response = ErrorResponse.builder()
                 .status(500)
-                .message("Đã có lỗi xảy ra " + ex.getMessage())
+                .message("Đã có lỗi nội bộ. Vui lòng thử lại sau.")
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now())
                 .build();

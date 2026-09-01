@@ -78,6 +78,7 @@ export const StaffConsignmentDetailPage = () => {
       {consignment.status === "DRAFT" ? (
         <div className={styles.contentGrid}>
           <ConsignmentItemForm
+            key={editingItem?.id ?? "new-item"}
             consignmentId={consignment.id}
             editingItem={editingItem}
             onCancelEdit={() => setEditingItem(null)}

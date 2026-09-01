@@ -41,7 +41,7 @@ app:
     access-expiration-ms: 1800000
     refresh-expiration-ms: 604800000
   scheduler:
-    daily-cron: "0 * * * * ?"
+    maintenance-cron: "0 * * * * ?"
   vnpay:
     hash-secret: ${VNPAY_HASH_SECRET}
     pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
@@ -55,4 +55,3 @@ cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME:docidan7t}
   api-key: ${CLOUDINARY_API_KEY}
   api-secret: ${CLOUDINARY_API_SECRET}
-

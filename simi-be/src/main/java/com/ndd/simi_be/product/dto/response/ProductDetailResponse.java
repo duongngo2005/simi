@@ -18,6 +18,7 @@ public class ProductDetailResponse {
     private String name;
     private Long category;
     private Long brand;
+    private String brandName;
     private BigDecimal currentPrice;
     private List<TagResponse> tagResponses;
     private String size;

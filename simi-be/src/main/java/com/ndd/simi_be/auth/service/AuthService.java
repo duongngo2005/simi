@@ -38,12 +38,16 @@ public class AuthService {
         if (userRepository.existsByEmail(request.getEmail())){
             throw new ConflictException("Email đã được sử dụng");
         }
+        String phoneNumber = request.getPhoneNumber().trim();
+        if (userRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new ConflictException("Số điện thoại đã được sử dụng");
+        }
 
         User user = User.builder()
                 .email(request.getEmail())
                 .fullName(request.getFullName())
                 .passwordHash(encoder.encode(request.getPassword()))
-                .phoneNumber(request.getPhoneNumber())
+                .phoneNumber(phoneNumber)
                 .build();
 
         user = userRepository.save(user);

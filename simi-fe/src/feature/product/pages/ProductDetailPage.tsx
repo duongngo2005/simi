@@ -214,19 +214,19 @@ export const ProductDetailPage = () => {
                 {CONDITION_LABEL[product.productCondition]}
               </span>
             </div>
-            {product.brand && (
+            {product.brandName && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Thương hiệu</span>
-                <span className={styles.detailValue}>{product.brand}</span>
+                <span className={styles.detailValue}>{product.brandName}</span>
               </div>
             )}
           </div>
 
-          {product.tagNames?.length > 0 && (
+          {product.tagResponses?.length > 0 && (
             <div className={styles.tags}>
-              {product.tagNames.map((tag) => (
-                <span key={tag} className={styles.tag}>
-                  #{tag}
+              {product.tagResponses.map((tag) => (
+                <span key={tag.id} className={styles.tag}>
+                  #{tag.name}
                 </span>
               ))}
             </div>
