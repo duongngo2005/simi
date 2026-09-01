@@ -20,7 +20,7 @@ public class OrderItemMapper {
                                 .filter(ProductImage::isThumbnail)
                                 .findFirst().get().getImageUrl()
                 )
-                .unitPrice(orderItem.getProduct().getCurrentPrice())
+                .unitPrice(orderItem.getUnitPrice())
                 .build();
     }
 }

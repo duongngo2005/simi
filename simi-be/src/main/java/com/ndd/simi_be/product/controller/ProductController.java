@@ -1,6 +1,5 @@
 package com.ndd.simi_be.product.controller;
 
-import com.cloudinary.Api;
 import com.ndd.simi_be.common.response.ApiResponse;
 import com.ndd.simi_be.product.dto.request.ProductFilterRequest;
 import com.ndd.simi_be.product.dto.response.ProductDetailResponse;

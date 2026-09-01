@@ -14,8 +14,8 @@ public class ConsignmentScheduler {
     private final ConsignmentExpiryService consignmentExpiryService;
     private final ItemDispositionService itemDispositionService;
 
-    @Scheduled(cron = "${app.scheduler.daily-cron}")
-    public void runDailyConsignmentMaintenance() {
+    @Scheduled(cron = "${app.scheduler.maintenance-cron}")
+    public void runConsignmentMaintenance() {
         priceMarkdownService.applyPendingPriceSchedules();
         consignmentExpiryService.processExpiredConsignments();
         itemDispositionService.moveExpiredReturnsToDonation();
